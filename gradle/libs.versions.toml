@@ -1,0 +1,8 @@
+[versions]
+spring-jfr-api = "0.0.6"
+junit-jupiter = "5.10.3"
+
+[libraries]
+
+spring-jfr-api = { module = "io.github.sibmaks.spring-jfr:api", version.ref = "spring-jfr-api" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
