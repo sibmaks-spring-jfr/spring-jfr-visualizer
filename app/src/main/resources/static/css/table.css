@@ -1,0 +1,45 @@
+.td-32 {
+    max-width: 32px;
+    min-width: 32px;
+}
+
+.td-48 {
+    max-width: 48px;
+    min-width: 48px;
+}
+
+.td-64 {
+    max-width: 64px;
+    min-width: 64px;
+}
+
+.td-96 {
+    max-width: 96px;
+    min-width: 96px;
+}
+
+.td-128 {
+    max-width: 128px;
+    min-width: 128px;
+}
+
+.td-256 {
+    max-width: 256px;
+    min-width: 256px;
+}
+
+.td-512 {
+    max-width: 512px;
+    min-width: 512px;
+}
+
+.td-1024 {
+    max-width: 1024px;
+    min-width: 1024px;
+}
+
+.content-scroll {
+    white-space: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+}

@@ -24,16 +24,12 @@ repositories {
 }
 
 dependencies {
+    compileOnly(libs.lombok)
+    annotationProcessor(libs.lombok)
+
     implementation(libs.spring.jfr.api)
 
-    implementation(libs.javax.servlet)
-
-    implementation(libs.spring.aop)
-    implementation(libs.spring.aspects)
-    implementation(libs.spring.context)
-
-    implementation(libs.spring.jpa)
-    implementation(libs.spring.web)
+    implementation(libs.thymeleaf)
 
     testImplementation(libs.junit.jupiter)
 
