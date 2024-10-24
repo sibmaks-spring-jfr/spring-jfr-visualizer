@@ -18,7 +18,39 @@ interface Edge extends SimulationLinkDatum<Node> {
 const GraphPage: React.FC<GraphProps> = ({ beanDependencies }) => {
   const graphRef = useRef<SVGSVGElement | null>(null);
   const [beanName, setBeanName] = useState<string>('');
+  const [selectedBeanName, setSelectedBeanName] = useState<string>('');
   const [beanNames, setBeanNames] = useState<string[]>([]);
+  const [svg, setSVG] = useState<d3.Selection<SVGGElement, Node, null, undefined> | null>(null);
+
+  useEffect(() => {
+    const zoom = d3.zoom<SVGSVGElement, Node>()
+      .scaleExtent([0.01, 15])
+      .on('zoom', (event) => {
+        d3.select(graphRef.current).select('g')
+          .attr('transform', event.transform);
+      });
+
+    const graph = graphRef.current;
+    if (!graph) {
+      return;
+    }
+
+    graph.addEventListener('resize', () => {
+      console.log('resize');
+    });
+
+    const width = graph.parentElement?.clientWidth || 0;
+    const height = graph.parentElement?.scrollHeight || 0;
+    console.log('graph', graph, width, height);
+
+    const svg = d3.select<SVGSVGElement, Node>(graph)
+      // .attr('width', width)
+      // .attr('height', height)
+      .attr('viewBox', `0 0 ${width} ${height}`)
+      .call(zoom)
+      .append('g');
+    setSVG(svg);
+  }, [graphRef, graphRef.current]);
 
   useEffect(() => {
     const names = Object.keys(beanDependencies).filter(bean => beanDependencies[bean].length > 0);
@@ -32,8 +64,15 @@ const GraphPage: React.FC<GraphProps> = ({ beanDependencies }) => {
   };
 
   const highlightNode = (nodeId: string) => {
+    if (beanName === selectedBeanName) {
+      return;
+    }
+    setSelectedBeanName(beanName);
     const node = d3.selectAll<SVGCircleElement, Node>('.node');
     const link = d3.selectAll<SVGLineElement, Edge>('.link');
+
+    console.log('node', node);
+    console.log('link', link);
 
     node.classed('selected', false)
       .classed('friend', false);
@@ -56,26 +95,30 @@ const GraphPage: React.FC<GraphProps> = ({ beanDependencies }) => {
       });
   };
 
-  // const dragStarted = (simulation: d3.Simulation<Node, any>) => (event) => {
-  //   highlightNode(event.subject.id);
-  //   if (!event.active) simulation.alphaTarget(0.3).restart();
-  //   event.subject.fx = event.subject.x;
-  //   event.subject.fy = event.subject.y;
-  // };
-  //
-  // const dragged = (event) => {
-  //   event.subject.fx = event.x;
-  //   event.subject.fy = event.y;
-  // };
-  //
-  // const dragEnded = (simulation: d3.Simulation<Node, any>) => (event) => {
-  //   if (!event.active) simulation.alphaTarget(0);
-  //   event.subject.fx = event.x;
-  //   event.subject.fy = event.y;
-  // };
+  const dragStarted = (simulation: d3.Simulation<Node, any>) => (event: any, d: Node) => {
+    if (!event.active) {
+      simulation.alphaTarget(0.3).restart();
+    } else {
+      console.log('drag started');
+      highlightNode(event.subject.id);
+    }
+    event.subject.fx = event.subject.x;
+    event.subject.fy = event.subject.y;
+  };
+
+  const dragged = (event: any, d: Node) => {
+    event.subject.fx = event.x;
+    event.subject.fy = event.y;
+  };
+
+  const dragEnded = (simulation: d3.Simulation<Node, any>) => (event: any, d: Node) => {
+    if (!event.active) simulation.alphaTarget(0);
+    event.subject.fx = event.x;
+    event.subject.fy = event.y;
+  };
 
   const handleBuild = () => {
-    if (!beanName || !graphRef.current) return;
+    if (!beanName || !graphRef.current || !svg) return;
 
     const width = graphRef.current.clientWidth;
     const height = graphRef.current.clientHeight;
@@ -98,7 +141,6 @@ const GraphPage: React.FC<GraphProps> = ({ beanDependencies }) => {
 
     traverse(beanName);
 
-    const svg = d3.select<SVGSVGElement, Node>(graphRef.current);
     svg.selectAll('g').remove();
 
     const simulation = d3.forceSimulation(nodes)
@@ -116,20 +158,25 @@ const GraphPage: React.FC<GraphProps> = ({ beanDependencies }) => {
       .attr('class', 'link')
       .attr('marker-end', 'url(#arrowhead)');
 
+    const drag = d3.drag<SVGGElement, Node>()
+      .on('start', dragStarted(simulation))
+      .on('drag', dragged)
+      .on('end', dragEnded(simulation));
+
     const node = svg
       .append('g')
       .attr('class', 'nodes')
-      .selectAll<SVGCircleElement, Node>('circle')
+      .selectAll<SVGCircleElement, Node>('g')
       .data(nodes)
       .enter()
       .append('g')
       .attr('class', 'node')
-      .on('click', (e, node) => highlightNode(node.id));
-    // .call(d3.drag()
-    //   .on("start", dragStarted(simulation))
-    //   .on("drag", dragged)
-    //   .on("end", dragEnded(simulation))
-    // );
+      .on('click', (e, node) => {
+        console.log('click');
+        highlightNode(node.id);
+      })
+      .call(drag);
+
     node.append('circle')
       .attr('r', 10);
 
@@ -159,12 +206,10 @@ const GraphPage: React.FC<GraphProps> = ({ beanDependencies }) => {
         );
 
       node
-        .attr('cx', d => d.x !== undefined ? d.x : 0)
-        .attr('cy', d => d.y !== undefined ? d.y : 0);
-
-      highlightNode(beanName);
+        .attr('transform', d => `translate(${d.x},${d.y})`);
     });
 
+    highlightNode(beanName);
   };
 
   return (
@@ -200,8 +245,8 @@ const GraphPage: React.FC<GraphProps> = ({ beanDependencies }) => {
             </InputGroup>
           </Col>
         </Row>
-        <Row className={'m-2'}>
-          <svg ref={graphRef}>
+        <Row className={'m-2 w-100 h-100'}>
+          <svg className={'w-100 h-100'} ref={graphRef}>
             <defs>
               <marker id="arrowhead" className="arrowhead" markerWidth="10" markerHeight="7"
                       refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
