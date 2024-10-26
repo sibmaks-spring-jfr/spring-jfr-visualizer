@@ -45,12 +45,11 @@ class Graph extends React.Component {
 
             const dependencies = beans[bean] || [];
             dependencies.forEach(dependency => {
-                if (visited.has(dependency)) {
-                    return;
+                if (!visited.has(dependency)) {
+                    nodes.push({id: dependency, name: dependency});
+                    traverse(dependency);
                 }
-                nodes.push({id: dependency, name: dependency});
                 edges.push({source: bean, target: dependency});
-                traverse(dependency);
             });
         };
 

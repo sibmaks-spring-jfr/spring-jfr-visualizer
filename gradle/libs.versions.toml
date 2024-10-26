@@ -1,5 +1,5 @@
 [versions]
-spring-jfr-api = "0.0.6"
+spring-jfr-api = "0.0.8"
 
 lombok = "1.18.34"
 thymeleaf = "3.1.2.RELEASE"
