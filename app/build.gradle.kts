@@ -29,7 +29,7 @@ dependencies {
 
     implementation(libs.spring.jfr.api)
 
-    implementation(libs.thymeleaf)
+    implementation(libs.bundles.jackson)
 
     testImplementation(libs.junit.jupiter)
 
@@ -49,7 +49,22 @@ tasks.named<Test>("test") {
     useJUnitPlatform()
 }
 
+tasks.register<Copy>("copyFrontendResources") {
+    group = "build"
+    description = "Copies the frontend build resources to the Spring Boot static directory"
+
+    dependsOn(":ui:buildFrontend")
+
+    from(project(":ui").file("build/out"))
+    into(layout.buildDirectory.dir("resources/main/static"))
+}
+
+tasks.named("processResources") {
+    dependsOn("copyFrontendResources")
+}
+
 tasks.jar {
+    dependsOn("copyFrontendResources")
     from("LICENSE") {
         rename { "${it}_${project.property("project_name")}" }
     }

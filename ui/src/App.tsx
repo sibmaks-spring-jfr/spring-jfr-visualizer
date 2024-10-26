@@ -1,34 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import BeanDefinitionsPage from './pages/BeanDefinitionsPage';
 import BeansPage from './pages/BeansPage';
 import GraphPage from './pages/GraphPage';
-import { BeanDefinition } from './api/types';
+import { Bean, BeanDefinition } from './api/types';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 
+interface BeanReport {
+  beans: Bean[];
+  beanDefinitions: BeanDefinition[];
+}
+
 const App: React.FC = () => {
-  const beanDefinitions: BeanDefinition[] = [
-    {
-      scope: 'singleton',
-      beanClassName: 'demo.class',
-      beanName: 'bean',
-      primary: 'true',
-      dependencies: [
-        'depend'
-      ],
-      generated: false
-    },
-    {
-      scope: null,
-      beanClassName: 'depend.class',
-      beanName: 'depend',
-      primary: null,
-      dependencies: null,
-      generated: true
-    }
-  ];
+  const [beans, setBeans] = useState<Bean[]>([]);
+  const [beanDefinitions, setBeanDefinitions] = useState<BeanDefinition[]>([]);
+
+  useEffect(() => {
+    // @ts-ignore
+    const beansJson = window.beansJson || '{}';
+    const beans = JSON.parse(beansJson) as BeanReport;
+    setBeans(beans.beans);
+    setBeanDefinitions(beans.beanDefinitions);
+  }, []);
 
   return (
     <Container>
@@ -42,7 +37,7 @@ const App: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <BeansPage beans={[]} />
+          <BeansPage beans={beans} />
         </Col>
       </Row>
       <Row className="mb-4">
