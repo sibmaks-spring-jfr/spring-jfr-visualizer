@@ -1,14 +1,7 @@
 import React from 'react';
 import CustomTable from '../components/CustomTable';
 import { Card } from 'react-bootstrap';
-
-export interface BeanDefinition {
-  scope: string | null;
-  beanClassName: string | null;
-  beanName: string;
-  primary: boolean;
-  dependencies: string[] | null;
-}
+import { BeanDefinition } from '../api/types';
 
 export interface BeanDefinitionsPageProps {
   beanDefinitions: BeanDefinition[];
@@ -25,7 +18,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
         aria-expanded="false"
         aria-controls="beanDefinitionsCollapse"
         role={'button'}>
-        <Card.Title className="h4">Beans</Card.Title>
+        <Card.Title className="h4">Bean Definitions</Card.Title>
       </Card.Header>
       <div id="beanDefinitionsCollapse" className="table-responsive collapse">
         <CustomTable
@@ -52,6 +45,10 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
               key: 'dependencies',
               label: 'Dependencies'
             },
+            {
+              key: 'generated',
+              label: 'Generated'
+            },
           ]}
           data={beanDefinitions.map(it => {
             return {
@@ -70,7 +67,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
                 value: it.beanName,
                 className: 'td-512'
               },
-              primary: (it.primary ? 'Yes' : 'No'),
+              primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
               dependencies: {
                 representation: <ul className="content-scroll">
                   {it.dependencies?.map(it => {
@@ -79,11 +76,12 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
                 </ul>,
                 value: it.dependencies?.join(', '),
                 className: 'td-1024'
-              }
+              },
+              generated: it.generated ? 'Yes' : 'No',
             };
           })}
-          filterableColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies']}
-          sortableColumns={['scope', 'beanClassName', 'beanName', 'dependencies']}
+          filterableColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies', 'generated']}
+          sortableColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies', 'generated']}
         />
       </div>
     </Card>

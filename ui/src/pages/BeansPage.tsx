@@ -1,11 +1,7 @@
 import React from 'react';
 import CustomTable from '../components/CustomTable';
 import { Card } from 'react-bootstrap';
-
-export interface Bean {
-  beanName: string;
-  duration: number;
-}
+import { Bean } from '../api/types';
 
 export interface BeansPageProps {
   beans: Bean[];
