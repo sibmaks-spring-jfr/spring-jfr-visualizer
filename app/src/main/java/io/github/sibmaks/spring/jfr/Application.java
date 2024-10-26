@@ -56,8 +56,9 @@ public class Application {
                             .scope(recordedEvent.getString("scope"))
                             .beanClassName(recordedEvent.getString("beanClassName"))
                             .beanName(beanName)
-                            .primary(recordedEvent.getBoolean("primary"))
+                            .primary(recordedEvent.getString("primary"))
                             .dependencies(DependencyConverter.convert(recordedEvent.getString("dependencies")))
+                            .generated(recordedEvent.getBoolean("generated"))
                             .build();
                     beanDefinitions.add(event);
                     System.out.printf("Bean definition read: %s%n", beanName);

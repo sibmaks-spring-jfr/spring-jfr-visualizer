@@ -38,6 +38,10 @@ class BeanDefinitions extends React.Component {
                             key: 'dependencies',
                             label: 'Dependencies'
                         },
+                        {
+                            key: 'generated',
+                            label: 'Generated'
+                        },
                     ]}
                     data={beanDefinitions.map(it => {
                         return {
@@ -56,7 +60,7 @@ class BeanDefinitions extends React.Component {
                                 value: it.beanName,
                                 className: 'td-512'
                             },
-                            primary: it.primary ? 'Yes' : 'No',
+                            primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
                             dependencies: {
                                 representation: <ul className="content-scroll">
                                     {it.dependencies.map(it => {
@@ -65,11 +69,12 @@ class BeanDefinitions extends React.Component {
                                 </ul>,
                                 value: it.dependencies.join(", "),
                                 className: 'td-1024'
-                            }
+                            },
+                            generated: it.generated ? 'Yes' : 'No',
                         }
                     })}
-                    filteringColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies']}
-                    sortingColumns={['scope', 'beanClassName', 'beanName', 'dependencies']}
+                    filteringColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies', 'generated']}
+                    sortingColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies', 'generated']}
                 />
             </div>
         </div>
