@@ -2,12 +2,19 @@
 spring-jfr-api = "0.0.8"
 
 lombok = "1.18.34"
-thymeleaf = "3.1.2.RELEASE"
+jackson = "2.18.0"
+
 junit-jupiter = "5.10.3"
 
 [libraries]
 
 spring-jfr-api = { module = "io.github.sibmaks.spring-jfr:api", version.ref = "spring-jfr-api" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
-thymeleaf = { module = "org.thymeleaf:thymeleaf", version.ref = "thymeleaf" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-module-parameter-names = { module = "com.fasterxml.jackson.module:jackson-module-parameter-names", version.ref = "jackson" }
+jackson-datatype-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jdk8", version.ref = "jackson" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+
+[bundles]
+jackson = ['jackson-databind', 'jackson-module-parameter-names', 'jackson-datatype-jdk8', 'jackson-datatype-jsr310']

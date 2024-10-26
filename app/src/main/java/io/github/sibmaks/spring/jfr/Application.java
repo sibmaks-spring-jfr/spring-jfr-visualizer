@@ -1,13 +1,11 @@
 package io.github.sibmaks.spring.jfr;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sibmaks.spring.jfr.event.bean.BeanDefinitionRegisteredEvent;
 import io.github.sibmaks.spring.jfr.event.bean.PostProcessAfterInitializationEvent;
 import io.github.sibmaks.spring.jfr.event.bean.PostProcessBeforeInitializationEvent;
 import io.github.sibmaks.spring.jfr.event.converter.DependencyConverter;
 import jdk.jfr.consumer.RecordingFile;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * @author sibmaks
@@ -82,36 +79,18 @@ public class Application {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        generateHtml(beanDefinitions, beanInitialized);
+        generateReport(beanDefinitions, beanInitialized);
         System.out.println();
     }
 
     /**
      * Generate an HTML file using Thymeleaf.
      */
-    public static void generateHtml(
+    public static void generateReport(
             List<BeanDefinitionRegisteredEvent> beanDefinitions,
             List<BeanInitialized> beanInitialized
     ) {
-        var templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode("HTML");
-
-        var templateEngine = new TemplateEngine();
-        templateEngine.setTemplateResolver(templateResolver);
-
-        var context = new Context();
-        context.setVariable("beanDefinitions", beanDefinitions);
-        context.setVariable("beanInitialized", beanInitialized);
-
-        var dependencies = beanDefinitions.stream()
-                .collect(Collectors.toMap(BeanDefinitionRegisteredEvent::getBeanName, BeanDefinitionRegisteredEvent::getDependencies));
-        context.setVariable("dependencies", dependencies);
-
-        var htmlContent = templateEngine.process("beanEventsTemplate", context);
-
-        var reportFile = new File("report", "BeanEvents.html");
+        var reportFile = new File("report", "beans.js");
         var parentFile = reportFile.getParentFile();
         if (!parentFile.exists()) {
             if (!parentFile.mkdirs()) {
@@ -128,9 +107,19 @@ public class Application {
             throw new RuntimeException(e);
         }
 
+        var report = BeansReport
+                .builder()
+                .beans(beanInitialized)
+                .beanDefinitions(beanDefinitions)
+                .build();
+
+        var objectMapper = new ObjectMapper();
+
         try (var fileWriter = new FileWriter(reportFile);
              var writer = new BufferedWriter(fileWriter)) {
-            writer.write(htmlContent);
+            var json = objectMapper.writeValueAsString(report);
+            var jsonVariable = objectMapper.writeValueAsString(json);
+            writer.write(String.format("window.beansJson = %s", jsonVariable));
         } catch (IOException e) {
             e.printStackTrace();
         }

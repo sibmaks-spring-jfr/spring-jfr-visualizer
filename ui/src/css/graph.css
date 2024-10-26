@@ -1,9 +1,11 @@
-#graph-div {
-    height: 640px;
-    min-height: 640px;
-    border: 1px solid #ccc;
+#graphCollapse {
     resize: vertical;
     overflow: auto;
+}
+
+.graph-svg {
+  height: 320px;
+  min-height: 320px;
 }
 
 .link {
