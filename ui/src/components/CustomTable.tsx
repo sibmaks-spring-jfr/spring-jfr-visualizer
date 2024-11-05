@@ -91,7 +91,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
     if (typeof cell === 'boolean') {
       return `${cell}`;
     }
-    if (typeof cell.value === 'string') {
+    if (typeof cell.value === 'string' || typeof cell.value === 'number') {
       return cell.value;
     }
     return cell.value ? `${cell.value}` : '';

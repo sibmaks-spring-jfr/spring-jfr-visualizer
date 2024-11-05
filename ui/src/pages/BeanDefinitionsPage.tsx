@@ -42,6 +42,10 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
               label: 'Primary'
             },
             {
+              key: 'dependencies_count',
+              label: 'Dependencies Count'
+            },
+            {
               key: 'dependencies',
               label: 'Dependencies'
             },
@@ -68,6 +72,11 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
                 className: 'td-512'
               },
               primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
+              dependencies_count: {
+                representation: <code>{it.dependencies?.length ?? 0}</code>,
+                value: it.dependencies?.length ?? 0,
+                className: 'td-32'
+              },
               dependencies: {
                 representation: <ul className="content-scroll">
                   {it.dependencies?.map(it => {
@@ -80,8 +89,24 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
               generated: it.generated ? 'Yes' : 'No',
             };
           })}
-          filterableColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies', 'generated']}
-          sortableColumns={['scope', 'beanClassName', 'beanName', 'primary', 'dependencies', 'generated']}
+          filterableColumns={[
+            'scope',
+            'beanClassName',
+            'beanName',
+            'primary',
+            'dependencies_count',
+            'dependencies',
+            'generated'
+          ]}
+          sortableColumns={[
+            'scope',
+            'beanClassName',
+            'beanName',
+            'primary',
+            'dependencies_count',
+            'dependencies',
+            'generated'
+          ]}
         />
       </div>
     </Card>

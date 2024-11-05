@@ -91,9 +91,8 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
 
   const dragStarted = (simulation: d3.Simulation<Node, any>) => (event: any) => {
     if (!event.active) {
-      simulation.alphaTarget(0.3).restart();
-    } else {
       highlightNode(event.subject.id);
+      simulation.alphaTarget(0.3).restart();
     }
     event.subject.fx = event.subject.x;
     event.subject.fy = event.subject.y;
