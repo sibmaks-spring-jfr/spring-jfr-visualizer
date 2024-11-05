@@ -70,9 +70,14 @@ public class Application {
                 if (PostProcessAfterInitializationEvent.class.getCanonicalName().equals(eventTypeName)) {
                     var beanName = recordedEvent.getString(EVENT_BEAN_NAME);
                     var startTime = beanStartTimes.get(beanName);
-                    var endTime = recordedEvent.getEndTime();
-                    var duration = Duration.between(startTime, endTime);
-                    beanInitialized.add(new BeanInitialized(beanName, duration.toNanos() / 1000.));
+                    if(startTime == null) {
+                        beanInitialized.add(new BeanInitialized(beanName, -1));
+                    } else {
+                        var endTime = recordedEvent.getEndTime();
+                        var between = Duration.between(startTime, endTime);
+                        var duration = between.toNanos() / 1000.;
+                        beanInitialized.add(new BeanInitialized(beanName, duration));
+                    }
                 }
             }
             System.out.println();
