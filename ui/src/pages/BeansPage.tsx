@@ -30,18 +30,44 @@ const BeansPage: React.FC<BeansPageProps> = ({
               label: 'Bean Name'
             },
             {
+              key: 'preInitializedAt',
+              label: 'Pre Initialized At'
+            },
+            {
+              key: 'postInitializedAt',
+              label: 'Post Initialized At'
+            },
+            {
               key: 'duration',
               label: 'Duration'
             },
           ]}
           data={beans.map(it => {
             return {
-              beanName: it.beanName,
-              duration: it.duration,
+              beanName: {
+                representation: <div className="content-scroll">{it.beanName}</div>,
+                value: it.beanName,
+                className: 'td-128'
+              },
+              preInitializedAt: {
+                representation: <code className="content-scroll">{it.preInitializedAt ?? 'Unknown'}</code>,
+                value: it.preInitializedAt ?? 'Unknown',
+                className: 'td-64 text-center'
+              },
+              postInitializedAt: {
+                representation: <code className="content-scroll">{it.postInitializedAt}</code>,
+                value: it.postInitializedAt,
+                className: 'td-64 text-center'
+              },
+              duration: {
+                representation: <code className="content-scroll">{it.duration}</code>,
+                value: it.duration,
+                className: 'td-64 text-center'
+              },
             };
           })}
-          filterableColumns={['beanName', 'duration']}
-          sortableColumns={['beanName', 'duration']}
+          filterableColumns={['beanName', 'preInitializedAt', 'postInitializedAt', 'duration']}
+          sortableColumns={['beanName', 'preInitializedAt', 'postInitializedAt', 'duration']}
         />
       </div>
     </Card>

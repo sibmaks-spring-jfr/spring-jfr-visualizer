@@ -193,8 +193,8 @@ const CustomTable: React.FC<CustomTableProps> = ({
     .sort(rowComparator);
 
   return (
-    <Table striped={true} bordered={true} hover={true} className={className || ''}>
-      <thead className={`table-dark ${thead?.className || ''}`}>
+    <Table className={className ?? ''}>
+      <thead className={`table-dark ${thead?.className ?? ''}`}>
       <tr className={`${styleProps.centerHeaders ? 'text-center' : ''}`}>
         {columns.map((column) => (
           <th
@@ -234,7 +234,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
             const cellOnClick = getCellOnClick(item, item[column.key]);
             return (
               <td
-                className={`${styleProps.textCenterValues ? 'text-center' : ''} ${getCellClassName(item[column.key])}`}
+                className={`${styleProps.textCenterValues ? 'text-center' : ''} ${getCellClassName(item[column.key])}`.trim()}
                 onClick={cellOnClick}
                 role={cellOnClick ? 'button' : undefined}
                 key={column.key}>{getCellRepresentation(item[column.key])}</td>
