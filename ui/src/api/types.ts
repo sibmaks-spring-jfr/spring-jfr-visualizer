@@ -9,6 +9,8 @@ export interface BeanDefinition {
 
 export interface Bean {
   beanName: string;
+  preInitializedAt: string | null;
+  postInitializedAt: string;
   duration: number;
 }
 

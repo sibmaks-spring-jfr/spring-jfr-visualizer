@@ -1,6 +1,7 @@
 package io.github.sibmaks.spring.jfr;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.sibmaks.spring.jfr.event.bean.BeanDefinitionRegisteredEvent;
 import io.github.sibmaks.spring.jfr.event.bean.PostProcessAfterInitializationEvent;
 import io.github.sibmaks.spring.jfr.event.bean.PostProcessBeforeInitializationEvent;
@@ -36,7 +37,7 @@ public class Application {
         var path = Path.of(args[0]);
         var beanDefinitions = new ArrayList<BeanDefinitionRegisteredEvent>();
         var beanStartTimes = new HashMap<String, Instant>();
-        var beanInitialized = new ArrayList<BeanInitialized>();
+        var beans = new ArrayList<BeanInitialized>();
         try (var recordingFile = new RecordingFile(path)) {
             System.out.println("Reading beanDefinitions one by one");
             System.out.println("=========================");
@@ -70,13 +71,24 @@ public class Application {
                 if (PostProcessAfterInitializationEvent.class.getCanonicalName().equals(eventTypeName)) {
                     var beanName = recordedEvent.getString(EVENT_BEAN_NAME);
                     var startTime = beanStartTimes.get(beanName);
-                    if(startTime == null) {
-                        beanInitialized.add(new BeanInitialized(beanName, -1));
+                    var endTime = recordedEvent.getEndTime();
+                    if (startTime == null) {
+                        var beanInitialized = BeanInitialized.builder()
+                                .beanName(beanName)
+                                .duration(-1)
+                                .postInitializedAt(endTime)
+                                .build();
+                        beans.add(beanInitialized);
                     } else {
-                        var endTime = recordedEvent.getEndTime();
                         var between = Duration.between(startTime, endTime);
                         var duration = between.toNanos() / 1000.;
-                        beanInitialized.add(new BeanInitialized(beanName, duration));
+                        var beanInitialized = BeanInitialized.builder()
+                                .beanName(beanName)
+                                .duration(duration)
+                                .preInitializedAt(startTime)
+                                .postInitializedAt(endTime)
+                                .build();
+                        beans.add(beanInitialized);
                     }
                 }
             }
@@ -84,7 +96,7 @@ public class Application {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        generateReport(beanDefinitions, beanInitialized);
+        generateReport(beanDefinitions, beans);
         System.out.println();
     }
 
@@ -119,6 +131,7 @@ public class Application {
                 .build();
 
         var objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
 
         try (var fileWriter = new FileWriter(reportFile);
              var writer = new BufferedWriter(fileWriter)) {

@@ -42,7 +42,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
               label: 'Primary'
             },
             {
-              key: 'dependencies_count',
+              key: 'dependenciesCount',
               label: 'Dependencies Count'
             },
             {
@@ -59,7 +59,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
               scope: {
                 representation: <div className="content-scroll">{it.scope}</div>,
                 value: it.scope,
-                className: 'td-96'
+                className: 'td-96 text-center'
               },
               beanClassName: {
                 representation: <div className="content-scroll">{it.beanClassName}</div>,
@@ -71,11 +71,15 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
                 value: it.beanName,
                 className: 'td-512'
               },
-              primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
-              dependencies_count: {
+              primary: {
+                representation: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
+                value: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
+                className: 'text-center'
+              },
+              dependenciesCount: {
                 representation: <code>{it.dependencies?.length ?? 0}</code>,
                 value: it.dependencies?.length ?? 0,
-                className: 'td-32'
+                className: 'td-32 text-center'
               },
               dependencies: {
                 representation: <ul className="content-scroll">
@@ -86,7 +90,11 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
                 value: it.dependencies?.join(', '),
                 className: 'td-1024'
               },
-              generated: it.generated ? 'Yes' : 'No',
+              generated: {
+                representation: it.generated ? 'Yes' : 'No',
+                value: it.generated ? 'Yes' : 'No',
+                className: 'text-center'
+              },
             };
           })}
           filterableColumns={[
@@ -94,7 +102,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
             'beanClassName',
             'beanName',
             'primary',
-            'dependencies_count',
+            'dependenciesCount',
             'dependencies',
             'generated'
           ]}
@@ -103,7 +111,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
             'beanClassName',
             'beanName',
             'primary',
-            'dependencies_count',
+            'dependenciesCount',
             'dependencies',
             'generated'
           ]}

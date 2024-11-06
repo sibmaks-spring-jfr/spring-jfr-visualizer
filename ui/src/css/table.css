@@ -42,4 +42,5 @@
   white-space: nowrap;
   overflow-x: auto;
   max-width: 100%;
+  display: block;
 }
