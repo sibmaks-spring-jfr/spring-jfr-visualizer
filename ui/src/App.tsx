@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import BeanDefinitionsPage from './pages/BeanDefinitionsPage';
 import BeansPage from './pages/BeansPage';
+import GanttChartPage from './pages/GanttChartPage';
 import GraphPage from './pages/GraphPage';
 import { Bean, BeanDefinition } from './api/types';
 
@@ -38,6 +39,11 @@ const App: React.FC = () => {
       <Row className="mb-4">
         <Col>
           <BeansPage beans={beans} />
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col>
+          <GanttChartPage beans={beans} />
         </Col>
       </Row>
       <Row className="mb-4">
