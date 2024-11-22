@@ -5,6 +5,8 @@ plugins {
     java
     jacoco
     `maven-publish`
+    alias(libs.plugins.spring.framework.boot)
+    alias(libs.plugins.spring.dependency.managment)
 }
 
 val versionFromProperty = "${project.property("version")}"
@@ -29,7 +31,15 @@ dependencies {
 
     implementation(libs.spring.jfr.api)
 
+    implementation("org.springframework:spring-context")
+    implementation("org.springframework:spring-core")
+
+
+    implementation(libs.slf4j.api)
+
     implementation(libs.bundles.jackson)
+
+    runtimeOnly(libs.slf4j.simple)
 
     testImplementation(libs.junit.jupiter)
 

@@ -26,6 +26,10 @@ const BeansPage: React.FC<BeansPageProps> = ({
           thead={{ className: 'table-dark' }}
           columns={[
             {
+              key: 'contextId',
+              label: 'Context Id'
+            },
+            {
               key: 'beanName',
               label: 'Bean Name'
             },
@@ -44,6 +48,11 @@ const BeansPage: React.FC<BeansPageProps> = ({
           ]}
           data={beans.map(it => {
             return {
+              contextId: {
+                representation: <div className="content-scroll">{it.contextId}</div>,
+                value: it.contextId,
+                className: 'td-128'
+              },
               beanName: {
                 representation: <div className="content-scroll">{it.beanName}</div>,
                 value: it.beanName,
@@ -66,8 +75,20 @@ const BeansPage: React.FC<BeansPageProps> = ({
               },
             };
           })}
-          filterableColumns={['beanName', 'preInitializedAt', 'postInitializedAt', 'duration']}
-          sortableColumns={['beanName', 'preInitializedAt', 'postInitializedAt', 'duration']}
+          filterableColumns={[
+            'contextId',
+            'beanName',
+            'preInitializedAt',
+            'postInitializedAt',
+            'duration'
+          ]}
+          sortableColumns={[
+            'contextId',
+            'beanName',
+            'preInitializedAt',
+            'postInitializedAt',
+            'duration'
+          ]}
         />
       </div>
     </Card>
