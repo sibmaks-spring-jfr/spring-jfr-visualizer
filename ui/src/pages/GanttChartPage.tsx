@@ -14,7 +14,7 @@ export interface ProcessedBean extends Bean {
   lane: number;
 }
 
-const GanttChart: React.FC<GanttChartProps> = ({ beans, width = 800, height = 400 }) => {
+const GanttChartPage: React.FC<GanttChartProps> = ({ beans, width = 800, height = 400 }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const GanttChart: React.FC<GanttChartProps> = ({ beans, width = 800, height = 40
       .attr('y', d => yScale(String(d.lane))! + yScale.bandwidth() / 2)
       .attr('dy', '.35em')
       .text(d => d.beanName)
-      .attr('fill', 'white')
+      .attr('fill', 'black')
       .attr('font-size', '10px');
 
   }, [beans, width, height]);
@@ -132,4 +132,4 @@ const GanttChart: React.FC<GanttChartProps> = ({ beans, width = 800, height = 40
   return <svg ref={svgRef}></svg>;
 };
 
-export default GanttChart;
+export default GanttChartPage;

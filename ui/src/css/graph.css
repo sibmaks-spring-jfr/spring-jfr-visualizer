@@ -56,3 +56,7 @@
 .arrowhead.highlighted {
     fill: cornflowerblue;
 }
+
+.bar:hover {
+  fill: orange;
+}
