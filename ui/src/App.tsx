@@ -44,30 +44,6 @@ const App: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <GanttChartPage spans={[
-            {
-              id: '1',
-              start: 5000,
-              end: 100000,
-              label: 'Bean A'
-            },
-            {
-              id: '2',
-              start: 50000,
-              end: 100005,
-              label: 'Bean B'
-            },
-            {
-              id: '3',
-              start: 100000,
-              end: 200000,
-              label: 'Bean C'
-            }
-          ]} />
-        </Col>
-      </Row>
-      <Row className="mb-4">
-        <Col>
           <BeanInitializationGantChartPage beans={beans} />
         </Col>
       </Row>

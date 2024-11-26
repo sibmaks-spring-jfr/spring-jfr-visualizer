@@ -19,13 +19,15 @@ interface GanttChartPageProps {
   spans: Span[];
 }
 
-interface PositionedSpan extends Span {
+interface SkippedSpan extends Span {
+  skippedSteps: number;
+}
+
+interface PositionedSpan extends SkippedSpan {
   level: number;
 }
 
-const assignLevelsToSpans = (spans: Span[]): PositionedSpan[] => {
-  spans.sort((a, b) => a.start - b.start);
-
+const assignLevelsToSpans = (spans: SkippedSpan[]): PositionedSpan[] => {
   const levels: Span[][] = [];
 
   return spans.map(span => {
@@ -48,29 +50,81 @@ const assignLevelsToSpans = (spans: Span[]): PositionedSpan[] => {
   });
 };
 
+const collapseEmptyIntervals = (spans: Span[], gridStep: number): SkippedSpan[] => {
+  const collapsed: SkippedSpan[] = [];
+
+  let skippedSteps = 0;
+  let lastEnd = 0;
+
+  spans.forEach((span, index) => {
+    if (index === 0) {
+      lastEnd = span.end;
+      collapsed.push(({ ...span, skippedSteps }));
+      return;
+    }
+
+    const emptySpace = (span.start - lastEnd) / gridStep;
+
+    if (emptySpace >= 3) {
+      skippedSteps += Math.floor(emptySpace - 3);
+    }
+
+    collapsed.push(({ ...span, skippedSteps }));
+    lastEnd = span.end;
+  });
+
+  return collapsed;
+};
+
 const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
   const [scale, setScale] = useState(1);
-  const positionedSpans = assignLevelsToSpans(spans);
+  spans.sort((a, b) => a.start - b.start);
+
+  const baseMinTime = Math.min(...spans.map(span => span.start));
+  const baseMaxTime = Math.max(...spans.map(span => span.end));
+
+  spans = spans.map(span => ({ ...span, start: span.start - baseMinTime, end: span.end - baseMinTime }));
+
+  const gridWidth = 50;
+  const gridStep = gridWidth * (1 / scale);
+
+  const collapsedSpans = collapseEmptyIntervals(spans, gridStep);
+
+  const positionedSpans = assignLevelsToSpans(collapsedSpans);
   const levels = new Set(positionedSpans.map(span => span.level));
 
-  const gridStep = 50 * (1 / scale);
 
-  const minTime = Math.min(...positionedSpans.map(span => span.start));
-  const maxTime = Math.max(...positionedSpans.map(span => span.end));
-  console.log(minTime, maxTime)
+  const minTime = Math.min(...spans.map(span => span.start));
+  const maxTime = Math.max(...spans.map(span => span.end));
+
+  const isCellEmpty = (time: number, step: number) => {
+    return !positionedSpans.some(
+      span => {
+        const leftBound = time - step;
+        const rightBound = time + step;
+        return span.start <= rightBound && span.end >= leftBound;
+      }
+    );
+  };
 
   const gridLines = [];
   for (let time = minTime; time <= maxTime; time += gridStep) {
-    gridLines.push(time);
+    if (!isCellEmpty(time, gridStep)) {
+      gridLines.push(time);
+    } else {
+
+    }
   }
 
   return (
     <Card>
-      <Card.Header data-bs-toggle="collapse"
-                   data-bs-target="#gantCollapse"
-                   aria-expanded="false"
-                   aria-controls="gantCollapse"
-                   role="button">
+      <Card.Header
+        data-bs-toggle="collapse"
+        data-bs-target="#gantCollapse"
+        aria-expanded="false"
+        aria-controls="gantCollapse"
+        role="button"
+      >
         <Card.Title>Gant Graph</Card.Title>
       </Card.Header>
       <div id="gantCollapse" className="collapse">
@@ -83,7 +137,8 @@ const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
               </ButtonGroup>
             </Row>
             <Row className="mb-2">
-              Grid Step: {gridStep} ms
+              <p>Grid Step: {gridStep} ms</p>
+              <p>Base Min Time: {baseMinTime} ms</p>
             </Row>
             <Container className="timeline">
               {/* Сетка */}
@@ -124,14 +179,16 @@ const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
                     .map(span => {
                       const spanStart = (span.start - minTime) * scale;
                       const spanWidth = (span.end - span.start) * scale;
+                      const spanOffset = span.skippedSteps * gridWidth;
+                      console.log(level, span.skippedSteps, spanOffset);
 
                       return (
                         <div
                           key={span.id}
                           className="timeline-span"
                           style={{
-                            left: `${spanStart}px`,
-                            width: `${spanWidth}px`
+                            left: `${spanStart - spanOffset}px`,
+                            width: `${spanWidth}px`,
                           }}
                           title={span.label}
                         >
