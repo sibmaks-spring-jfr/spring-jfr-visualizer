@@ -46,20 +46,20 @@ const App: React.FC = () => {
           <GanttChartPage spans={[
             {
               id: '1',
-              start: 0,
-              end: 1000,
+              start: 5000,
+              end: 100000,
               label: 'Bean A'
             },
             {
               id: '2',
-              start: 500,
-              end: 1000,
+              start: 50000,
+              end: 100005,
               label: 'Bean B'
             },
             {
               id: '3',
-              start: 1000,
-              end: 2000,
+              start: 100000,
+              end: 200000,
               label: 'Bean C'
             }
           ]}/>
