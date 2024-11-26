@@ -7,6 +7,14 @@ export interface BeansPageProps {
   beans: Bean[];
 }
 
+const toLocalDateTime = (millis: number | null): string => {
+  if (!millis) {
+    return 'Unknown';
+  }
+  const rawDate = new Date(millis);
+  return rawDate.toLocaleDateString() + ' ' + rawDate.toLocaleTimeString();
+};
+
 const BeansPage: React.FC<BeansPageProps> = ({
                                                beans
                                              }) => {
@@ -59,13 +67,13 @@ const BeansPage: React.FC<BeansPageProps> = ({
                 className: 'td-128'
               },
               preInitializedAt: {
-                representation: <code className="content-scroll">{it.preInitializedAt ?? 'Unknown'}</code>,
-                value: it.preInitializedAt ?? 'Unknown',
+                representation: <code className="content-scroll">{toLocalDateTime(it.preInitializedAt)}</code>,
+                value: toLocalDateTime(it.preInitializedAt),
                 className: 'td-64 text-center'
               },
               postInitializedAt: {
-                representation: <code className="content-scroll">{it.postInitializedAt}</code>,
-                value: it.postInitializedAt,
+                representation: <code className="content-scroll">{toLocalDateTime(it.postInitializedAt)}</code>,
+                value: toLocalDateTime(it.postInitializedAt),
                 className: 'td-64 text-center'
               },
               duration: {

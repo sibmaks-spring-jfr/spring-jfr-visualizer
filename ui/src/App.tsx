@@ -8,6 +8,7 @@ import { Bean, BeanDefinition } from './api/types';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import BeanInitializationGantChartPage from './pages/BeanInitializationGantChartPage';
 
 interface BeanReport {
   beans: Bean[];
@@ -62,7 +63,12 @@ const App: React.FC = () => {
               end: 200000,
               label: 'Bean C'
             }
-          ]}/>
+          ]} />
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col>
+          <BeanInitializationGantChartPage beans={beans} />
         </Col>
       </Row>
       <Row className="mb-4">

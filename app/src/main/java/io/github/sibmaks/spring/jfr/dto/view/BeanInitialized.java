@@ -1,11 +1,8 @@
 package io.github.sibmaks.spring.jfr.dto.view;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.Instant;
 
 /**
  * @author sibmaks
@@ -17,9 +14,7 @@ import java.time.Instant;
 public class BeanInitialized {
     private String contextId;
     private String beanName;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "UTC")
-    private Instant preInitializedAt;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSSSSS", timezone = "UTC")
-    private Instant postInitializedAt;
+    private Long preInitializedAt;
+    private Long postInitializedAt;
     private double duration;
 }

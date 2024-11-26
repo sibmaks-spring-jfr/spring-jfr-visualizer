@@ -11,8 +11,8 @@ export interface BeanDefinition {
 export interface Bean {
   contextId: string;
   beanName: string;
-  preInitializedAt: string | null;
-  postInitializedAt: string;
+  preInitializedAt: number | null;
+  postInitializedAt: number;
   duration: number;
 }
 

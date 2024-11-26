@@ -55,7 +55,7 @@ public class BeansReportCreator {
                         .contextId(contextId)
                         .beanName(beanName)
                         .duration(-1)
-                        .postInitializedAt(endTime)
+                        .postInitializedAt(endTime.toEpochMilli())
                         .build();
                 beans.add(beanInitialized);
             } else {
@@ -65,8 +65,8 @@ public class BeansReportCreator {
                         .contextId(contextId)
                         .beanName(beanName)
                         .duration(duration)
-                        .preInitializedAt(startTime)
-                        .postInitializedAt(endTime)
+                        .preInitializedAt(startTime.toEpochMilli())
+                        .postInitializedAt(endTime.toEpochMilli())
                         .build();
                 beans.add(beanInitialized);
             }
