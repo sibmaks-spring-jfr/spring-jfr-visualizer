@@ -43,7 +43,26 @@ const App: React.FC = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <GanttChartPage beans={beans} />
+          <GanttChartPage spans={[
+            {
+              id: '1',
+              start: 0,
+              end: 1000,
+              label: 'Bean A'
+            },
+            {
+              id: '2',
+              start: 500,
+              end: 1000,
+              label: 'Bean B'
+            },
+            {
+              id: '3',
+              start: 1000,
+              end: 2000,
+              label: 'Bean C'
+            }
+          ]}/>
         </Col>
       </Row>
       <Row className="mb-4">

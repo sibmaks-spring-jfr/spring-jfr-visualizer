@@ -1,6 +1,6 @@
 #graphCollapse {
-    resize: vertical;
-    overflow: auto;
+  resize: vertical;
+  overflow: auto;
 }
 
 .graph-svg {
@@ -9,54 +9,50 @@
 }
 
 .link {
-    stroke: #999;
-    stroke-opacity: 0.6;
-    stroke-width: 2px;
+  stroke: #999;
+  stroke-opacity: 0.6;
+  stroke-width: 2px;
 }
 
 .link.highlighted {
-    stroke: cornflowerblue;
-    stroke-opacity: 1.0;
+  stroke: cornflowerblue;
+  stroke-opacity: 1.0;
 }
 
 .node {
-    stroke: #fff;
-    stroke-width: 1px;
+  stroke: #fff;
+  stroke-width: 1px;
 }
 
 .node circle {
-    stroke: #fff;
-    fill: black;
-    stroke-width: 1px;
+  stroke: #fff;
+  fill: black;
+  stroke-width: 1px;
 }
 
 .node.selected circle {
-    stroke: #000;
-    fill: green;
-    stroke-width: 2px;
+  stroke: #000;
+  fill: green;
+  stroke-width: 2px;
 }
 
 .node.friend circle {
-    stroke: #000;
-    fill: red;
-    stroke-width: 3px;
+  stroke: #000;
+  fill: red;
+  stroke-width: 3px;
 }
 
 .node-text {
-    stroke: none;
-    font: 10px sans-serif;
-    fill: black;
-    pointer-events: none;
+  stroke: none;
+  font: 10px sans-serif;
+  fill: black;
+  pointer-events: none;
 }
 
 .arrowhead {
-    fill: #999;
+  fill: #999;
 }
 
 .arrowhead.highlighted {
-    fill: cornflowerblue;
-}
-
-.bar:hover {
-  fill: orange;
+  fill: cornflowerblue;
 }

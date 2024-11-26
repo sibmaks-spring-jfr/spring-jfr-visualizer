@@ -1,135 +1,119 @@
-import React, { useRef, useEffect } from 'react';
-import * as d3 from 'd3';
-import { Bean } from '../api/types';
+import React, { useState } from 'react';
+import {
+  Button,
+  ButtonGroup,
+  Card,
+  Col,
+  Container,
+  Form,
+  FormLabel,
+  FormSelect,
+  InputGroup,
+  Row
+} from 'react-bootstrap';
+import './GanttChartPage.css';
 
-interface GanttChartProps {
-  beans: Bean[];
-  width?: number;
-  height?: number;
+interface Span {
+  id: string;
+  start: number; // Start time in milliseconds
+  end: number; // End time in milliseconds
+  label: string; // Caption
 }
 
-export interface ProcessedBean extends Bean {
-  start: Date;
-  end: Date;
-  lane: number;
+interface GanttChartPageProps {
+  spans: Span[];
 }
 
-const GanttChartPage: React.FC<GanttChartProps> = ({ beans, width = 800, height = 400 }) => {
-  const svgRef = useRef<SVGSVGElement | null>(null);
+interface PositionedSpan extends Span {
+  level: number;
+}
 
-  useEffect(() => {
-    if (!beans || beans.length === 0) return;
+const assignLevelsToSpans = (spans: Span[]): PositionedSpan[] => {
+  spans.sort((a, b) => a.start - b.start);
 
-    // Parse dates and ensure 'start' is not null
-    const parseDate = d3.isoParse; // assuming ISO date strings
+  const levels: Span[][] = [];
 
-    const processedData: ProcessedBean[] = beans.map(bean => {
-      const startDate = bean.preInitializedAt ? parseDate(bean.preInitializedAt) : parseDate(bean.postInitializedAt);
-      if (!startDate) {
-        throw new Error(`Invalid date format for bean: ${bean.beanName}`);
-      }
-      const endDate = parseDate(bean.postInitializedAt);
-      if (!endDate) {
-        throw new Error(`Invalid postInitializedAt date for bean: ${bean.beanName}`);
-      }
-      return {
-        ...bean,
-        start: startDate,
-        end: endDate,
-        lane: 0, // will be assigned later
-      };
-    });
+  return spans.map(span => {
+    let level = 0;
 
-    // Sort the data by start time
-    const sortedData = processedData.sort((a, b) => a.start.getTime() - b.start.getTime());
+    // Найти первый доступный уровень
+    while (
+      levels[level] &&
+      levels[level].some(existingSpan =>
+        // Проверяем пересечение по времени
+        existingSpan.start < span.end &&
+        span.start < existingSpan.end
+      )
+      ) {
+      level++;
+    }
 
-    // Assign lanes to handle overlaps
-    const lanes: Date[] = []; // Track the end time of the last bean in each lane
+    // Добавляем спан на найденный уровень
+    if (!levels[level]) levels[level] = [];
+    levels[level].push(span);
 
-    sortedData.forEach(bean => {
-      let placed = false;
-      for (let i = 0; i < lanes.length; i++) {
-        if (lanes[i].getTime() <= bean.start.getTime()) {
-          lanes[i] = bean.end;
-          bean.lane = i;
-          placed = true;
-          break;
-        }
-      }
-      if (!placed) {
-        lanes.push(bean.end);
-        bean.lane = lanes.length - 1;
-      }
-    });
+    return { ...span, level };
+  });
+};
 
-    const numLanes = lanes.length;
-    const margin = { top: 20, right: 30, bottom: 50, left: 150 };
-    const innerWidth = width - margin.left - margin.right;
-    const innerHeight = height - margin.top - margin.bottom;
+const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
+  const [scale, setScale] = useState(1);
+  const positionedSpans = assignLevelsToSpans(spans);
+  const levels = new Set(positionedSpans.map(span => span.level));
 
-    // Clear previous SVG content
-    d3.select(svgRef.current).selectAll('*').remove();
+  return (
+    <Card>
+      <Card.Header data-bs-toggle="collapse"
+                   data-bs-target="#gantCollapse"
+                   aria-expanded="false"
+                   aria-controls="gantCollapse"
+                   role="button">
+        <Card.Title>Gant Graph</Card.Title>
+      </Card.Header>
+      <div id="gantCollapse" className="collapse">
+        <Row className={'m-2 h-100'}>
+          <Container fluid>
+            <Row className="mb-2">
+              <ButtonGroup>
+                <Button onClick={() => setScale(scale * 2)}>Zoom In</Button>
+                <Button onClick={() => setScale(scale / 2)}>Zoom Out</Button>
+              </ButtonGroup>
+            </Row>
+            <Container className="timeline">
+              {levels.keys().map(level => (
+                <Row
+                  className="timeline-content"
+                >
+                  {positionedSpans
+                    .filter(span => span.level === level)
+                    .map(span => {
+                      const spanStart = span.start * scale;
+                      const spanWidth = (span.end - span.start) * scale;
 
-    const svg = d3
-      .select(svgRef.current)
-      .attr('width', width)
-      .attr('height', height);
-
-    // Define scales
-    const xExtent: [Date, Date] = d3.extent(sortedData.flatMap(d => [d.start, d.end])) as [Date, Date];
-    const xScale = d3.scaleTime().domain(xExtent).range([0, innerWidth]);
-
-    const yScale = d3.scaleBand().domain(d3.range(numLanes).map(String)).range([0, innerHeight]).padding(0.1);
-
-    const g = svg
-      .append('g')
-      .attr('transform', `translate(${margin.left},${margin.top})`);
-
-    // X Axis
-    const xAxis = d3.axisBottom<Date>(xScale)
-      .ticks(d3.timeMillisecond.every(100))
-      .tickFormat((date: Date) => d3.timeFormat('%H:%M:%S')(date));
-
-    g.append('g')
-      .attr('transform', `translate(0, ${innerHeight})`)
-      .call(xAxis)
-      .selectAll('text')
-      .attr('transform', 'rotate(-45)')
-      .style('text-anchor', 'end');
-
-    // Y Axis (lanes)
-    g.append('g')
-      .call(d3.axisLeft(d3.scaleBand().domain(d3.range(numLanes).map(String)).range([0, innerHeight])));
-
-    // Bars
-    g.selectAll('.bar')
-      .data(sortedData)
-      .enter()
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', d => xScale(d.start))
-      .attr('y', d => yScale(String(d.lane))!)
-      .attr('width', d => xScale(d.end) - xScale(d.start))
-      .attr('height', yScale.bandwidth())
-      .attr('fill', 'steelblue')
-      .append('title') // Tooltip
-      .text(d => `${d.beanName}\nStart: ${d.preInitializedAt ?? 'N/A'}\nEnd: ${d.postInitializedAt}`);
-
-    // Labels (optional)
-    g.selectAll('.label')
-      .data(sortedData)
-      .enter()
-      .append('text')
-      .attr('x', d => xScale(d.start) + 5)
-      .attr('y', d => yScale(String(d.lane))! + yScale.bandwidth() / 2)
-      .attr('dy', '.35em')
-      .text(d => d.beanName)
-      .attr('fill', 'black')
-      .attr('font-size', '10px');
-
-  }, [beans, width, height]);
-
-  return <svg ref={svgRef}></svg>;
+                      return (
+                        <div
+                          key={span.id}
+                          className="timeline-span"
+                          style={{
+                            left: `${spanStart}px`,
+                            width: `${spanWidth}px`,
+                            top: '0',
+                            height: '30px',
+                          }}
+                          title={span.label}
+                        >
+                          {span.label}
+                        </div>
+                      );
+                    })}
+                </Row>
+              ))}
+            </Container>
+          </Container>
+        </Row>
+      </div>
+    </Card>
+  );
 };
 
 export default GanttChartPage;
