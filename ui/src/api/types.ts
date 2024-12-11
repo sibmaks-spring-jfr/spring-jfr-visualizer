@@ -1,4 +1,5 @@
 export interface BeanDefinition {
+  contextId: string;
   scope: string | null;
   beanClassName: string | null;
   beanName: string;
@@ -8,9 +9,10 @@ export interface BeanDefinition {
 }
 
 export interface Bean {
+  contextId: string;
   beanName: string;
-  preInitializedAt: string | null;
-  postInitializedAt: string;
+  preInitializedAt: number | null;
+  postInitializedAt: number;
   duration: number;
 }
 

@@ -1,0 +1,49 @@
+.timeline {
+  position: relative;
+  overflow-x: auto;
+  border: 0;
+  height: 50px;
+  min-height: fit-content;
+}
+
+.timeline-content {
+  position: relative;
+  height: inherit;
+}
+
+.timeline-span {
+  position: absolute;
+  top: 0;
+  height: 32px;
+  color: white;
+  background-color: #1240AB;
+  border: 1px solid;
+  border-radius: 5px;
+  transition: background-color 0.2s ease;
+  max-width: none !important;
+  overflow: scroll;
+}
+
+.timeline-span:hover {
+  background-color: #FFD300;
+  cursor: pointer;
+}
+
+
+.timeline-span {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  border-radius: 4px;
+  position: absolute;
+  line-height: 30px;
+}
+
+.timeline-collapsed {
+  background-color: #eee;
+  color: #000;
+  border: 1px dashed #ccc;
+  text-align: center;
+  line-height: 30px;
+  font-size: 12px;
+}

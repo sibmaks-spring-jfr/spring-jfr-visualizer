@@ -26,6 +26,10 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
           thead={{ className: 'table-dark' }}
           columns={[
             {
+              key: 'contextId',
+              label: 'Context Id'
+            },
+            {
               key: 'scope',
               label: 'Scope'
             },
@@ -56,6 +60,11 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
           ]}
           data={beanDefinitions.map(it => {
             return {
+              contextId: {
+                representation: <div className="content-scroll">{it.contextId}</div>,
+                value: it.contextId,
+                className: 'td-128 text-center'
+              },
               scope: {
                 representation: <div className="content-scroll">{it.scope}</div>,
                 value: it.scope,
@@ -98,6 +107,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
             };
           })}
           filterableColumns={[
+            'contextId',
             'scope',
             'beanClassName',
             'beanName',
@@ -107,6 +117,7 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
             'generated'
           ]}
           sortableColumns={[
+            'contextId',
             'scope',
             'beanClassName',
             'beanName',

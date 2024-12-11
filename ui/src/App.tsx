@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import BeanDefinitionsPage from './pages/BeanDefinitionsPage';
 import BeansPage from './pages/BeansPage';
+import GanttChartPage from './pages/GanttChartPage';
 import GraphPage from './pages/GraphPage';
 import { Bean, BeanDefinition } from './api/types';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import BeanInitializationGantChartPage from './pages/BeanInitializationGantChartPage';
 
 interface BeanReport {
   beans: Bean[];
@@ -38,6 +40,11 @@ const App: React.FC = () => {
       <Row className="mb-4">
         <Col>
           <BeansPage beans={beans} />
+        </Col>
+      </Row>
+      <Row className="mb-4">
+        <Col>
+          <BeanInitializationGantChartPage beans={beans} />
         </Col>
       </Row>
       <Row className="mb-4">

@@ -7,6 +7,14 @@ export interface BeansPageProps {
   beans: Bean[];
 }
 
+const toLocalDateTime = (millis: number | null): string => {
+  if (!millis) {
+    return 'Unknown';
+  }
+  const rawDate = new Date(millis);
+  return rawDate.toLocaleDateString() + ' ' + rawDate.toLocaleTimeString();
+};
+
 const BeansPage: React.FC<BeansPageProps> = ({
                                                beans
                                              }) => {
@@ -26,6 +34,10 @@ const BeansPage: React.FC<BeansPageProps> = ({
           thead={{ className: 'table-dark' }}
           columns={[
             {
+              key: 'contextId',
+              label: 'Context Id'
+            },
+            {
               key: 'beanName',
               label: 'Bean Name'
             },
@@ -44,19 +56,24 @@ const BeansPage: React.FC<BeansPageProps> = ({
           ]}
           data={beans.map(it => {
             return {
+              contextId: {
+                representation: <div className="content-scroll">{it.contextId}</div>,
+                value: it.contextId,
+                className: 'td-128'
+              },
               beanName: {
                 representation: <div className="content-scroll">{it.beanName}</div>,
                 value: it.beanName,
                 className: 'td-128'
               },
               preInitializedAt: {
-                representation: <code className="content-scroll">{it.preInitializedAt ?? 'Unknown'}</code>,
-                value: it.preInitializedAt ?? 'Unknown',
+                representation: <code className="content-scroll">{toLocalDateTime(it.preInitializedAt)}</code>,
+                value: toLocalDateTime(it.preInitializedAt),
                 className: 'td-64 text-center'
               },
               postInitializedAt: {
-                representation: <code className="content-scroll">{it.postInitializedAt}</code>,
-                value: it.postInitializedAt,
+                representation: <code className="content-scroll">{toLocalDateTime(it.postInitializedAt)}</code>,
+                value: toLocalDateTime(it.postInitializedAt),
                 className: 'td-64 text-center'
               },
               duration: {
@@ -66,8 +83,20 @@ const BeansPage: React.FC<BeansPageProps> = ({
               },
             };
           })}
-          filterableColumns={['beanName', 'preInitializedAt', 'postInitializedAt', 'duration']}
-          sortableColumns={['beanName', 'preInitializedAt', 'postInitializedAt', 'duration']}
+          filterableColumns={[
+            'contextId',
+            'beanName',
+            'preInitializedAt',
+            'postInitializedAt',
+            'duration'
+          ]}
+          sortableColumns={[
+            'contextId',
+            'beanName',
+            'preInitializedAt',
+            'postInitializedAt',
+            'duration'
+          ]}
         />
       </div>
     </Card>

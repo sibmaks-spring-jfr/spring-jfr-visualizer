@@ -1,6 +1,5 @@
-package io.github.sibmaks.spring.jfr;
+package io.github.sibmaks.spring.jfr.dto.view;
 
-import io.github.sibmaks.spring.jfr.event.bean.BeanDefinitionRegisteredEvent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +14,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class BeansReport {
-    private final List<BeanDefinitionRegisteredEvent> beanDefinitions;
+    private final List<BeanDefinition> beanDefinitions;
     private final List<BeanInitialized> beans;
 }

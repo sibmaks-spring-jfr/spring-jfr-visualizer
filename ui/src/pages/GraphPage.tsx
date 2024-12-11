@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import { Card, Form, Button, Row, Col, FormLabel, InputGroup } from 'react-bootstrap';
+import { Card, Form, Button, Row, Col, FormLabel, InputGroup, FormSelect } from 'react-bootstrap';
 import { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
 import { BeanDefinition } from '../api/types';
 
@@ -16,17 +16,30 @@ interface Node extends SimulationNodeDatum {
 interface Edge extends SimulationLinkDatum<Node> {
 }
 
+interface BeanId {
+  contextId: string;
+  beanName: string;
+}
+
 const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
   const graphRef = useRef<SVGSVGElement | null>(null);
-  const [beanName, setBeanName] = useState<string>('');
-  const [beanNames, setBeanNames] = useState<string[]>([]);
+  const [beanId, setBeanId] = useState<BeanId>({ contextId: '', beanName: '' });
+  const [beanNames, setBeanNames] = useState<Map<string, string[]>>(new Map<string, string[]>());
   const [svg, setSVG] = useState<d3.Selection<SVGGElement, Node, null, undefined> | null>(null);
-  const [beanDependencies, setBeanDependencies] = useState<Record<string, string[]>>({});
+  const [beanDependencies, setBeanDependencies] = useState<Map<string, Map<string, string[]>> | null>();
 
   useEffect(() => {
-    const beanDependencies: Record<string, string[]> = {};
+    const beanDependencies = new Map<string, Map<string, string[]>>();
     for (let beanDefinition of beanDefinitions) {
-      beanDependencies[beanDefinition.beanName] = beanDefinition.dependencies || [];
+      const dependencies = beanDefinition.dependencies || [];
+      const length = dependencies.length || 0;
+      if (length <= 0) {
+        continue;
+      }
+      let contextId = beanDefinition.contextId;
+      const contextMap = beanDependencies.get(contextId) || new Map<string, string[]>();
+      contextMap.set(beanDefinition.beanName, dependencies);
+      beanDependencies.set(contextId, contextMap);
     }
     setBeanDependencies(beanDependencies);
   }, [beanDefinitions]);
@@ -54,8 +67,20 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
   }, [graphRef, graphRef.current]);
 
   useEffect(() => {
-    const names = Object.keys(beanDependencies).filter(bean => beanDependencies[bean].length > 0);
-    setBeanNames(names);
+    if (!beanDependencies) {
+      return;
+    }
+    const newBeanNames = new Map<string, string[]>();
+    for (let beanDefinition of beanDefinitions) {
+      if ((beanDefinition.dependencies?.length ?? 0) <= 0) {
+        continue;
+      }
+      let contextId = beanDefinition.contextId;
+      let beanNames = newBeanNames.get(contextId) || [];
+      beanNames.push(beanDefinition.beanName);
+      newBeanNames.set(contextId, beanNames);
+    }
+    setBeanNames(newBeanNames);
   }, [beanDependencies]);
 
   const getNodeId = (node: Node | string | number) => {
@@ -110,29 +135,30 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
   };
 
   const handleBuild = () => {
-    if (!beanName || !graphRef.current || !svg) return;
+    if (!beanId || !beanId.beanName || !beanId.contextId || !graphRef.current || !svg) return;
 
     const width = graphRef.current.clientWidth;
     const height = graphRef.current.clientHeight;
-    const nodes: Node[] = [{ id: beanName, name: beanName }];
+    const nodes: Node[] = [{ id: beanId.beanName, name: beanId.beanName }];
     const edges: Edge[] = [];
     const visited = new Set<string>();
 
-    const traverse = (bean: string) => {
+    const traverse = (contextId: string, bean: string) => {
       if (visited.has(bean)) return;
       visited.add(bean);
 
-      const dependencies = beanDependencies[bean] || [];
+      const contextDependencies = beanDependencies?.get(contextId) || new Map<string, string[]>();
+      const dependencies = contextDependencies?.get(bean) || [];
       dependencies.forEach(dependency => {
         if (!visited.has(dependency)) {
           nodes.push({ id: dependency, name: dependency });
-          traverse(dependency);
+          traverse(contextId, dependency);
         }
         edges.push({ source: bean, target: dependency });
       });
     };
 
-    traverse(beanName);
+    traverse(beanId.contextId, beanId.beanName);
 
     svg.selectAll('g').remove();
 
@@ -201,7 +227,7 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
         .attr('transform', d => `translate(${d.x},${d.y})`);
     });
 
-    highlightNode(beanName);
+    highlightNode(beanId.beanName);
   };
 
   return (
@@ -220,16 +246,31 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
           </Col>
           <Col md={'auto'}>
             <InputGroup>
+              <FormSelect
+                id={'contextId'}
+                value={beanId.contextId}
+                onChange={e => setBeanId({ ...beanId, contextId: e.target.value })}
+              >
+                <option selected={true}></option>
+                {
+                  beanNames.keys()
+                    .map(it => <option key={it} value={it}>{it}</option>)
+                }
+              </FormSelect>
               <Form.Control
                 id="beanName"
                 type="text"
                 list="beanNames-suggestions"
                 placeholder="Bean Name"
-                value={beanName}
-                onChange={e => setBeanName(e.target.value)}
+                value={beanId.beanName}
+                disabled={!beanId.contextId}
+                onChange={e => setBeanId({ ...beanId, beanName: e.target.value })}
               />
               <datalist id="beanNames-suggestions">
-                {beanNames.map(it => <option key={it} value={it} />)}
+                {
+                  (beanNames.get(beanId.contextId) || [])
+                    .map(it => <option key={it} value={it} />)
+                }
               </datalist>
               <Button variant="outline-secondary" onClick={handleBuild}>
                 Build Graph
