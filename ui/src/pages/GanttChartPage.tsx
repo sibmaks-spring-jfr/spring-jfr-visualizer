@@ -7,6 +7,8 @@ import {
   Row
 } from 'react-bootstrap';
 import './GanttChartPage.css';
+import { format } from 'date-fns';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Span {
   id: string;
@@ -15,7 +17,11 @@ interface Span {
   label: string;
 }
 
-interface LeveledSpan extends Span {
+interface UniqueSpan extends Span {
+  uuid: string;
+}
+
+interface LeveledSpan extends UniqueSpan {
   level: number;
 }
 
@@ -23,7 +29,7 @@ interface GanttChartPageProps {
   spans: Span[];
 }
 
-const assignLevelsToSpans = (spans: Span[]): LeveledSpan[] => {
+const assignLevelsToSpans = (spans: UniqueSpan[]): LeveledSpan[] => {
   const levels: Span[][] = [];
 
   return spans.map(span => {
@@ -48,17 +54,28 @@ const assignLevelsToSpans = (spans: Span[]): LeveledSpan[] => {
 
 const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
   const [scale, setScale] = useState(1);
+  const [tooltip, setTooltip] = useState<{ span: UniqueSpan | null; x: number; y: number }>({ span: null, x: 0, y: 0 });
+
   spans.sort((a, b) => a.start - b.start);
 
   const baseMinTime = Math.min(...spans.map(span => span.start));
   const baseMaxTime = Math.max(...spans.map(span => span.start));
 
-  spans = spans.map(span => ({ ...span, start: span.start - baseMinTime, end: span.end - baseMinTime }));
+  const uniqueSpans = spans.map(
+    span => (
+      {
+        ...span,
+        uuid: uuidv4(),
+        start: span.start - baseMinTime,
+        end: span.end - baseMinTime
+      }
+    )
+  );
 
   const gridWidth = 50;
   const gridStep = gridWidth * (1 / scale);
 
-  const leveledSpans = assignLevelsToSpans(spans);
+  const leveledSpans = assignLevelsToSpans(uniqueSpans);
   const levels = new Set(leveledSpans.map(span => span.level));
 
   const minTime = 0;
@@ -69,92 +86,112 @@ const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
     gridLines.push(time);
   }
 
+  const handleMouse = (span: UniqueSpan, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (tooltip.span?.uuid !== span.uuid) {
+      setTooltip({ span, x: e.clientX, y: e.clientY });
+    } else {
+      setTooltip({ span: null, x: 0, y: 0 });
+    }
+  };
+
+  window.onmouseup = () => {
+    setTooltip({ span: null, x: 0, y: 0 });
+  };
+
+  const formatZonedDateTime = (time: number) => {
+    return format(new Date(time), 'yyyy-MM-dd\'T\'HH:mm:ss.SSS');
+  };
+
   return (
-    <Card>
-      <Card.Header
-        data-bs-toggle="collapse"
-        data-bs-target="#gantCollapse"
-        aria-expanded="false"
-        aria-controls="gantCollapse"
-        role="button"
-      >
-        <Card.Title>Gantt Graph</Card.Title>
-      </Card.Header>
-      <div id="gantCollapse" className="collapse">
-        <Row className="m-2 h-100">
-          <Container fluid>
-            <Row className="mb-2">
-              <ButtonGroup>
-                <Button onClick={() => setScale(scale * 2)}>Zoom In</Button>
-                <Button onClick={() => setScale(scale / 2 <= 0 ? 1 : scale / 2)}>Zoom Out</Button>
-              </ButtonGroup>
-            </Row>
-            <Row className="mb-2">
-              <p>Grid Step: {gridStep} ms</p>
-              <p>Base Min Time: {baseMinTime} ms</p>
-            </Row>
-            <Container className="timeline">
-              {/* Сетка */}
-              <div className="timeline-grid mb-4">
-                {gridLines.map((time, index) => (
-                  <div
-                    key={index}
-                    className="grid-line"
-                    style={{
-                      left: `${(time - minTime) * scale}px`,
-                      height: '100%',
-                      position: 'absolute',
-                      borderLeft: '1px solid #ddd',
-                    }}
-                  >
-                    <span
-                      className="grid-label"
+    <>
+      {tooltip.span && (
+        <div
+          className="tooltip-window"
+          style={{
+            top: tooltip.y,
+            left: tooltip.x,
+          }}
+        >
+          <p><strong>Label:</strong> <code>{tooltip.span.label}</code></p>
+          <p><strong>Start Time:</strong> {formatZonedDateTime(tooltip.span.start + baseMinTime)}</p>
+          <p><strong>End Time:</strong> {formatZonedDateTime(tooltip.span.end + baseMinTime)}</p>
+          <p><strong>Duration:</strong> {tooltip.span.end - tooltip.span.start} ms</p>
+        </div>
+      )}
+      <Card>
+        <Card.Header
+          data-bs-toggle="collapse"
+          data-bs-target="#gantCollapse"
+          aria-expanded="false"
+          aria-controls="gantCollapse"
+          role="button"
+        >
+          <Card.Title>Gantt Graph</Card.Title>
+        </Card.Header>
+        <div id="gantCollapse" className="collapse">
+          <Row className="m-2 h-100">
+            <Container fluid>
+              <Row className="mb-2">
+                <ButtonGroup>
+                  <Button variant={'outline-primary'} onClick={() => setScale(scale * 2)}>Zoom In</Button>
+                  <Button variant={'outline-primary'} onClick={() => setScale(scale / 2 <= 0 ? 1 : scale / 2)}>Zoom Out</Button>
+                </ButtonGroup>
+              </Row>
+              <Row className="mb-2">
+                <p>Grid Step: {gridStep} ms</p>
+                <p>Base Min Time: {baseMinTime} ms</p>
+              </Row>
+              <Container className="timeline">
+                {/* Сетка */}
+                <div className="timeline-grid mb-4">
+                  {gridLines.map((time, index) => (
+                    <div
+                      key={index}
+                      className="grid-line"
                       style={{
-                        position: 'absolute',
-                        top: '0',
-                        transform: 'translateX(-50%)',
-                        fontSize: '10px',
-                        color: '#666',
+                        left: `${(time - minTime) * scale}px`
                       }}
                     >
-                      {time}
-                    </span>
-                  </div>
-                ))}
-              </div>
-              {/* Контент */}
-              {levels.keys().map(level => (
-                <Row
-                  key={`level-${level}`}
-                  className="timeline-content"
-                >
-                  {leveledSpans
-                    .filter(span => span.level === level)
-                    .map(span => {
-                      const spanStart = (span.start - minTime) * scale;
-                      const spanWidth = (span.end - span.start) * scale;
+                      <span className="grid-label">{time}</span>
+                    </div>
+                  ))}
+                </div>
+                {/* Контент */}
+                {Array.from(levels).map(level => (
+                  <Row
+                    key={`level-${level}`}
+                    className="timeline-content"
+                  >
+                    {leveledSpans
+                      .filter(span => span.level === level)
+                      .map(span => {
+                        const spanStart = (span.start - minTime) * scale;
+                        const spanWidth = (span.end - span.start) * scale;
 
-                      return (
-                        <div
-                          key={span.id}
-                          className="timeline-span"
-                          style={{
-                            left: `${spanStart}px`,
-                            width: `${spanWidth}px`,
-                          }}
-                          title={span.label}
-                        >
-                          {span.label}
-                        </div>
-                      );
-                    })}
-                </Row>
-              ))}
+                        return (
+                          <div
+                            key={span.id}
+                            className="timeline-span"
+                            style={{
+                              left: `${spanStart}px`,
+                              width: `${spanWidth}px`,
+                            }}
+                            title={span.label}
+                            onMouseUp={(e) => handleMouse(span, e)}
+                          >
+                            {span.label}
+                          </div>
+                        );
+                      })}
+                  </Row>
+                ))}
+              </Container>
             </Container>
-          </Container>
-        </Row>
-      </div>
-    </Card>
+          </Row>
+        </div>
+      </Card>
+    </>
   );
 };
 
