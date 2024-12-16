@@ -14,9 +14,10 @@
 .timeline-span {
   position: absolute;
   top: 0;
-  height: 32px;
+  height: 48px;
+  line-height: 38px;
   color: white;
-  background-color: #1240AB;
+  background-color: #007bff;
   border: 1px solid;
   border-radius: 5px;
   transition: background-color 0.2s ease;
@@ -28,16 +29,6 @@
 .timeline-span:hover {
   background-color: #FFD300;
   cursor: pointer;
-}
-
-
-.timeline-span {
-  background-color: #007bff;
-  color: white;
-  text-align: center;
-  border-radius: 4px;
-  position: absolute;
-  line-height: 30px;
 }
 
 .timeline-collapsed {
