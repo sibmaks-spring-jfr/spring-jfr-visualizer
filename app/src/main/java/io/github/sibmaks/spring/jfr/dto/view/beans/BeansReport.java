@@ -1,4 +1,4 @@
-package io.github.sibmaks.spring.jfr.dto.view;
+package io.github.sibmaks.spring.jfr.dto.view.beans;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

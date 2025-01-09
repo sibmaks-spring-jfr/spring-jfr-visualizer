@@ -2,7 +2,8 @@ package io.github.sibmaks.spring.jfr.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sibmaks.spring.jfr.Application;
-import io.github.sibmaks.spring.jfr.dto.view.BeansReport;
+import io.github.sibmaks.spring.jfr.dto.view.beans.BeansReport;
+import io.github.sibmaks.spring.jfr.dto.view.calls.CallsReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,12 @@ public class ReportService {
     }
 
     /**
-     * Generate an HTML file using Thymeleaf.
+     * Generate JavaScript beans report
      *
-     * @param report report data
+     * @param beansReport beans report data
+     * @param callsReport calls report data
      */
-    public void generateReport(BeansReport report) {
+    public void generateReport(BeansReport beansReport, CallsReport callsReport) {
         var reportFile = new File(reportFilePath);
         var parentFile = reportFile.getParentFile();
         if (!parentFile.exists()) {
@@ -56,9 +58,11 @@ public class ReportService {
 
         try (var fileWriter = new FileWriter(reportFile);
              var writer = new BufferedWriter(fileWriter)) {
-            var json = objectMapper.writeValueAsString(report);
-            var jsonVariable = objectMapper.writeValueAsString(json);
-            writer.write(String.format("window.beansJson = %s", jsonVariable));
+            var beansJson = objectMapper.writeValueAsString(beansReport);
+            var callsJson = objectMapper.writeValueAsString(callsReport);
+            var beansJsonVariable = objectMapper.writeValueAsString(beansJson);
+            var callsJsonVariable = objectMapper.writeValueAsString(callsJson);
+            writer.write(String.format("window.beansJson = %s;\nwindow.callsJson = %s;", beansJsonVariable, callsJsonVariable));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }

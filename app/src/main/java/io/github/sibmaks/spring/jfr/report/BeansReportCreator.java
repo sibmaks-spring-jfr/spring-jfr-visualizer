@@ -1,9 +1,9 @@
 package io.github.sibmaks.spring.jfr.report;
 
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedEvents;
-import io.github.sibmaks.spring.jfr.dto.view.BeanDefinition;
-import io.github.sibmaks.spring.jfr.dto.view.BeanInitialized;
-import io.github.sibmaks.spring.jfr.dto.view.BeansReport;
+import io.github.sibmaks.spring.jfr.dto.view.beans.BeanDefinition;
+import io.github.sibmaks.spring.jfr.dto.view.beans.BeanInitialized;
+import io.github.sibmaks.spring.jfr.dto.view.beans.BeansReport;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;

@@ -16,3 +16,22 @@ export interface Bean {
   duration: number;
 }
 
+
+export enum InvocationType {
+  ASYNC,
+  JPA,
+  CONTROLLER,
+  SCHEDULED
+}
+
+export interface CallTrace {
+  contextId: string;
+  correlationId: string | null;
+  invocationId: string;
+  success: boolean;
+  type: InvocationType;
+  startTime: number;
+  endTime: number;
+  parameters: Record<string, string>;
+  children: CallTrace[];
+}

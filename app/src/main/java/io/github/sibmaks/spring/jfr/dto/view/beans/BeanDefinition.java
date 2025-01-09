@@ -1,4 +1,4 @@
-package io.github.sibmaks.spring.jfr.dto.view;
+package io.github.sibmaks.spring.jfr.dto.view.beans;
 
 import io.github.sibmaks.spring.jfr.event.api.bean.BeanDefinitionRegisteredFact;
 import io.github.sibmaks.spring.jfr.event.core.converter.DependencyConverter;
