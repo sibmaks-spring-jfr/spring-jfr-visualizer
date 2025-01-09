@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -21,8 +20,8 @@ public class CallTrace {
     private final String invocationId;
     private final boolean success;
     private final InvocationType type;
-    private final Instant startTime;
-    private final Instant endTime;
+    private final long startTime;
+    private final long endTime;
     private final Map<String, String> parameters;
     private final List<CallTrace> children;
 }

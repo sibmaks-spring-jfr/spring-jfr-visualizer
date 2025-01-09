@@ -2,18 +2,11 @@ import React, { useState } from 'react';
 import CustomTable from '../components/CustomTable';
 import { Button, Card, Col, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
 import { Bean } from '../api/types';
+import { toLocalDateTime } from '../utils/datetime';
 
 export interface BeansPageProps {
   beans: Bean[];
 }
-
-const toLocalDateTime = (millis: number | null): string => {
-  if (!millis) {
-    return 'Unknown';
-  }
-  const rawDate = new Date(millis);
-  return rawDate.toLocaleDateString() + ' ' + rawDate.toLocaleTimeString();
-};
 
 const BeansPage: React.FC<BeansPageProps> = ({
                                                beans

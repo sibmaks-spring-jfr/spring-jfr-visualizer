@@ -71,8 +71,8 @@ public class CallsReportCreator {
                     .invocationId(invocationId)
                     .type(InvocationType.SCHEDULED)
                     .success(executedTimestamp != null)
-                    .startTime(event.getStartTime())
-                    .endTime(executedTimestamp == null ? failedTimestamp : executedTimestamp)
+                    .startTime(event.getStartTime().toEpochMilli())
+                    .endTime((executedTimestamp == null ? failedTimestamp : executedTimestamp).toEpochMilli())
                     .parameters(Map.ofEntries(
                             Map.entry("Class Name", event.getClassName()),
                             Map.entry("Method Name", event.getMethodName())
@@ -105,8 +105,8 @@ public class CallsReportCreator {
                     .invocationId(invocationId)
                     .type(InvocationType.JPA)
                     .success(executedTimestamp != null)
-                    .startTime(event.getStartTime())
-                    .endTime(executedTimestamp == null ? failedTimestamp : executedTimestamp)
+                    .startTime(event.getStartTime().toEpochMilli())
+                    .endTime((executedTimestamp == null ? failedTimestamp : executedTimestamp).toEpochMilli())
                     .parameters(Map.ofEntries(
                             Map.entry("Class Name", event.getClassName()),
                             Map.entry("Method Name", event.getMethodName())
@@ -139,8 +139,8 @@ public class CallsReportCreator {
                     .invocationId(invocationId)
                     .type(InvocationType.CONTROLLER)
                     .success(executedTimestamp != null)
-                    .startTime(event.getStartTime())
-                    .endTime(executedTimestamp == null ? failedTimestamp : executedTimestamp)
+                    .startTime(event.getStartTime().toEpochMilli())
+                    .endTime((executedTimestamp == null ? failedTimestamp : executedTimestamp).toEpochMilli())
                     .parameters(Map.ofEntries(
                             Map.entry("HTTP Method", event.getHttpMethod()),
                             Map.entry("HTTP URL", event.getUrl()),
