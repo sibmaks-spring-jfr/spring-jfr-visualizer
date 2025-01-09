@@ -8,5 +8,7 @@ public enum InvocationType {
     ASYNC,
     JPA,
     CONTROLLER,
-    SCHEDULED
+    SCHEDULED,
+    SERVICE,
+    COMPONENT
 }

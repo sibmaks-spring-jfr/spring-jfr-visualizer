@@ -1,6 +1,7 @@
 package io.github.sibmaks.spring.jfr.report;
 
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedEvents;
+import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationFailedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallTrace;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallsReport;
 import io.github.sibmaks.spring.jfr.dto.view.calls.InvocationType;
@@ -29,6 +30,8 @@ public class CallsReportCreator {
         callTracesByStartId.putAll(readControllerEvents(events));
         callTracesByStartId.putAll(readJPAEvents(events));
         callTracesByStartId.putAll(readScheduledEvents(events));
+        callTracesByStartId.putAll(readServiceEvents(events));
+        callTracesByStartId.putAll(readComponentEvents(events));
 
         var roots = new ArrayList<CallTrace>();
 
@@ -60,10 +63,13 @@ public class CallsReportCreator {
         for (var event : scheduledEvents) {
             var invocationId = event.getInvocationId();
             var executedTimestamp = executedInvocations.get(invocationId);
-            var failedTimestamp = failedInvocations.get(invocationId);
-            if (executedTimestamp == null && failedTimestamp == null) {
+            var failedFact = failedInvocations.get(invocationId);
+            if (executedTimestamp == null && failedFact == null) {
                 continue;
             }
+
+            var parameters = getBasicParameters(failedFact);
+            var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
             var trace = CallTrace.builder()
                     .contextId(event.getContextId())
@@ -72,11 +78,10 @@ public class CallsReportCreator {
                     .type(InvocationType.SCHEDULED)
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
-                    .endTime((executedTimestamp == null ? failedTimestamp : executedTimestamp).toEpochMilli())
-                    .parameters(Map.ofEntries(
-                            Map.entry("Class Name", event.getClassName()),
-                            Map.entry("Method Name", event.getMethodName())
-                    ))
+                    .endTime(endTime.toEpochMilli())
+                    .className(event.getClassName())
+                    .methodName(event.getMethodName())
+                    .parameters(parameters)
                     .children(new ArrayList<>())
                     .build();
 
@@ -94,10 +99,13 @@ public class CallsReportCreator {
         for (var event : jpaEvents) {
             var invocationId = event.getInvocationId();
             var executedTimestamp = executedInvocations.get(invocationId);
-            var failedTimestamp = failedInvocations.get(invocationId);
-            if (executedTimestamp == null && failedTimestamp == null) {
+            var failedFact = failedInvocations.get(invocationId);
+            if (executedTimestamp == null && failedFact == null) {
                 continue;
             }
+
+            var parameters = getBasicParameters(failedFact);
+            var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
             var trace = CallTrace.builder()
                     .contextId(event.getContextId())
@@ -106,11 +114,82 @@ public class CallsReportCreator {
                     .type(InvocationType.JPA)
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
-                    .endTime((executedTimestamp == null ? failedTimestamp : executedTimestamp).toEpochMilli())
-                    .parameters(Map.ofEntries(
-                            Map.entry("Class Name", event.getClassName()),
-                            Map.entry("Method Name", event.getMethodName())
-                    ))
+                    .endTime(endTime.toEpochMilli())
+                    .className(event.getClassName())
+                    .methodName(event.getMethodName())
+                    .parameters(parameters)
+                    .children(new ArrayList<>())
+                    .build();
+
+            callTracesByStartId.put(invocationId, trace);
+        }
+        return callTracesByStartId;
+    }
+
+    private static Map<String, CallTrace> readServiceEvents(RecordedEvents events) {
+        var serviceEvents = events.getServiceMethodCalledRecordedEvents();
+        var executedInvocations = events.getExecutedInvocations();
+        var failedInvocations = events.getFailedInvocations();
+
+        var callTracesByStartId = new HashMap<String, CallTrace>();
+        for (var event : serviceEvents) {
+            var invocationId = event.getInvocationId();
+            var executedTimestamp = executedInvocations.get(invocationId);
+            var failedFact = failedInvocations.get(invocationId);
+            if (executedTimestamp == null && failedFact == null) {
+                continue;
+            }
+
+            var parameters = getBasicParameters(failedFact);
+            var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
+
+            var trace = CallTrace.builder()
+                    .contextId(event.getContextId())
+                    .correlationId(event.getCorrelationId())
+                    .invocationId(invocationId)
+                    .type(InvocationType.SERVICE)
+                    .success(executedTimestamp != null)
+                    .startTime(event.getStartTime().toEpochMilli())
+                    .endTime(endTime.toEpochMilli())
+                    .className(event.getClassName())
+                    .methodName(event.getMethodName())
+                    .parameters(parameters)
+                    .children(new ArrayList<>())
+                    .build();
+
+            callTracesByStartId.put(invocationId, trace);
+        }
+        return callTracesByStartId;
+    }
+
+    private static Map<String, CallTrace> readComponentEvents(RecordedEvents events) {
+        var componentEvents = events.getComponentMethodCalledRecordedEvents();
+        var executedInvocations = events.getExecutedInvocations();
+        var failedInvocations = events.getFailedInvocations();
+
+        var callTracesByStartId = new HashMap<String, CallTrace>();
+        for (var event : componentEvents) {
+            var invocationId = event.getInvocationId();
+            var executedTimestamp = executedInvocations.get(invocationId);
+            var failedFact = failedInvocations.get(invocationId);
+            if (executedTimestamp == null && failedFact == null) {
+                continue;
+            }
+
+            var parameters = getBasicParameters(failedFact);
+            var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
+
+            var trace = CallTrace.builder()
+                    .contextId(event.getContextId())
+                    .correlationId(event.getCorrelationId())
+                    .invocationId(invocationId)
+                    .type(InvocationType.COMPONENT)
+                    .success(executedTimestamp != null)
+                    .startTime(event.getStartTime().toEpochMilli())
+                    .endTime(endTime.toEpochMilli())
+                    .className(event.getClassName())
+                    .methodName(event.getMethodName())
+                    .parameters(parameters)
                     .children(new ArrayList<>())
                     .build();
 
@@ -128,10 +207,17 @@ public class CallsReportCreator {
         for (var event : controllerEvents) {
             var invocationId = event.getInvocationId();
             var executedTimestamp = executedInvocations.get(invocationId);
-            var failedTimestamp = failedInvocations.get(invocationId);
-            if (executedTimestamp == null && failedTimestamp == null) {
+            var failedFact = failedInvocations.get(invocationId);
+            if (executedTimestamp == null && failedFact == null) {
                 continue;
             }
+
+            var parameters = getBasicParameters(failedFact);
+            parameters.put("HTTP Method", event.getHttpMethod());
+            parameters.put("HTTP URL", event.getUrl());
+            parameters.put("Rest", String.valueOf(event.isRest()));
+
+            var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
             var trace = CallTrace.builder()
                     .contextId(event.getContextId())
@@ -140,14 +226,10 @@ public class CallsReportCreator {
                     .type(InvocationType.CONTROLLER)
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
-                    .endTime((executedTimestamp == null ? failedTimestamp : executedTimestamp).toEpochMilli())
-                    .parameters(Map.ofEntries(
-                            Map.entry("HTTP Method", event.getHttpMethod()),
-                            Map.entry("HTTP URL", event.getUrl()),
-                            Map.entry("Rest", String.valueOf(event.isRest())),
-                            Map.entry("Class Name", event.getClassName()),
-                            Map.entry("Method Name", event.getMethodName())
-                    ))
+                    .endTime(endTime.toEpochMilli())
+                    .className(event.getClassName())
+                    .methodName(event.getMethodName())
+                    .parameters(parameters)
                     .children(new ArrayList<>())
                     .build();
 
@@ -161,6 +243,15 @@ public class CallsReportCreator {
         for (var trace : traces) {
             sortTracesRecursively(trace.getChildren());
         }
+    }
+
+    static Map<String, String> getBasicParameters(InvocationFailedRecordedEvent failedFact) {
+        var parameters = new LinkedHashMap<String, String>();
+        if (failedFact != null) {
+            parameters.put("Exception Class", failedFact.getExceptionClass());
+            parameters.put("Exception Message", failedFact.getExceptionMessage());
+        }
+        return parameters;
     }
 
 }

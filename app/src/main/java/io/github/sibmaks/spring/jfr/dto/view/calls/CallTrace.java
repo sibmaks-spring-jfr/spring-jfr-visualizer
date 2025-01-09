@@ -22,6 +22,8 @@ public class CallTrace {
     private final InvocationType type;
     private final long startTime;
     private final long endTime;
+    private final String className;
+    private final String methodName;
     private final Map<String, String> parameters;
     private final List<CallTrace> children;
 }

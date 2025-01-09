@@ -1,44 +1,116 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Card, Col, Container, Dropdown, ListGroup, Row, Table } from 'react-bootstrap';
+import { Accordion, Badge, Col, Container, Row, Table } from 'react-bootstrap';
 import { CallTrace } from '../api/types';
 import BackButton from '../components/BackButton';
-import { toLocalDateTime } from '../utils/datetime';
+import { toISOString } from '../utils/datetime';
 
 interface CallReport {
   roots: CallTrace[];
 }
 
-const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => (
-  <ListGroup>
-    <ListGroup.Item>
-      <strong>{trace.type}</strong> - {trace.invocationId}
-      <Badge bg={trace.success ? 'success' : 'danger'}>
+const getTraceName = (trace: CallTrace) => {
+  return (
+    <>
+      <strong>{trace.type}</strong> - {trace.className}#{trace.methodName}{' '}
+      <Badge bg={trace.success ? 'success' : 'danger'} className="ms-2">
         {trace.success ? 'Success' : 'Fail'}
       </Badge>
-      <div>Start: {toLocalDateTime(trace.startTime)}</div>
-      <div>End: {toLocalDateTime(trace.endTime)}</div>
-      {trace.parameters && (
-        <div>
-          <strong>Parameters:</strong>
-          <ul>
-            {Object.entries(trace.parameters).map(([key, value]) => (
-              <li key={key}>
-                {key}: {value}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {trace.children.length > 0 && (
-        <div style={{ marginLeft: '20px', marginTop: '10px' }}>
-          {trace.children.map((child) => (
-            <CallTraceTree key={child.contextId} trace={child} />
-          ))}
-        </div>
-      )}
-    </ListGroup.Item>
-  </ListGroup>
-);
+    </>
+  );
+};
+
+const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
+  return (
+    <Accordion.Item eventKey={trace.contextId + trace.invocationId}>
+      <Accordion.Header>
+        {getTraceName(trace)}
+      </Accordion.Header>
+      <Accordion.Body>
+        <Row className={'mb-2'}>
+          <Row>
+            <Col md={2}>
+              <strong>Class Name:</strong>
+            </Col>
+            <Col md={10}>
+              <code>{trace.className}</code>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <strong>Method Name:</strong>
+            </Col>
+            <Col md={10}>
+              <code>{trace.methodName}</code>
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <strong>Start:</strong>
+            </Col>
+            <Col md={10}>
+              {toISOString(trace.startTime)}
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <strong>End:</strong>
+            </Col>
+            <Col md={10}>
+              {toISOString(trace.endTime)}
+            </Col>
+          </Row>
+          <Row>
+            <Col md={2}>
+              <strong>Duration:</strong>
+            </Col>
+            <Col md={10}>
+              {trace.endTime - trace.startTime} ms
+            </Col>
+          </Row>
+        </Row>
+        {Object.keys(trace.parameters).length > 0 && (
+          <Row className={'mb-2'}>
+            <Accordion className="mt-3">
+              <Accordion.Item eventKey={`${trace.contextId + trace.invocationId}-parameters`}>
+                <Accordion.Header><strong>Parameters</strong></Accordion.Header>
+                <Accordion.Body>
+                  <Table bordered={true}>
+                    <thead className={'table-dark'}>
+                    <tr>
+                      <th>Name</th>
+                      <th>Value</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {Object.entries(trace.parameters).map(([key, value]) => (
+                      <tr key={key}>
+                        <td>{key}</td>
+                        <td>{value}</td>
+                      </tr>
+                    ))}
+                    </tbody>
+                  </Table>
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </Row>
+        )}
+        {trace.children.length > 0 && (
+          <>
+            <h4>Children</h4>
+            <Row>
+              <Accordion>
+                {trace.children.map((child) => (
+                  <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
+                ))}
+              </Accordion>
+            </Row>
+          </>
+        )}
+      </Accordion.Body>
+    </Accordion.Item>
+  );
+};
 
 const CallsReportPage = () => {
   const [roots, setRoots] = useState<CallTrace[]>([]);
@@ -50,43 +122,18 @@ const CallsReportPage = () => {
     setRoots(report.roots);
   }, []);
 
-  const [selectedTrace, setSelectedTrace] = useState<CallTrace | null>(null);
-
   return (
     <Container>
       <Row className={'mt-4 mb-4'}>
         <h3><BackButton /> Calls Report</h3>
-        <Col>
-          <h2>Выбор корневого вызова</h2>
-          <Dropdown>
-            <Dropdown.Toggle variant="primary">Выберите корневой вызов</Dropdown.Toggle>
-            <Dropdown.Menu>
-              {roots.map((trace) => (
-                <Dropdown.Item
-                  key={trace.contextId}
-                  onClick={() => setSelectedTrace(trace)}
-                >
-                  {trace.invocationId}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </Col>
       </Row>
       <Row>
         <Col>
-          {selectedTrace ? (
-            <Card style={{ marginTop: '20px' }}>
-              <Card.Header>
-                <h3>Дерево вызовов для {selectedTrace.invocationId}</h3>
-              </Card.Header>
-              <Card.Body>
-                <CallTraceTree trace={selectedTrace} />
-              </Card.Body>
-            </Card>
-          ) : (
-            <p style={{ marginTop: '20px' }}>Выберите корневой вызов из списка.</p>
-          )}
+          <Accordion>
+            {roots.map(root => (
+              <CallTraceTree trace={root} />
+            ))}
+          </Accordion>
         </Col>
       </Row>
     </Container>

@@ -32,6 +32,8 @@ export interface CallTrace {
   type: InvocationType;
   startTime: number;
   endTime: number;
+  className: string;
+  methodName: string;
   parameters: Record<string, string>;
   children: CallTrace[];
 }

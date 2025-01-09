@@ -7,15 +7,20 @@ import io.github.sibmaks.spring.jfr.dto.recorded.bean.PostProcessAfterInitializa
 import io.github.sibmaks.spring.jfr.dto.recorded.bean.PostProcessBeforeInitializationRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationExecutedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationFailedRecordedEvent;
+import io.github.sibmaks.spring.jfr.dto.recorded.component.ComponentMethodCalledRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.controller.ControllerMethodCalledRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.jpa.JPAMethodCalledRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.scheduled.ScheduledMethodCalledRecordedEvent;
+import io.github.sibmaks.spring.jfr.dto.recorded.service.ServiceMethodCalledRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.core.RecordedEventProxyFactory;
 import io.github.sibmaks.spring.jfr.event.publish.async.AsyncMethodExecutedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.async.AsyncMethodFailedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.bean.BeanDefinitionRegisteredEvent;
 import io.github.sibmaks.spring.jfr.event.publish.bean.PostProcessAfterInitializationEvent;
 import io.github.sibmaks.spring.jfr.event.publish.bean.PostProcessBeforeInitializationEvent;
+import io.github.sibmaks.spring.jfr.event.publish.component.ComponentMethodCalledEvent;
+import io.github.sibmaks.spring.jfr.event.publish.component.ComponentMethodExecutedEvent;
+import io.github.sibmaks.spring.jfr.event.publish.component.ComponentMethodFailedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.controller.ControllerMethodCalledEvent;
 import io.github.sibmaks.spring.jfr.event.publish.controller.ControllerMethodExecutedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.controller.ControllerMethodFailedEvent;
@@ -25,6 +30,9 @@ import io.github.sibmaks.spring.jfr.event.publish.jpa.JPAMethodFailedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.scheduled.ScheduledMethodCalledEvent;
 import io.github.sibmaks.spring.jfr.event.publish.scheduled.ScheduledMethodExecutedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.scheduled.ScheduledMethodFailedEvent;
+import io.github.sibmaks.spring.jfr.event.publish.service.ServiceMethodCalledEvent;
+import io.github.sibmaks.spring.jfr.event.publish.service.ServiceMethodExecutedEvent;
+import io.github.sibmaks.spring.jfr.event.publish.service.ServiceMethodFailedEvent;
 import jdk.jfr.consumer.RecordingFile;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -71,6 +79,14 @@ public class EventReader {
                         ScheduledMethodCalledRecordedEvent.class
                 ),
                 Map.entry(
+                        ServiceMethodCalledEvent.class.getCanonicalName(),
+                        ServiceMethodCalledRecordedEvent.class
+                ),
+                Map.entry(
+                        ComponentMethodCalledEvent.class.getCanonicalName(),
+                        ComponentMethodCalledRecordedEvent.class
+                ),
+                Map.entry(
                         AsyncMethodExecutedEvent.class.getCanonicalName(),
                         InvocationExecutedRecordedEvent.class
                 ),
@@ -87,6 +103,14 @@ public class EventReader {
                         InvocationExecutedRecordedEvent.class
                 ),
                 Map.entry(
+                        ServiceMethodExecutedEvent.class.getCanonicalName(),
+                        InvocationExecutedRecordedEvent.class
+                ),
+                Map.entry(
+                        ComponentMethodExecutedEvent.class.getCanonicalName(),
+                        InvocationExecutedRecordedEvent.class
+                ),
+                Map.entry(
                         AsyncMethodFailedEvent.class.getCanonicalName(),
                         InvocationFailedRecordedEvent.class
                 ),
@@ -100,6 +124,14 @@ public class EventReader {
                 ),
                 Map.entry(
                         ScheduledMethodFailedEvent.class.getCanonicalName(),
+                        InvocationFailedRecordedEvent.class
+                ),
+                Map.entry(
+                        ServiceMethodFailedEvent.class.getCanonicalName(),
+                        InvocationFailedRecordedEvent.class
+                ),
+                Map.entry(
+                        ComponentMethodFailedEvent.class.getCanonicalName(),
                         InvocationFailedRecordedEvent.class
                 )
         );
