@@ -95,6 +95,7 @@ const CallsReportPage = () => {
               <Form.Label>Minimal Duration (ms)</Form.Label>
               <Form.Control
                 type="number"
+                min={0}
                 value={minDuration === null ? '' : minDuration}
                 onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
               />
@@ -103,6 +104,7 @@ const CallsReportPage = () => {
               <Form.Label>Maximum Duration (ms)</Form.Label>
               <Form.Control
                 type="number"
+                min={minDuration || 0}
                 value={maxDuration === null ? '' : maxDuration}
                 onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
               />
