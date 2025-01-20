@@ -37,6 +37,7 @@ export const CallReportProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           }
           id2Trace.set(root.invocationId, root);
         }
+        setContext2id2Trace(context2id2Trace);
       } catch (error) {
         console.error('Failed to load:', error);
       } finally {

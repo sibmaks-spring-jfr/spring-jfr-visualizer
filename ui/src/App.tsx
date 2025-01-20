@@ -20,7 +20,9 @@ const App: React.FC = () => {
               <Route index element={<ReportsMenuPage />} />
               <Route path="calls">
                 <Route index element={<CallsReportPage />} />
-                <Route path={':contextId/:callId'} element={<CallReportPage />} />
+                <Route path={':contextId'}>
+                  <Route path={':callId'} element={<CallReportPage />} />
+                </Route>
               </Route>
               <Route path="beans" element={<BeansReportPage />} />
             </Route>

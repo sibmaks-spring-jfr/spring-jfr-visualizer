@@ -6,6 +6,7 @@ import CustomTable from '../../../components/CustomTable';
 import { toISOString } from '../../../utils/datetime';
 import { Loader } from '../../../components/Loader';
 import { CallReportContext } from '../../../context/CallReportProvider';
+import { useNavigate } from 'react-router-dom';
 
 const MAX_TRACE_ON_PAGE = 25;
 
@@ -19,6 +20,7 @@ const getStatusRepresentation = (it: CallTrace) => {
 
 const CallsReportPage = () => {
   const { callReport, isLoading } = useContext(CallReportContext);
+  const navigate = useNavigate();
   const [filteredRoots, setFilteredRoots] = useState<CallTrace[]>([...callReport.roots]);
   const [leftTimeBound, setLeftTimeBound] = useState<string>('');
   const [rightTimeBound, setRightTimeBound] = useState<string>('');
@@ -150,6 +152,8 @@ const CallsReportPage = () => {
             ]}
             data={filteredRoots.slice(0, MAX_TRACE_ON_PAGE).map(it => {
               return {
+                contextId: it.contextId,
+                invocationId: it.invocationId,
                 qualifier: `${it.className}#${it.methodName}`,
                 call_started_at: {
                   representation: <code>{toISOString(it.startTime)}</code>,
@@ -180,6 +184,9 @@ const CallsReportPage = () => {
               'timing',
               'status',
             ]}
+            onRowClick={(row) => {
+              navigate(`/calls/${row.contextId}/${row.invocationId}`);
+            }}
           />
         </Col>
       </Row>
