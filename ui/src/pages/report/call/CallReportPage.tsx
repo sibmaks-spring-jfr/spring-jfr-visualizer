@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Accordion, Badge, Col, Container, Row, Table } from 'react-bootstrap';
-import { CallTrace } from '../api/types';
-import BackButton from '../components/BackButton';
-import { toISOString } from '../utils/datetime';
+import { CallTrace } from '../../../api/types';
+import BackButton from '../../../components/BackButton';
+import { toISOString } from '../../../utils/datetime';
+import { useNavigate, useParams } from 'react-router-dom';
+import { CallReportContext } from '../../../context/CallReportProvider';
+import { Loader } from '../../../components/Loader';
 
 interface CallReport {
   roots: CallTrace[];
@@ -114,14 +117,27 @@ const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
 };
 
 const CallReportPage = () => {
-  const [roots, setRoots] = useState<CallTrace[]>([]);
+  const { context2id2Trace, isLoading } = useContext(CallReportContext);
 
-  useEffect(() => {
-    // @ts-ignore
-    const callsJson = window.callsJson || '{"roots":[]}';
-    const report = JSON.parse(callsJson) as CallReport;
-    setRoots(report.roots);
-  }, []);
+  const navigate = useNavigate();
+  const { contextId, callId } = useParams();
+
+  if (isLoading) {
+    return (
+      <Loader />
+    );
+  }
+
+  if (!context2id2Trace || !contextId || !callId) {
+    navigate('#/calls');
+    return;
+  }
+  const id2Trace = context2id2Trace.get(contextId);
+  const callTrace = id2Trace?.get(callId);
+  if (!callTrace) {
+    navigate('#/calls');
+    return;
+  }
 
   return (
     <Container>
@@ -131,9 +147,7 @@ const CallReportPage = () => {
       <Row>
         <Col>
           <Accordion>
-            {roots.map(root => (
-              <CallTraceTree trace={root} />
-            ))}
+            <CallTraceTree trace={callTrace} />
           </Accordion>
         </Col>
       </Row>

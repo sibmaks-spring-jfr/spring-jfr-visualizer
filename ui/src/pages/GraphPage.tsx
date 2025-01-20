@@ -45,13 +45,6 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
   }, [beanDefinitions]);
 
   useEffect(() => {
-    const zoom = d3.zoom<SVGSVGElement, Node>()
-      .scaleExtent([0.01, 15])
-      .on('zoom', (event) => {
-        d3.select(graphRef.current).select('g')
-          .attr('transform', event.transform);
-      });
-
     const graph = graphRef.current;
     if (!graph) {
       return;
@@ -60,10 +53,23 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
       return;
     }
 
-    const newSvg = d3.select<SVGSVGElement, Node>(graph)
-      .call(zoom)
-      .append('g');
-    setSVG(newSvg);
+    const zoom = d3.zoom<SVGSVGElement, Node>()
+      .scaleExtent([0.01, 15])
+      .on('zoom', (event) => {
+        d3.select(graphRef.current).select('g')
+          .attr('transform', event.transform);
+      });
+
+    const newSVG = d3.select<SVGSVGElement, Node>(graph);
+    newSVG
+      .selectAll('g')
+      .remove();
+
+    setSVG(
+      newSVG
+        .call(zoom)
+        .append('g')
+    );
   }, [graphRef, graphRef.current]);
 
   useEffect(() => {
@@ -247,13 +253,13 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
           <Col md={'auto'}>
             <InputGroup>
               <FormSelect
-                id={'contextId'}
+                id={'graphPageContextId'}
                 value={beanId.contextId}
                 onChange={e => setBeanId({ ...beanId, contextId: e.target.value })}
               >
-                <option selected={true}></option>
+                <option value={''}></option>
                 {
-                  beanNames.keys()
+                  Array.from(beanNames.keys())
                     .map(it => <option key={it} value={it}>{it}</option>)
                 }
               </FormSelect>

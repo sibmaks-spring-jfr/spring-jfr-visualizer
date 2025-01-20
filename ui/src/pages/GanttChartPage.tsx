@@ -171,7 +171,7 @@ const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
 
                         return (
                           <div
-                            key={span.id}
+                            key={span.uuid}
                             className="timeline-span"
                             style={{
                               left: `${spanStart}px`,

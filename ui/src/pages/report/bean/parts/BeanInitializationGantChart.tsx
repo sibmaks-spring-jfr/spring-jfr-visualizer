@@ -1,13 +1,13 @@
 import React from 'react';
-import { Bean } from '../api/types';
-import GanttChartPage from './GanttChartPage';
+import { Bean } from '../../../../api/types';
+import GanttChartPage from '../../../GanttChartPage';
 
 interface BeanInitializationGantChartProps {
   beans: Bean[];
 }
 
 
-const BeanInitializationGantChartPage: React.FC<BeanInitializationGantChartProps> = ({ beans }) => {
+const BeanInitializationGantChart: React.FC<BeanInitializationGantChartProps> = ({ beans }) => {
   const spans = beans
     .filter(it => it.preInitializedAt)
     .map(bean => {
@@ -21,4 +21,4 @@ const BeanInitializationGantChartPage: React.FC<BeanInitializationGantChartProps
   return <GanttChartPage spans={spans} />;
 };
 
-export default BeanInitializationGantChartPage;
+export default BeanInitializationGantChart;

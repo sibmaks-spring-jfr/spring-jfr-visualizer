@@ -60,7 +60,7 @@ public class BeansReportCreator {
                 beans.add(beanInitialized);
             } else {
                 var between = Duration.between(startTime, endTime);
-                var duration = between.toNanos() / 1000.;
+                var duration = between.toNanos() / 1_000_000.;
                 var beanInitialized = BeanInitialized.builder()
                         .contextId(contextId)
                         .beanName(beanName)

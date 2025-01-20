@@ -16,3 +16,10 @@ tasks.register<NpmTask>("buildFrontend") {
   dependsOn("npmInstall")
   args.set(listOf("run", "build"))
 }
+
+tasks.register<NpmTask>("buildDevFrontend") {
+  group = "build"
+  description = "Builds development the React frontend using npm."
+  dependsOn("npmInstall")
+  args.set(listOf("run", "devbuild"))
+}

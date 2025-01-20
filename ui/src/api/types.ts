@@ -37,3 +37,12 @@ export interface CallTrace {
   parameters: Record<string, string>;
   children: CallTrace[];
 }
+
+export interface BeanReport {
+  beans: Bean[];
+  beanDefinitions: BeanDefinition[];
+}
+
+export interface CallReport {
+  roots: CallTrace[];
+}

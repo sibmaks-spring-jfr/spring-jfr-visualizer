@@ -3,8 +3,8 @@ import { Container, Spinner } from 'react-bootstrap';
 
 export const Loader = () => {
   return (
-    <Container className={'h-100 w-100 d-flex justify-content-center'}>
-      <Spinner variant={'dark'} animation={'border'}>
+    <Container className={'vh-100 vw-100 d-flex justify-content-center'}>
+      <Spinner className={'m-auto'} variant={'dark'} animation={'border'}>
         <span className="visually-hidden">Loading...</span>
       </Spinner>
     </Container>

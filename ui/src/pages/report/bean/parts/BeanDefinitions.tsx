@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import CustomTable from '../components/CustomTable';
+import CustomTable from '../../../../components/CustomTable';
 import { Button, Card, Col, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
-import { BeanDefinition } from '../api/types';
+import { BeanDefinition } from '../../../../api/types';
 
 export interface BeanDefinitionsPageProps {
   beanDefinitions: BeanDefinition[];
 }
 
-const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
+const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                                                                    beanDefinitions
                                                                  }) => {
   const [contextId, setContextId] = useState<string>('');
@@ -38,11 +38,11 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
           <Col md={'auto'}>
             <InputGroup>
               <FormSelect
-                id={'contextId'}
+                id={'beanDefinitionContextId'}
                 value={contextId}
                 onChange={e => setContextId(e.target.value)}
               >
-                <option selected={true} value={''}>*</option>
+                <option value={''}>*</option>
                 {
                   contextIds
                     .map(it => <option key={it} value={it}>{it}</option>)
@@ -169,4 +169,4 @@ const BeanDefinitionsPage: React.FC<BeanDefinitionsPageProps> = ({
 };
 
 
-export default BeanDefinitionsPage;
+export default BeanDefinitions;

@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import CustomTable from '../components/CustomTable';
+import CustomTable from '../../../../components/CustomTable';
 import { Button, Card, Col, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
-import { Bean } from '../api/types';
-import { toLocalDateTime } from '../utils/datetime';
+import { Bean } from '../../../../api/types';
+import { toISOString } from '../../../../utils/datetime';
 
 export interface BeansPageProps {
   beans: Bean[];
 }
 
-const BeansPage: React.FC<BeansPageProps> = ({
+const BeansStatistic: React.FC<BeansPageProps> = ({
                                                beans
                                              }) => {
 
@@ -41,11 +41,11 @@ const BeansPage: React.FC<BeansPageProps> = ({
           <Col md={'auto'}>
             <InputGroup>
               <FormSelect
-                id={'contextId'}
+                id={'beansStatisticContextId'}
                 value={contextId}
                 onChange={e => setContextId(e.target.value)}
               >
-                <option selected={true} value={''}>*</option>
+                <option value={''}>*</option>
                 {
                   contextIds
                     .map(it => <option key={it} value={it}>{it}</option>)
@@ -97,13 +97,13 @@ const BeansPage: React.FC<BeansPageProps> = ({
                   className: 'td-128'
                 },
                 preInitializedAt: {
-                  representation: <code className="content-scroll">{toLocalDateTime(it.preInitializedAt)}</code>,
-                  value: toLocalDateTime(it.preInitializedAt),
+                  representation: <code className="content-scroll">{toISOString(it.preInitializedAt)}</code>,
+                  value: toISOString(it.preInitializedAt),
                   className: 'td-64 text-center'
                 },
                 postInitializedAt: {
-                  representation: <code className="content-scroll">{toLocalDateTime(it.postInitializedAt)}</code>,
-                  value: toLocalDateTime(it.postInitializedAt),
+                  representation: <code className="content-scroll">{toISOString(it.postInitializedAt)}</code>,
+                  value: toISOString(it.postInitializedAt),
                   className: 'td-64 text-center'
                 },
                 duration: {
@@ -135,4 +135,4 @@ const BeansPage: React.FC<BeansPageProps> = ({
 };
 
 
-export default BeansPage;
+export default BeansStatistic;
