@@ -32,9 +32,10 @@ export interface CallTrace {
   type: InvocationType;
   startTime: number;
   endTime: number;
+  threadName: string;
   className: string;
   methodName: string;
-  parameters: Record<string, string>;
+  details: Record<string, string>;
   children: CallTrace[];
 }
 

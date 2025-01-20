@@ -1,5 +1,7 @@
 package io.github.sibmaks.spring.jfr.dto.recorded;
 
+import jdk.jfr.consumer.RecordedThread;
+
 import java.time.Instant;
 
 /**
@@ -8,4 +10,6 @@ import java.time.Instant;
  */
 public interface RecordedData {
     Instant getStartTime();
+
+    RecordedThread getThread();
 }

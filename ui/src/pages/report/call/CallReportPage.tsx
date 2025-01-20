@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { Accordion, Badge, Button, Col, Container, Row, Table } from 'react-bootstrap';
 import { CallTrace } from '../../../api/types';
-import BackButton from '../../../components/BackButton';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CallReportContext } from '../../../context/CallReportProvider';
@@ -24,9 +23,17 @@ const getTraceName = (trace: CallTrace) => {
   );
 };
 
-function getCallTraceDetails(trace: CallTrace) {
+function getCallTraceSystemDescription(trace: CallTrace) {
   return (
     <Row className={'mb-2'}>
+      <Row>
+        <Col md={2}>
+          <strong>Thread Name:</strong>
+        </Col>
+        <Col md={10}>
+          <code>{trace.threadName}</code>
+        </Col>
+      </Row>
       <Row>
         <Col md={2}>
           <strong>Class Name:</strong>
@@ -79,15 +86,15 @@ function getCallTraceDetails(trace: CallTrace) {
   );
 }
 
-function getCallTraceParameters(trace: CallTrace) {
-  if (Object.keys(trace.parameters).length <= 0) {
+function getCallTraceDetails(trace: CallTrace) {
+  if (Object.keys(trace.details).length <= 0) {
     return <></>;
   }
   return (
     <Row className={'mb-2'}>
       <Accordion className="mt-3">
         <Accordion.Item eventKey={`${trace.contextId + trace.invocationId}-parameters`}>
-          <Accordion.Header><strong>Parameters</strong></Accordion.Header>
+          <Accordion.Header><strong>Details</strong></Accordion.Header>
           <Accordion.Body>
             <Table bordered={true}>
               <thead className={'table-dark'}>
@@ -97,7 +104,7 @@ function getCallTraceParameters(trace: CallTrace) {
               </tr>
               </thead>
               <tbody>
-              {Object.entries(trace.parameters).map(([key, value]) => (
+              {Object.entries(trace.details).map(([key, value]) => (
                 <tr key={key}>
                   <td>{key}</td>
                   <td>{value}</td>
@@ -119,8 +126,8 @@ const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
         {getTraceName(trace)}
       </Accordion.Header>
       <Accordion.Body>
+        {getCallTraceSystemDescription(trace)}
         {getCallTraceDetails(trace)}
-        {getCallTraceParameters(trace)}
         {trace.children.length > 0 && (
           <>
             <h4>Children</h4>
@@ -165,12 +172,11 @@ const CallReportPage = () => {
     <Container>
       <Row className={'mt-4 mb-4'}>
         <h3>
-          <Button variant={'outline-secondary'} onClick={() => navigate('/calls')}>Back</Button> Call
-          Trace <code>{callTrace.invocationId}</code> Report
+          <Button variant={'outline-secondary'} onClick={() => navigate('/calls')}>Back</Button> Call Trace Report
         </h3>
       </Row>
+      {getCallTraceSystemDescription(callTrace)}
       {getCallTraceDetails(callTrace)}
-      {getCallTraceParameters(callTrace)}
       {callTrace.children.length > 0 && (
         <>
           <h4>Children</h4>

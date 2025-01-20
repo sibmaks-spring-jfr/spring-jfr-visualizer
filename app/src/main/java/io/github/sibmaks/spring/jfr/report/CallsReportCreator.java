@@ -1,5 +1,6 @@
 package io.github.sibmaks.spring.jfr.report;
 
+import io.github.sibmaks.spring.jfr.dto.recorded.RecordedData;
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedEvents;
 import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationFailedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallTrace;
@@ -68,7 +69,7 @@ public class CallsReportCreator {
                 continue;
             }
 
-            var parameters = getBasicParameters(failedFact);
+            var details = getBasicDetails(failedFact);
             var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
             var trace = CallTrace.builder()
@@ -79,15 +80,21 @@ public class CallsReportCreator {
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
                     .endTime(endTime.toEpochMilli())
+                    .threadName(getThreadName(event))
                     .className(event.getClassName())
                     .methodName(event.getMethodName())
-                    .parameters(parameters)
+                    .details(details)
                     .children(new ArrayList<>())
                     .build();
 
             callTracesByStartId.put(invocationId, trace);
         }
         return callTracesByStartId;
+    }
+
+    private static String getThreadName(RecordedData event) {
+        var thread = event.getThread();
+        return thread == null ? null : thread.getJavaName();
     }
 
     private static Map<String, CallTrace> readJPAEvents(RecordedEvents events) {
@@ -104,7 +111,7 @@ public class CallsReportCreator {
                 continue;
             }
 
-            var parameters = getBasicParameters(failedFact);
+            var details = getBasicDetails(failedFact);
             var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
             var trace = CallTrace.builder()
@@ -115,9 +122,10 @@ public class CallsReportCreator {
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
                     .endTime(endTime.toEpochMilli())
+                    .threadName(getThreadName(event))
                     .className(event.getClassName())
                     .methodName(event.getMethodName())
-                    .parameters(parameters)
+                    .details(details)
                     .children(new ArrayList<>())
                     .build();
 
@@ -140,7 +148,7 @@ public class CallsReportCreator {
                 continue;
             }
 
-            var parameters = getBasicParameters(failedFact);
+            var details = getBasicDetails(failedFact);
             var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
             var trace = CallTrace.builder()
@@ -151,9 +159,10 @@ public class CallsReportCreator {
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
                     .endTime(endTime.toEpochMilli())
+                    .threadName(getThreadName(event))
                     .className(event.getClassName())
                     .methodName(event.getMethodName())
-                    .parameters(parameters)
+                    .details(details)
                     .children(new ArrayList<>())
                     .build();
 
@@ -176,7 +185,7 @@ public class CallsReportCreator {
                 continue;
             }
 
-            var parameters = getBasicParameters(failedFact);
+            var details = getBasicDetails(failedFact);
             var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
             var trace = CallTrace.builder()
@@ -187,9 +196,10 @@ public class CallsReportCreator {
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
                     .endTime(endTime.toEpochMilli())
+                    .threadName(getThreadName(event))
                     .className(event.getClassName())
                     .methodName(event.getMethodName())
-                    .parameters(parameters)
+                    .details(details)
                     .children(new ArrayList<>())
                     .build();
 
@@ -212,10 +222,10 @@ public class CallsReportCreator {
                 continue;
             }
 
-            var parameters = getBasicParameters(failedFact);
-            parameters.put("HTTP Method", event.getHttpMethod());
-            parameters.put("HTTP URL", event.getUrl());
-            parameters.put("Rest", String.valueOf(event.isRest()));
+            var details = getBasicDetails(failedFact);
+            details.put("HTTP Method", event.getHttpMethod());
+            details.put("HTTP URL", event.getUrl());
+            details.put("Rest", String.valueOf(event.isRest()));
 
             var endTime = executedTimestamp == null ? failedFact.getStartTime() : executedTimestamp;
 
@@ -227,9 +237,10 @@ public class CallsReportCreator {
                     .success(executedTimestamp != null)
                     .startTime(event.getStartTime().toEpochMilli())
                     .endTime(endTime.toEpochMilli())
+                    .threadName(getThreadName(event))
                     .className(event.getClassName())
                     .methodName(event.getMethodName())
-                    .parameters(parameters)
+                    .details(details)
                     .children(new ArrayList<>())
                     .build();
 
@@ -245,13 +256,13 @@ public class CallsReportCreator {
         }
     }
 
-    static Map<String, String> getBasicParameters(InvocationFailedRecordedEvent failedFact) {
-        var parameters = new LinkedHashMap<String, String>();
+    static Map<String, String> getBasicDetails(InvocationFailedRecordedEvent failedFact) {
+        var details = new LinkedHashMap<String, String>();
         if (failedFact != null) {
-            parameters.put("Exception Class", failedFact.getExceptionClass());
-            parameters.put("Exception Message", failedFact.getExceptionMessage());
+            details.put("Exception Class", failedFact.getExceptionClass());
+            details.put("Exception Message", failedFact.getExceptionMessage());
         }
-        return parameters;
+        return details;
     }
 
 }
