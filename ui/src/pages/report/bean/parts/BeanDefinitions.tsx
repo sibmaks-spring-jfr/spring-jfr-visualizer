@@ -4,20 +4,18 @@ import { Button, Card, Col, FormLabel, FormSelect, InputGroup, Row } from 'react
 import { BeanDefinition } from '../../../../api/types';
 
 export interface BeanDefinitionsPageProps {
-  beanDefinitions: BeanDefinition[];
+  contextBeanDefinitions: Record<string, BeanDefinition[]>;
 }
 
 const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
-                                                                   beanDefinitions
-                                                                 }) => {
+                                                               contextBeanDefinitions
+                                                             }) => {
   const [contextId, setContextId] = useState<string>('');
   const [filteredBeanDefinitions, setFilteredBeanDefinitions] = useState<BeanDefinition[]>([]);
-  const contextIds = [...new Set(beanDefinitions.map(item => item.contextId))];
+  const contextIds = Object.keys(contextBeanDefinitions);
 
   const handleBuild = () => {
-    setFilteredBeanDefinitions(
-      beanDefinitions.filter(it => contextId === '' || it.contextId === contextId)
-    );
+    setFilteredBeanDefinitions(contextBeanDefinitions[contextId] || []);
   };
 
   return (
@@ -59,11 +57,6 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
             className={'card-body overflow-scroll table table-striped table-hover'}
             thead={{ className: 'table-dark' }}
             columns={[
-              ...(contextId === '' ? [
-                {
-                  key: 'contextId',
-                  label: 'Context Id'
-                }] : []),
               {
                 key: 'scope',
                 label: 'Scope'
@@ -95,11 +88,6 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
             ]}
             data={filteredBeanDefinitions.map(it => {
               return {
-                contextId: {
-                  representation: <div className="content-scroll">{it.contextId}</div>,
-                  value: it.contextId,
-                  className: 'td-128 text-center'
-                },
                 scope: {
                   representation: <div className="content-scroll">{it.scope}</div>,
                   value: it.scope,
@@ -142,7 +130,6 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
               };
             })}
             filterableColumns={[
-              'contextId',
               'scope',
               'beanClassName',
               'beanName',
@@ -152,7 +139,6 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
               'generated'
             ]}
             sortableColumns={[
-              'contextId',
               'scope',
               'beanClassName',
               'beanName',

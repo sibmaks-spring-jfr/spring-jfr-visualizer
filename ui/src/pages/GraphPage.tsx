@@ -5,7 +5,7 @@ import { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
 import { BeanDefinition } from '../api/types';
 
 interface GraphProps {
-  beanDefinitions: BeanDefinition[];
+  contextBeanDefinitions: Record<string, BeanDefinition[]>;
 }
 
 interface Node extends SimulationNodeDatum {
@@ -21,7 +21,7 @@ interface BeanId {
   beanName: string;
 }
 
-const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
+const GraphPage: React.FC<GraphProps> = ({ contextBeanDefinitions }) => {
   const graphRef = useRef<SVGSVGElement | null>(null);
   const [beanId, setBeanId] = useState<BeanId>({ contextId: '', beanName: '' });
   const [beanNames, setBeanNames] = useState<Map<string, string[]>>(new Map<string, string[]>());
@@ -30,19 +30,20 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
 
   useEffect(() => {
     const beanDependencies = new Map<string, Map<string, string[]>>();
-    for (let beanDefinition of beanDefinitions) {
-      const dependencies = beanDefinition.dependencies || [];
-      const length = dependencies.length || 0;
-      if (length <= 0) {
-        continue;
+    for (let [contextId, beanDefinitions] of Object.entries(contextBeanDefinitions)) {
+      for (let beanDefinition of beanDefinitions) {
+        const dependencies = beanDefinition.dependencies || [];
+        const length = dependencies.length || 0;
+        if (length <= 0) {
+          continue;
+        }
+        const contextMap = beanDependencies.get(contextId) || new Map<string, string[]>();
+        contextMap.set(beanDefinition.beanName, dependencies);
+        beanDependencies.set(contextId, contextMap);
       }
-      let contextId = beanDefinition.contextId;
-      const contextMap = beanDependencies.get(contextId) || new Map<string, string[]>();
-      contextMap.set(beanDefinition.beanName, dependencies);
-      beanDependencies.set(contextId, contextMap);
     }
     setBeanDependencies(beanDependencies);
-  }, [beanDefinitions]);
+  }, [contextBeanDefinitions]);
 
   useEffect(() => {
     const graph = graphRef.current;
@@ -77,14 +78,15 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
       return;
     }
     const newBeanNames = new Map<string, string[]>();
-    for (let beanDefinition of beanDefinitions) {
-      if ((beanDefinition.dependencies?.length ?? 0) <= 0) {
-        continue;
+    for (let [contextId, beanDefinitions] of Object.entries(contextBeanDefinitions)) {
+      for (let beanDefinition of beanDefinitions) {
+        if ((beanDefinition.dependencies?.length ?? 0) <= 0) {
+          continue;
+        }
+        let beanNames = newBeanNames.get(contextId) || [];
+        beanNames.push(beanDefinition.beanName);
+        newBeanNames.set(contextId, beanNames);
       }
-      let contextId = beanDefinition.contextId;
-      let beanNames = newBeanNames.get(contextId) || [];
-      beanNames.push(beanDefinition.beanName);
-      newBeanNames.set(contextId, beanNames);
     }
     setBeanNames(newBeanNames);
   }, [beanDependencies]);

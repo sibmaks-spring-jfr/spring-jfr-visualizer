@@ -1,5 +1,4 @@
 export interface BeanDefinition {
-  contextId: string;
   scope: string | null;
   beanClassName: string | null;
   beanName: string;
@@ -41,7 +40,7 @@ export interface CallTrace {
 
 export interface BeanReport {
   beans: Bean[];
-  beanDefinitions: BeanDefinition[];
+  beanDefinitions: Record<string, BeanDefinition[]>;
 }
 
 export interface CallReport {

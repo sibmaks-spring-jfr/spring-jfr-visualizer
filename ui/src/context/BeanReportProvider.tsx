@@ -7,14 +7,14 @@ type BeanReportContextType = {
 };
 
 export const BeanReportContext = createContext<BeanReportContextType>({
-  beanReport: { beans: [], beanDefinitions: [] },
+  beanReport: { beans: [], beanDefinitions: {} },
   isLoading: true,
 });
 
 export const BeanReportProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [beanReport, setBeanReport] = useState<BeanReport>({
     beans: [],
-    beanDefinitions: []
+    beanDefinitions: {},
   });
   const [isLoading, setIsLoading] = useState(true);
 

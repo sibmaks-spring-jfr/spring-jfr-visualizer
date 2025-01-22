@@ -63,7 +63,7 @@ tasks.register<Copy>("copyFrontendResources") {
     group = "build"
     description = "Copies the frontend build resources to the Spring Boot static directory"
 
-    dependsOn(":ui:buildFrontend")
+    dependsOn(":ui:buildDevFrontend")
 
     from(project(":ui").file("build/out"))
     into(layout.buildDirectory.dir("resources/main/static"))

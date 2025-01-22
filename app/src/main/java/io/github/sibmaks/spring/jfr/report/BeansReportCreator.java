@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author sibmaks
@@ -74,13 +72,35 @@ public class BeansReportCreator {
         return beans;
     }
 
-    private static ArrayList<BeanDefinition> getBeanDefinitions(RecordedEvents events) {
-        var beanDefinitions = new ArrayList<BeanDefinition>();
+    private static Map<String, List<BeanDefinition>> getBeanDefinitions(RecordedEvents events) {
+        var beanDefinitions = new HashMap<String, Map<String, BeanDefinition>>();
 
         for (var event : events.getBeanDefinitionRegistered()) {
-            beanDefinitions.add(new BeanDefinition(event));
+            var beanDefinition = new BeanDefinition(event);
+            var contextBeanDefinitions = beanDefinitions.computeIfAbsent(event.getContextId(), k -> new HashMap<>());
+            contextBeanDefinitions.put(event.getBeanName(), beanDefinition);
         }
-        return beanDefinitions;
+
+        for (var event : events.getMergedBeanDefinitionRegistered()) {
+            var contextBeanDefinitions = beanDefinitions.computeIfAbsent(event.getContextId(), k -> new HashMap<>());
+            var beanName = event.getBeanName();
+            var existedBeanDefinition = contextBeanDefinitions.get(beanName);
+            if (existedBeanDefinition != null) {
+                existedBeanDefinition.patch(event);
+            } else {
+                var beanDefinition = new BeanDefinition(event);
+                contextBeanDefinitions.put(beanName, beanDefinition);
+            }
+        }
+
+        return beanDefinitions.entrySet()
+                .stream()
+                .collect(
+                        Collectors.toMap(
+                                Map.Entry::getKey,
+                                it -> new ArrayList<>(it.getValue().values())
+                        )
+                );
     }
 
 }

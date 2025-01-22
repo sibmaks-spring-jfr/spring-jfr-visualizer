@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author sibmaks
@@ -14,6 +15,6 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class BeansReport {
-    private final List<BeanDefinition> beanDefinitions;
+    private final Map<String, List<BeanDefinition>> beanDefinitions;
     private final List<BeanInitialized> beans;
 }

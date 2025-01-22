@@ -22,7 +22,7 @@ const BeansReportPage = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <BeanDefinitions beanDefinitions={beanReport.beanDefinitions} />
+          <BeanDefinitions contextBeanDefinitions={beanReport.beanDefinitions} />
         </Col>
       </Row>
       <Row className="mb-4">
@@ -37,7 +37,7 @@ const BeansReportPage = () => {
       </Row>
       <Row className="mb-4">
         <Col>
-          <GraphPage beanDefinitions={beanReport.beanDefinitions} />
+          <GraphPage contextBeanDefinitions={beanReport.beanDefinitions} />
         </Col>
       </Row>
     </Container>
