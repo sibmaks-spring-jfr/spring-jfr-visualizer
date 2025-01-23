@@ -15,7 +15,12 @@
 }
 
 .link.highlighted {
-  stroke: cornflowerblue;
+  stroke: #99B2DD;
+  stroke-opacity: 1.0;
+}
+
+.link.highlighted-in {
+  stroke: #F96E46;
   stroke-opacity: 1.0;
 }
 
@@ -24,22 +29,21 @@
   stroke-width: 1px;
 }
 
-.node circle {
+.node circle, .node rect, .node path, .node polygon {
   stroke: #fff;
   fill: black;
   stroke-width: 1px;
 }
 
-.node.selected circle {
+.node.selected circle, .node.selected rect, .node.selected path, .node.selected polygon {
   stroke: #000;
-  fill: green;
+  fill: #F9C846;
   stroke-width: 2px;
 }
 
-.node.friend circle {
+.node.friend circle, .node.friend rect, .node.friend path, .node.friend polygon {
   stroke: #000;
-  fill: red;
-  stroke-width: 3px;
+  fill: #FFE3E3;
 }
 
 .node-text {
@@ -50,9 +54,13 @@
 }
 
 .arrowhead {
-  fill: #999;
+  fill: #545863;
 }
 
 .arrowhead.highlighted {
-  fill: cornflowerblue;
+  fill: #99B2DD;
+}
+
+.arrowhead.highlighted-in {
+  fill: #F96E46;
 }

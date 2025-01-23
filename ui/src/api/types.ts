@@ -1,9 +1,12 @@
+export type Stereotype = 'UNKNOWN' | 'COMPONENT' | 'CONTROLLER' | 'REST_CONTROLLER' | 'SERVICE' | 'REPOSITORY'
+
 export interface BeanDefinition {
   scope: string | null;
   beanClassName: string | null;
   beanName: string;
   primary: 'true' | 'false' | null;
   dependencies: string[] | null;
+  stereotype: Stereotype | null;
   generated: boolean;
 }
 

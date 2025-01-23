@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import { Card, Form, Button, Row, Col, FormLabel, InputGroup, FormSelect } from 'react-bootstrap';
 import { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
-import { BeanDefinition } from '../api/types';
+import { BeanDefinition, Stereotype } from '../api/types';
 
 interface GraphProps {
   contextBeanDefinitions: Record<string, BeanDefinition[]>;
@@ -11,6 +11,7 @@ interface GraphProps {
 interface Node extends SimulationNodeDatum {
   id: string;
   name: string;
+  stereotype: Stereotype | null;
 }
 
 interface Edge extends SimulationLinkDatum<Node> {
@@ -105,21 +106,31 @@ const GraphPage: React.FC<GraphProps> = ({ contextBeanDefinitions }) => {
       .classed('friend', false);
     link.classed('highlighted', false)
       .attr('marker-end', 'url(#arrowhead)');
+    link.classed('highlighted-in', false)
+      .attr('marker-end', 'url(#arrowhead)');
 
     node.filter(n => n && n.id === nodeId).classed('selected', true);
 
-    link.filter(l => l && getNodeId(l.source) === nodeId || l && getNodeId(l.target) === nodeId)
+
+    const doSome = (edge: Edge) => {
+      if (getNodeId(edge.source) === nodeId) {
+        node.filter(n => n && edge && n.id === getNodeId(edge.target))
+          .classed('friend', true);
+      } else if (getNodeId(edge.target) === nodeId) {
+        node.filter(n => n && edge && n.id === getNodeId(edge.source))
+          .classed('friend', true);
+      }
+    };
+
+    link.filter(l => l && getNodeId(l.source) === nodeId)
       .classed('highlighted', true)
       .attr('marker-end', 'url(#highlighted-arrowhead)')
-      .each(function (edge) {
-        if (getNodeId(edge.source) === nodeId) {
-          node.filter(n => n && edge && n.id === getNodeId(edge.target))
-            .classed('friend', true);
-        } else if (getNodeId(edge.target) === nodeId) {
-          node.filter(n => n && edge && n.id === getNodeId(edge.source))
-            .classed('friend', true);
-        }
-      });
+      .each(doSome);
+
+    link.filter(l => l && getNodeId(l.target) === nodeId)
+      .classed('highlighted-in', true)
+      .attr('marker-end', 'url(#highlighted-in-arrowhead)')
+      .each(doSome);
   };
 
   const dragStarted = (simulation: d3.Simulation<Node, any>) => (event: any) => {
@@ -147,7 +158,11 @@ const GraphPage: React.FC<GraphProps> = ({ contextBeanDefinitions }) => {
 
     const width = graphRef.current.clientWidth;
     const height = graphRef.current.clientHeight;
-    const nodes: Node[] = [{ id: beanId.beanName, name: beanId.beanName }];
+    const nodes: Node[] = [{
+      id: beanId.beanName,
+      name: beanId.beanName,
+      stereotype: contextBeanDefinitions[beanId.contextId].find(b => b.beanName === beanId.beanName)?.stereotype || null
+    }];
     const edges: Edge[] = [];
     const visited = new Set<string>();
 
@@ -159,7 +174,12 @@ const GraphPage: React.FC<GraphProps> = ({ contextBeanDefinitions }) => {
       const dependencies = contextDependencies?.get(bean) || [];
       dependencies.forEach(dependency => {
         if (!visited.has(dependency)) {
-          nodes.push({ id: dependency, name: dependency });
+          const beanDefinition = contextBeanDefinitions[contextId].find(b => b.beanName === dependency);
+          nodes.push({
+            id: dependency,
+            name: dependency,
+            stereotype: beanDefinition?.stereotype || null
+          });
           traverse(contextId, dependency);
         }
         edges.push({ source: bean, target: dependency });
@@ -203,8 +223,37 @@ const GraphPage: React.FC<GraphProps> = ({ contextBeanDefinitions }) => {
       })
       .call(drag);
 
-    node.append('circle')
-      .attr('r', 10);
+    /*node.append('circle')
+      .attr('r', 10);*/
+
+    node.each(function (d) {
+      const nodeGroup = d3.select(this);
+
+      if (d.stereotype === 'CONTROLLER' || d.stereotype === 'REST_CONTROLLER') {
+        nodeGroup.append('circle')
+          .attr('r', 10);
+      } else if (d.stereotype === 'SERVICE') {
+        nodeGroup
+          .append('rect')
+          .attr('width', 20)
+          .attr('height', 20)
+          .attr('rx', 5)
+          .attr('ry', 5)
+          .attr('x', -10)
+          .attr('y', -10);
+      } else if (d.stereotype === 'REPOSITORY') {
+        nodeGroup
+          .append('rect')
+          .attr('width', 20)
+          .attr('height', 20)
+          .attr('x', -10)
+          .attr('y', -10);
+      } else {
+        nodeGroup
+          .append('path')
+          .attr('d', 'M -10,10 L 10,10 L 0,-10 Z');
+      }
+    });
 
     node.append('text')
       .attr('class', 'node-text')
@@ -294,6 +343,10 @@ const GraphPage: React.FC<GraphProps> = ({ contextBeanDefinitions }) => {
                 <polygon points="0 0, 10 3.5, 0 7" />
               </marker>
               <marker id="highlighted-arrowhead" className="arrowhead highlighted" markerWidth="10"
+                      markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
+                <polygon points="0 0, 10 3.5, 0 7" />
+              </marker>
+              <marker id="highlighted-in-arrowhead" className="arrowhead highlighted-in" markerWidth="10"
                       markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
                 <polygon points="0 0, 10 3.5, 0 7" />
               </marker>
