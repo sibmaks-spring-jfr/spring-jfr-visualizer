@@ -1,7 +1,30 @@
 import React, { useState } from 'react';
-import CustomTable from '../../../../components/CustomTable';
-import { Button, Card, Col, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
+import CustomTable, { CustomTableRow } from '../../../../components/CustomTable';
+import { Button, Card, Col, Container, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
 import { BeanDefinition } from '../../../../api/types';
+
+interface BeanDefinitionDetailsProps {
+  row: CustomTableRow;
+}
+
+const BeanDefinitionDetails: React.FC<BeanDefinitionDetailsProps> = ({ row }) => {
+  return (
+    <Row>
+      <Row>
+        <Col className={'fw-bold'} md={3}>Scope:</Col>
+        <Col md={9}>{typeof row.scope === 'string' ? row.scope : ''}</Col>
+      </Row>
+      <Row>
+        <Col className={'fw-bold'} md={3}>Primary:</Col>
+        <Col md={9}>{typeof row.primary === 'string' ? row.primary : ''}</Col>
+      </Row>
+      <Row>
+        <Col className={'fw-bold'} md={3}>Generated:</Col>
+        <Col md={9}>{typeof row.generated === 'string' ? row.generated : ''}</Col>
+      </Row>
+    </Row>
+  );
+};
 
 export interface BeanDefinitionsPageProps {
   contextBeanDefinitions: Record<string, BeanDefinition[]>;
@@ -58,20 +81,12 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
             thead={{ className: 'table-dark' }}
             columns={[
               {
-                key: 'scope',
-                label: 'Scope'
-              },
-              {
                 key: 'beanClassName',
                 label: 'Class Name'
               },
               {
                 key: 'beanName',
                 label: 'Bean Name'
-              },
-              {
-                key: 'primary',
-                label: 'Primary'
               },
               {
                 key: 'dependenciesCount',
@@ -81,18 +96,12 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                 key: 'dependencies',
                 label: 'Dependencies'
               },
-              {
-                key: 'generated',
-                label: 'Generated'
-              },
             ]}
             data={filteredBeanDefinitions.map(it => {
               return {
-                scope: {
-                  representation: <div className="content-scroll">{it.scope}</div>,
-                  value: it.scope,
-                  className: 'td-96 text-center'
-                },
+                scope: it.scope,
+                primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
+                generated: it.generated ? 'Yes' : 'No',
                 beanClassName: {
                   representation: <div className="content-scroll">{it.beanClassName}</div>,
                   value: it.beanClassName,
@@ -102,11 +111,6 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   representation: <div className="content-scroll">{it.beanName}</div>,
                   value: it.beanName,
                   className: 'td-512'
-                },
-                primary: {
-                  representation: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
-                  value: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
-                  className: 'text-center'
                 },
                 dependenciesCount: {
                   representation: <code>{it.dependencies?.length ?? 0}</code>,
@@ -122,31 +126,23 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   value: it.dependencies?.join(', '),
                   className: 'td-1024'
                 },
-                generated: {
-                  representation: it.generated ? 'Yes' : 'No',
-                  value: it.generated ? 'Yes' : 'No',
-                  className: 'text-center'
-                },
               };
             })}
             filterableColumns={[
-              'scope',
               'beanClassName',
               'beanName',
-              'primary',
               'dependenciesCount',
               'dependencies',
-              'generated'
             ]}
             sortableColumns={[
-              'scope',
               'beanClassName',
               'beanName',
-              'primary',
               'dependenciesCount',
               'dependencies',
-              'generated'
             ]}
+            rowBehavior={{
+              expandableContent: (row) => <BeanDefinitionDetails row={row} />
+            }}
           />
         </Row>
       </div>

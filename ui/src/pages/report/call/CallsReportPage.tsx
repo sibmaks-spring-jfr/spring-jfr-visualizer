@@ -186,8 +186,10 @@ const CallsReportPage = () => {
               'timing',
               'status',
             ]}
-            onRowClick={(row) => {
-              navigate(`/calls/${row.contextId}/${row.invocationId}`);
+            rowBehavior={{
+              handler: (row) => {
+                navigate(`/calls/${row.contextId}/${row.invocationId}`);
+              }
             }}
           />
         </Col>

@@ -15,9 +15,19 @@ export type CellValue = string | number | boolean | null;
 
 export type Cell = ReactCell | CellValue;
 
-export type Row = { [key: string]: Cell };
+export interface ExpandableRowBehavior {
+  expandableContent: (row: CustomTableRow) => React.ReactNode;
+}
 
-export type CellClickHandler = (row: Row, cell: Cell) => void;
+export interface HandleClickBehavior {
+  handler: (row: CustomTableRow) => void;
+}
+
+export type RowBehavior = ExpandableRowBehavior | HandleClickBehavior;
+
+export type CustomTableRow = { [key: string]: Cell };
+
+export type CellClickHandler = (row: CustomTableRow, cell: Cell) => void;
 
 export interface ReactCell {
   /**
@@ -46,11 +56,14 @@ export interface CustomTableProps {
     className?: string;
   };
   columns: TableColumn[];
-  data: Array<Row>;
+  data: Array<CustomTableRow>;
   sortableColumns?: string[];
   filterableColumns?: string[];
   styleProps?: StyleProps;
-  onRowClick?: (row: Row) => void;
+  /**
+   * Row behavior
+   */
+  rowBehavior?: RowBehavior;
 }
 
 const CustomTable: React.FC<CustomTableProps> = ({
@@ -64,11 +77,12 @@ const CustomTable: React.FC<CustomTableProps> = ({
                                                      centerHeaders: true,
                                                      textCenterValues: false,
                                                    },
-                                                   onRowClick = null,
+                                                   rowBehavior
                                                  }) => {
   const [filter, setFilter] = useState<{ [key: string]: string }>({});
   const [sortColumn, setSortColumn] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, columnKey: string) => {
     setFilter({ ...filter, [columnKey]: event.target.value });
@@ -114,7 +128,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
     return cell.className;
   };
 
-  const getCellOnClick = (row: Row, cell: Cell): undefined | (() => void) => {
+  const getCellOnClick = (row: CustomTableRow, cell: Cell): undefined | (() => void) => {
     if (!cell) {
       return undefined;
     }
@@ -128,7 +142,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
     return () => onClick(row, cell);
   };
 
-  const filterCell = (item: Row, key: string, value: string): boolean => {
+  const filterCell = (item: CustomTableRow, key: string, value: string): boolean => {
     if (!value) return true;
     const cell = item[key];
     let cellValue = getCellValue(cell);
@@ -158,7 +172,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
     return cellValue.toLowerCase().includes(value.toLowerCase());
   };
 
-  const rowComparator = (a: Row, b: Row) => {
+  const rowComparator = (a: CustomTableRow, b: CustomTableRow) => {
     if (!sortColumn) return 0;
     let aValue = getCellValue(a[sortColumn]);
     let bValue = getCellValue(b[sortColumn]);
@@ -191,6 +205,18 @@ const CustomTable: React.FC<CustomTableProps> = ({
       });
     })
     .sort(rowComparator);
+
+  const toggleRowExpand = (index: number) => {
+    setExpandedRows((prevExpandedRows) => {
+      const newExpandedRows = new Set(prevExpandedRows);
+      if (newExpandedRows.has(index)) {
+        newExpandedRows.delete(index);
+      } else {
+        newExpandedRows.add(index);
+      }
+      return newExpandedRows;
+    });
+  };
 
   return (
     <Table className={className ?? ''}>
@@ -225,23 +251,87 @@ const CustomTable: React.FC<CustomTableProps> = ({
       </tr>
       </thead>
       <tbody>
-      {preparedData.map((item, index) => (
-        <tr
-          key={index}
-          onClick={onRowClick ? () => onRowClick(item) : undefined}
-          role={onRowClick ? 'button' : undefined}>
-          {columns.map((column) => {
-            const cellOnClick = getCellOnClick(item, item[column.key]);
+      {preparedData.map((row, index) => {
+          if (!rowBehavior) {
             return (
-              <td
-                className={`${styleProps.textCenterValues ? 'text-center' : ''} ${getCellClassName(item[column.key])}`.trim()}
-                onClick={cellOnClick}
-                role={cellOnClick ? 'button' : undefined}
-                key={column.key}>{getCellRepresentation(item[column.key])}</td>
+              <tr>
+                {columns.map((column) => {
+                  const cellOnClick = getCellOnClick(row, row[column.key]);
+                  return (
+                    <td
+                      className={`${styleProps.textCenterValues ? 'text-center' : ''} ${getCellClassName(row[column.key])}`.trim()}
+                      onClick={cellOnClick}
+                      role={cellOnClick ? 'button' : undefined}
+                      key={column.key}>{getCellRepresentation(row[column.key])}</td>
+                  );
+                })}
+              </tr>
             );
-          })}
-        </tr>
-      ))}
+          }
+          if ('handler' in rowBehavior) {
+            return (
+              <tr
+                onClick={() => rowBehavior.handler(row)}
+                role={'button'}
+              >
+                {columns.map((column) => {
+                  const cellOnClick = getCellOnClick(row, row[column.key]);
+                  return (
+                    <td
+                      className={`${styleProps.textCenterValues ? 'text-center' : ''} ${getCellClassName(row[column.key])}`.trim()}
+                      onClick={cellOnClick}
+                      role={cellOnClick ? 'button' : undefined}
+                      key={column.key}>{getCellRepresentation(row[column.key])}</td>
+                  );
+                })}
+              </tr>
+            );
+          }
+          if ('expandableContent' in rowBehavior) {
+            return (
+              <React.Fragment key={index}>
+                <tr
+                  onClick={() => toggleRowExpand(index)}
+                  role={'button'}
+                >
+                  {columns.map((column) => {
+                    const cellOnClick = getCellOnClick(row, row[column.key]);
+                    return (
+                      <td
+                        className={`${styleProps.textCenterValues ? 'text-center' : ''} ${getCellClassName(row[column.key])}`.trim()}
+                        onClick={cellOnClick}
+                        role={cellOnClick ? 'button' : undefined}
+                        key={column.key}>{getCellRepresentation(row[column.key])}</td>
+                    );
+                  })}
+                </tr>
+                {expandedRows.has(index) && (
+                  <tr key={`details-${index}`} className="expandable-row">
+                    <td colSpan={columns.length}>
+                      {rowBehavior.expandableContent(row)}
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          }
+          return (
+            <tr>
+              {columns.map((column) => {
+                const cellOnClick = getCellOnClick(row, row[column.key]);
+                return (
+                  <td
+                    className={`${styleProps.textCenterValues ? 'text-center' : ''} ${getCellClassName(row[column.key])}`.trim()}
+                    onClick={cellOnClick}
+                    role={cellOnClick ? 'button' : undefined}
+                    key={column.key}>{getCellRepresentation(row[column.key])}</td>
+                );
+              })}
+            </tr>
+          );
+        }
+      )
+      }
       </tbody>
     </Table>
   );
