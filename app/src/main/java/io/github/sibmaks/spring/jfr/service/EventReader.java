@@ -2,10 +2,7 @@ package io.github.sibmaks.spring.jfr.service;
 
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedData;
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedEvents;
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.BeanDefinitionRegisteredRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.MergedBeanDefinitionRegisteredRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.PostProcessAfterInitializationRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.PostProcessBeforeInitializationRecordedEvent;
+import io.github.sibmaks.spring.jfr.dto.recorded.bean.*;
 import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationExecutedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationFailedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.component.ComponentMethodCalledRecordedEvent;
@@ -16,10 +13,7 @@ import io.github.sibmaks.spring.jfr.dto.recorded.service.ServiceMethodCalledReco
 import io.github.sibmaks.spring.jfr.event.core.RecordedEventProxyFactory;
 import io.github.sibmaks.spring.jfr.event.publish.async.AsyncMethodExecutedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.async.AsyncMethodFailedEvent;
-import io.github.sibmaks.spring.jfr.event.publish.bean.BeanDefinitionRegisteredEvent;
-import io.github.sibmaks.spring.jfr.event.publish.bean.MergedBeanDefinitionRegisteredEvent;
-import io.github.sibmaks.spring.jfr.event.publish.bean.PostProcessAfterInitializationEvent;
-import io.github.sibmaks.spring.jfr.event.publish.bean.PostProcessBeforeInitializationEvent;
+import io.github.sibmaks.spring.jfr.event.publish.bean.*;
 import io.github.sibmaks.spring.jfr.event.publish.component.ComponentMethodCalledEvent;
 import io.github.sibmaks.spring.jfr.event.publish.component.ComponentMethodExecutedEvent;
 import io.github.sibmaks.spring.jfr.event.publish.component.ComponentMethodFailedEvent;
@@ -63,6 +57,10 @@ public class EventReader {
                 Map.entry(
                         MergedBeanDefinitionRegisteredEvent.class.getCanonicalName(),
                         MergedBeanDefinitionRegisteredRecordedEvent.class
+                ),
+                Map.entry(
+                        ResolveBeanDependencyEvent.class.getCanonicalName(),
+                        ResolveBeanDependencyRecordedEvent.class
                 ),
                 Map.entry(
                         PostProcessBeforeInitializationEvent.class.getCanonicalName(),

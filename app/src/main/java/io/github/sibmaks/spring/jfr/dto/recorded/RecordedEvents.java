@@ -1,10 +1,7 @@
 package io.github.sibmaks.spring.jfr.dto.recorded;
 
 
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.BeanDefinitionRegisteredRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.MergedBeanDefinitionRegisteredRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.PostProcessAfterInitializationRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.PostProcessBeforeInitializationRecordedEvent;
+import io.github.sibmaks.spring.jfr.dto.recorded.bean.*;
 import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationExecutedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationFailedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.recorded.component.ComponentMethodCalledRecordedEvent;
@@ -25,6 +22,7 @@ import java.util.*;
 public class RecordedEvents {
     private final Queue<BeanDefinitionRegisteredRecordedEvent> beanDefinitionRegistered;
     private final Queue<MergedBeanDefinitionRegisteredRecordedEvent> mergedBeanDefinitionRegistered;
+    private final Queue<ResolveBeanDependencyRecordedEvent> resolveBeanDependencyRecordedEvents;
     private final Queue<PostProcessBeforeInitializationRecordedEvent> beforeBeanInitializations;
     private final Queue<PostProcessAfterInitializationRecordedEvent> afterBeanInitializations;
     private final Queue<ControllerMethodCalledRecordedEvent> controllerMethodCalledRecordedEvents;
@@ -39,6 +37,7 @@ public class RecordedEvents {
     public RecordedEvents() {
         this.beanDefinitionRegistered = new PriorityQueue<>(Comparator.comparing(RecordedData::getStartTime));
         this.mergedBeanDefinitionRegistered = new PriorityQueue<>(Comparator.comparing(RecordedData::getStartTime));
+        this.resolveBeanDependencyRecordedEvents = new PriorityQueue<>(Comparator.comparing(RecordedData::getStartTime));
         this.beforeBeanInitializations = new PriorityQueue<>(Comparator.comparing(RecordedData::getStartTime));
         this.afterBeanInitializations = new PriorityQueue<>(Comparator.comparing(RecordedData::getStartTime));
         this.controllerMethodCalledRecordedEvents = new PriorityQueue<>(Comparator.comparing(RecordedData::getStartTime));
@@ -55,6 +54,8 @@ public class RecordedEvents {
             beanDefinitionRegistered.add(recordedEvent);
         } else if (event instanceof MergedBeanDefinitionRegisteredRecordedEvent recordedEvent) {
             mergedBeanDefinitionRegistered.add(recordedEvent);
+        } else if (event instanceof ResolveBeanDependencyRecordedEvent recordedEvent) {
+            resolveBeanDependencyRecordedEvents.add(recordedEvent);
         } else if (event instanceof PostProcessBeforeInitializationRecordedEvent recordedEvent) {
             beforeBeanInitializations.add(recordedEvent);
         } else if (event instanceof PostProcessAfterInitializationRecordedEvent recordedEvent) {

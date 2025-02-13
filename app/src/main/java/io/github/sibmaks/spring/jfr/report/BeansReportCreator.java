@@ -93,6 +93,18 @@ public class BeansReportCreator {
             }
         }
 
+        for (var event : events.getResolveBeanDependencyRecordedEvents()) {
+            var contextBeanDefinitions = beanDefinitions.get(event.getContextId());
+            if (contextBeanDefinitions == null) {
+                continue;
+            }
+            var beanName = event.getDependentBeanName();
+            var existedBeanDefinition = contextBeanDefinitions.get(beanName);
+            if (existedBeanDefinition != null) {
+                existedBeanDefinition.patch(event);
+            }
+        }
+
         return beanDefinitions.entrySet()
                 .stream()
                 .collect(

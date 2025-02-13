@@ -2,14 +2,14 @@ package io.github.sibmaks.spring.jfr.dto.view.beans;
 
 import io.github.sibmaks.spring.jfr.event.api.bean.BeanDefinitionRegisteredFact;
 import io.github.sibmaks.spring.jfr.event.api.bean.MergedBeanDefinitionRegisteredFact;
+import io.github.sibmaks.spring.jfr.event.api.bean.ResolveBeanDependencyFact;
 import io.github.sibmaks.spring.jfr.event.api.bean.Stereotype;
 import io.github.sibmaks.spring.jfr.event.core.converter.DependencyConverter;
 import lombok.Getter;
 import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author sibmaks
@@ -21,7 +21,7 @@ public class BeanDefinition {
     private String beanClassName;
     private String beanName;
     private String primary;
-    private String[] dependencies;
+    private final SortedSet<String> dependencies;
     private Stereotype stereotype;
     private final boolean generated;
 
@@ -30,7 +30,8 @@ public class BeanDefinition {
         this.beanClassName = fact.getBeanClassName();
         this.beanName = fact.getBeanName();
         this.primary = fact.getPrimary();
-        this.dependencies = DependencyConverter.convert(fact.getDependencies());
+        this.dependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
+                .collect(Collectors.toCollection(TreeSet::new));
         this.stereotype = Optional.ofNullable(fact.getStereotype())
                 .map(Stereotype::valueOf)
                 .orElse(Stereotype.UNKNOWN);
@@ -63,9 +64,10 @@ public class BeanDefinition {
 
     private void patchDependencies(MergedBeanDefinitionRegisteredFact fact) {
         var mergedDependencies = DependencyConverter.convert(fact.getDependencies());
-        var newDependencies = new HashSet<>(this.dependencies.length + mergedDependencies.length);
-        newDependencies.addAll(List.of(this.dependencies));
-        newDependencies.addAll(List.of(mergedDependencies));
-        this.dependencies = newDependencies.toArray(new String[newDependencies.size()]);
+        dependencies.addAll(List.of(mergedDependencies));
+    }
+
+    public void patch(ResolveBeanDependencyFact event) {
+        dependencies.add(event.getDependencyBeanName());
     }
 }
