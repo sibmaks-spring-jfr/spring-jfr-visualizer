@@ -17,7 +17,7 @@ const App: React.FC = () => {
         <HashRouter>
           <Routes>
             <Route path="/" element={<ApplicationLayout />}>
-              <Route index element={<ReportsMenuPage />} />
+              <Route index element={<BeansReportPage />} />
               <Route path="calls">
                 <Route index element={<CallsReportPage />} />
                 <Route path={':contextId'}>
