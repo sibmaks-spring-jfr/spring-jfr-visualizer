@@ -1,14 +1,15 @@
 package io.github.sibmaks.spring.jfr.dto.recorded;
 
 
-import io.github.sibmaks.spring.jfr.dto.recorded.bean.*;
-import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationExecutedRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationFailedRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.component.ComponentMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.controller.ControllerMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.jpa.JPAMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.scheduled.ScheduledMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.dto.recorded.service.ServiceMethodCalledRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.RecordedData;
+import io.github.sibmaks.spring.jfr.event.reading.api.bean.*;
+import io.github.sibmaks.spring.jfr.event.reading.api.common.InvocationExecutedRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.common.InvocationFailedRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.component.ComponentMethodCalledRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.controller.ControllerMethodCalledRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.jpa.JPAMethodCalledRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.scheduled.ScheduledMethodCalledRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.service.ServiceMethodCalledRecordedEvent;
 import lombok.Getter;
 
 import java.time.Instant;

@@ -1,11 +1,11 @@
 package io.github.sibmaks.spring.jfr.report;
 
-import io.github.sibmaks.spring.jfr.dto.recorded.RecordedData;
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedEvents;
-import io.github.sibmaks.spring.jfr.dto.recorded.common.InvocationFailedRecordedEvent;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallTrace;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallsReport;
 import io.github.sibmaks.spring.jfr.dto.view.calls.InvocationType;
+import io.github.sibmaks.spring.jfr.event.reading.api.RecordedData;
+import io.github.sibmaks.spring.jfr.event.reading.api.common.InvocationFailedRecordedEvent;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

@@ -29,7 +29,9 @@ dependencies {
     compileOnly(libs.lombok)
     annotationProcessor(libs.lombok)
 
-    implementation(libs.spring.jfr.api)
+    implementation(libs.spring.jfr.api.common)
+    implementation(libs.spring.jfr.api.reading)
+    implementation(libs.spring.jfr.api.recording)
 
     implementation("org.springframework:spring-context")
     implementation("org.springframework:spring-core")
