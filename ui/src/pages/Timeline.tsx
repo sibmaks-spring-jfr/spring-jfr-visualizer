@@ -1,5 +1,5 @@
 import React from 'react';
-import { Badge, Col, Container, ListGroup, Row } from 'react-bootstrap';
+import { Badge, Col, Container, ListGroup } from 'react-bootstrap';
 import {
   MaterialSymbolsLightCloseSmallOutlineRounded,
   MaterialSymbolsLightCommitRounded,
@@ -23,65 +23,8 @@ export interface TimelineProps {
 }
 
 const Timeline: React.FC<TimelineProps> = ({ connections }) => {
-  // Собираем все события в один массив
-  const allEvents: Event[] = connections.flatMap((connection) =>
-    connection.events.map((event) => ({ ...event, connectionId: connection.id }))
-  );
-
-  // Сортируем события по времени
-  allEvents.sort((a, b) => a.date.getTime() - b.date.getTime());
-
-  // Находим минимальную и максимальную дату для масштабирования
-  const minDate = allEvents[0]?.date || new Date();
-  const maxDate = allEvents[allEvents.length - 1]?.date || new Date();
-
-  // Функция для вычисления позиции события на шкале
-  const getPosition = (date: Date) => {
-    const totalDuration = maxDate.getTime() - minDate.getTime();
-    const eventDuration = date.getTime() - minDate.getTime();
-    return (eventDuration / totalDuration) * 100;
-  };
-
   return (
     <Container>
-      <Row>
-        <Col>
-          <div style={{ position: 'relative', height: '100px', margin: '20px 0' }}>
-            {/* Линия временной шкалы */}
-            <div
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: 0,
-                right: 0,
-                borderTop: '2px solid #ccc',
-              }}
-            />
-            {/* События */}
-            {allEvents.map((event, index) => (
-              <div
-                key={index}
-                style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: `${getPosition(event.date)}%`,
-                  transform: 'translate(-50%, -50%)',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                {event.type === 'create' && <MaterialSymbolsLightFiberNewOutlineRounded color="blue" />}
-                {event.type === 'commit' && <MaterialSymbolsLightCommitRounded color="green" />}
-                {event.type === 'rollback' && <MaterialSymbolsLightSettingsBackupRestoreRounded color="red" />}
-                {event.type === 'close' && <MaterialSymbolsLightCloseSmallOutlineRounded color="gray" />}
-                <Badge bg="light" text="dark" style={{ marginLeft: '5px' }}>
-                  {event.date.toLocaleString()}
-                </Badge>
-              </div>
-            ))}
-          </div>
-        </Col>
-      </Row>
       {/* Список подключений */}
       <ListGroup>
         {connections.map((connection) => (
@@ -97,7 +40,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
                     {event.type === 'rollback' && <MaterialSymbolsLightSettingsBackupRestoreRounded color="red" />}
                     {event.type === 'close' && <MaterialSymbolsLightCloseSmallOutlineRounded color="gray" />}
                     <Badge bg="light" text="dark" style={{ marginLeft: '5px' }}>
-                      {event.date.toLocaleString()}
+                      {event.date.toISOString()}
                     </Badge>
                   </div>
                 </React.Fragment>

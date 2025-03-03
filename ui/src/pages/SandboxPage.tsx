@@ -22,6 +22,17 @@ const SandboxPage: React.FC = () => {
         { type: 'close', date: new Date('2023-10-02T10:00:00') },
       ],
     } as Connection,
+    {
+      id: '3',
+      events: [
+        { type: 'create', date: new Date('2023-10-02T09:00:00') },
+        { type: 'commit', date: new Date('2023-10-02T09:30:00') },
+        { type: 'commit', date: new Date('2023-10-02T09:30:00.001Z') },
+        { type: 'rollback', date: new Date('2023-10-02T09:30:00.010Z') },
+        { type: 'commit', date: new Date('2023-10-02T09:30:00.105Z') },
+        { type: 'close', date: new Date('2023-10-02T10:00:00') },
+      ],
+    } as Connection,
   ];
 
   return (
