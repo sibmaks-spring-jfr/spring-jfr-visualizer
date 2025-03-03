@@ -2,11 +2,10 @@ import React, { useContext, useState } from 'react';
 import { Alert, Badge, Col, Container, Form, Row } from 'react-bootstrap';
 import { CallTrace } from '../../../api/types';
 import BackButton from '../../../components/BackButton';
-import CustomTable from '../../../components/CustomTable';
 import { toISOString } from '../../../utils/datetime';
-import { Loader } from '../../../components/Loader';
 import { CallReportContext } from '../../../context/CallReportProvider';
 import { useNavigate } from 'react-router-dom';
+import { CustomTable } from '@sibdevtools/frontend-common';
 
 const MAX_TRACE_ON_PAGE = 25;
 
@@ -21,18 +20,13 @@ const getStatusRepresentation = (it: CallTrace) => {
 const CallsReportPage = () => {
   const { callReport, isLoading } = useContext(CallReportContext);
   const navigate = useNavigate();
-  const [filteredRoots, setFilteredRoots] = useState<CallTrace[]>([...callReport.roots]);
+  const [filteredRoots, setFilteredRoots] = useState<CallTrace[]>([...callReport.roots].slice(0, MAX_TRACE_ON_PAGE));
+  const [showAlert, setShowAlert] = useState<boolean>(callReport.roots.length > MAX_TRACE_ON_PAGE);
   const [leftTimeBound, setLeftTimeBound] = useState<string>('');
   const [rightTimeBound, setRightTimeBound] = useState<string>('');
   const [minDuration, setMinDuration] = useState<number | null>(null);
   const [maxDuration, setMaxDuration] = useState<number | null>(null);
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'fail'>('all');
-
-  if (isLoading) {
-    return (
-      <Loader />
-    );
-  }
 
   const handleFilterSubmit = () => {
     let filtered = [...callReport.roots];
@@ -59,7 +53,8 @@ const CallsReportPage = () => {
       filtered = filtered.filter(it => (it.success ? 'success' : 'fail') === statusFilter);
     }
 
-    setFilteredRoots(filtered);
+    setFilteredRoots(filtered.slice(0, MAX_TRACE_ON_PAGE));
+    setShowAlert(filtered.length > MAX_TRACE_ON_PAGE);
   };
 
   return (
@@ -67,7 +62,7 @@ const CallsReportPage = () => {
       <Row className={'mt-4 mb-4'}>
         <h3><BackButton /> Calls Report</h3>
       </Row>
-      {(filteredRoots.length > MAX_TRACE_ON_PAGE) && (
+      {showAlert && (
         <Alert variant={'warning'}>
           Shown only first {MAX_TRACE_ON_PAGE} traces on the page.
         </Alert>
@@ -132,65 +127,70 @@ const CallsReportPage = () => {
         </Col>
         <Col md={9} className="d-flex flex-column">
           <CustomTable
-            className={'overflow-scroll table-striped table-hover'}
-            thead={{ className: 'table-dark' }}
-            columns={[
-              {
-                key: 'qualifier',
-                label: 'Qualifier'
-              },
-              {
-                key: 'call_started_at',
-                label: 'Call Started At'
-              },
-              {
-                key: 'timing',
-                label: 'Timing'
-              },
-              {
-                key: 'status',
-                label: 'Status'
-              },
-            ]}
-            data={filteredRoots.slice(0, MAX_TRACE_ON_PAGE).map(it => {
-              return {
-                contextId: it.contextId,
-                invocationId: it.invocationId,
-                qualifier: `${it.className}#${it.methodName}`,
-                call_started_at: {
-                  representation: <code>{toISOString(it.startTime)}</code>,
-                  value: toISOString(it.startTime),
-                  className: 'text-center text-nowrap',
+            table={{
+              striped: true,
+              hover: true,
+              responsive: true
+            }}
+            thead={{
+              className: 'table-dark',
+              columns: {
+                qualifier: {
+                  label: 'Qualifier',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center'
+                },
+                callStartedAt: {
+                  label: 'Call Started At',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center'
                 },
                 timing: {
-                  representation: `${it.endTime - it.startTime} ms`,
-                  value: it.endTime - it.startTime,
-                  className: 'text-center',
+                  label: 'Timing',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center'
                 },
                 status: {
-                  representation: getStatusRepresentation(it),
-                  value: it.success ? 'Success' : 'Fail',
-                  className: 'text-center',
+                  label: 'Status',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center'
                 },
-              };
-            })}
-            filterableColumns={[
-              'qualifier',
-              'call_started_at',
-              'timing',
-              'status',
-            ]}
-            sortableColumns={[
-              'qualifier',
-              'call_started_at',
-              'timing',
-              'status',
-            ]}
-            rowBehavior={{
-              handler: (row) => {
-                navigate(`/calls/${row.contextId}/${row.invocationId}`);
               }
             }}
+            tbody={{
+              data: filteredRoots.map(it => {
+                return {
+                  contextId: it.contextId,
+                  invocationId: it.invocationId,
+                  qualifier: `${it.className}#${it.methodName}`,
+                  callStartedAt: {
+                    representation: <code>{toISOString(it.startTime)}</code>,
+                    value: toISOString(it.startTime),
+                    className: 'text-center text-nowrap',
+                  },
+                  timing: {
+                    representation: `${it.endTime - it.startTime} ms`,
+                    value: it.endTime - it.startTime,
+                    className: 'text-center',
+                  },
+                  status: {
+                    representation: getStatusRepresentation(it),
+                    value: it.success ? 'Success' : 'Fail',
+                    className: 'text-center',
+                  },
+                };
+              }),
+              rowBehavior: {
+                handler: (row) => {
+                  navigate(`/calls/${row.contextId}/${row.invocationId}`);
+                }
+              }
+            }}
+            loading={isLoading}
           />
         </Col>
       </Row>

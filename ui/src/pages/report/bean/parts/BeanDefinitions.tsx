@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import CustomTable, { CustomTableRow } from '../../../../components/CustomTable';
-import { Button, Card, Col, Container, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
+import { Button, Card, Col, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
 import { BeanDefinition } from '../../../../api/types';
+import { CustomTable } from '@sibdevtools/frontend-common';
+import { CustomTableParts } from '@sibdevtools/frontend-common/dist/components/custom-table/types';
 
 interface BeanDefinitionDetailsProps {
-  row: CustomTableRow;
+  row: CustomTableParts.Row;
 }
 
 const BeanDefinitionDetails: React.FC<BeanDefinitionDetailsProps> = ({ row }) => {
@@ -77,71 +78,76 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
         </Row>
         <Row className={'m-2 h-100'}>
           <CustomTable
-            className={'card-body overflow-scroll table table-striped table-hover'}
-            thead={{ className: 'table-dark' }}
-            columns={[
-              {
-                key: 'beanClassName',
-                label: 'Class Name'
-              },
-              {
-                key: 'beanName',
-                label: 'Bean Name'
-              },
-              {
-                key: 'dependenciesCount',
-                label: 'Dependencies Count'
-              },
-              {
-                key: 'dependencies',
-                label: 'Dependencies'
-              },
-            ]}
-            data={filteredBeanDefinitions.map(it => {
-              return {
-                scope: it.scope,
-                primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
-                generated: it.generated ? 'Yes' : 'No',
+            table={{
+              className: 'card-body',
+              striped: true,
+              hover: true,
+              responsive: true
+            }}
+            thead={{
+              className: 'table-dark',
+              columns: {
                 beanClassName: {
-                  representation: <div className="content-scroll">{it.beanClassName}</div>,
-                  value: it.beanClassName,
-                  className: 'td-512'
+                  label: 'Class Name',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center'
                 },
                 beanName: {
-                  representation: <div className="content-scroll">{it.beanName}</div>,
-                  value: it.beanName,
-                  className: 'td-512'
+                  label: 'Bean Name',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center'
                 },
                 dependenciesCount: {
-                  representation: <code>{it.dependencies?.length ?? 0}</code>,
-                  value: it.dependencies?.length ?? 0,
-                  className: 'td-32 text-center'
+                  label: 'Dependencies Count',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center text-nowrap'
                 },
                 dependencies: {
-                  representation: <ul className="content-scroll">
-                    {it.dependencies?.map(it => {
-                      return (<li key={it}>{it}</li>);
-                    })}
-                  </ul>,
-                  value: it.dependencies?.join(', '),
-                  className: 'td-1024'
+                  label: 'Dependencies',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center'
                 },
-              };
-            })}
-            filterableColumns={[
-              'beanClassName',
-              'beanName',
-              'dependenciesCount',
-              'dependencies',
-            ]}
-            sortableColumns={[
-              'beanClassName',
-              'beanName',
-              'dependenciesCount',
-              'dependencies',
-            ]}
-            rowBehavior={{
-              expandableContent: (row) => <BeanDefinitionDetails row={row} />
+              }
+            }}
+            tbody={{
+              data: filteredBeanDefinitions.map(it => {
+                return {
+                  scope: it.scope,
+                  primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
+                  generated: it.generated ? 'Yes' : 'No',
+                  beanClassName: {
+                    representation: <div className="content-scroll">{it.beanClassName}</div>,
+                    value: it.beanClassName,
+                    className: 'td-512'
+                  },
+                  beanName: {
+                    representation: <div className="content-scroll">{it.beanName}</div>,
+                    value: it.beanName,
+                    className: 'td-512'
+                  },
+                  dependenciesCount: {
+                    representation: <code>{it.dependencies?.length ?? 0}</code>,
+                    value: it.dependencies?.length ?? 0,
+                    className: 'td-32 text-center'
+                  },
+                  dependencies: {
+                    representation: <ul className="content-scroll">
+                      {it.dependencies?.map(it => {
+                        return (<li key={it}>{it}</li>);
+                      })}
+                    </ul>,
+                    value: it.dependencies?.join(', '),
+                    className: 'td-1024'
+                  },
+                };
+              }),
+              rowBehavior: {
+                expandableContent: (row) => <BeanDefinitionDetails row={row} />
+              }
             }}
           />
         </Row>

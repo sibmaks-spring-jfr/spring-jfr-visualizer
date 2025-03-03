@@ -3,6 +3,7 @@ package io.github.sibmaks.spring.jfr.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.github.sibmaks.spring.jfr.event.reading.core.RecordedEventProxyFactory;
+import io.github.sibmaks.spring.jfr.event.reading.core.recorded.RecordedEventFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -25,5 +26,10 @@ public class ApplicationConfiguration {
     @Bean
     public RecordedEventProxyFactory recordedEventProxyFactory() {
         return new RecordedEventProxyFactory();
+    }
+
+    @Bean
+    public RecordedEventFactory recordedEventFactory(RecordedEventProxyFactory factory) {
+        return new RecordedEventFactory(factory);
     }
 }
