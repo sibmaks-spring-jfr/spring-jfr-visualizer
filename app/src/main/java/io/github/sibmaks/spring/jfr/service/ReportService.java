@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sibmaks.spring.jfr.Application;
 import io.github.sibmaks.spring.jfr.dto.view.beans.BeansReport;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallsReport;
+import io.github.sibmaks.spring.jfr.dto.view.connections.ConnectionsReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -30,42 +31,6 @@ public class ReportService {
                          @Value("${app.report.file}") String reportFilePath) {
         this.objectMapper = objectMapper;
         this.reportFilePath = reportFilePath;
-    }
-
-    /**
-     * Generate JavaScript beans report
-     *
-     * @param beansReport beans report data
-     * @param callsReport calls report data
-     */
-    public void generateReport(BeansReport beansReport, CallsReport callsReport) {
-        var reportFile = new File(reportFilePath);
-        var parentFile = reportFile.getParentFile();
-        if (!parentFile.exists()) {
-            if (!parentFile.mkdirs()) {
-                throw new RuntimeException("Couldn't create directory " + parentFile);
-            }
-        } else if (!parentFile.isDirectory()) {
-            throw new RuntimeException("Not a directory: " + parentFile);
-        }
-
-        log.info("Creating bean report...");
-        try {
-            copyStaticFiles(parentFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try (var fileWriter = new FileWriter(reportFile);
-             var writer = new BufferedWriter(fileWriter)) {
-            var beansJson = objectMapper.writeValueAsString(beansReport);
-            var callsJson = objectMapper.writeValueAsString(callsReport);
-            var beansJsonVariable = objectMapper.writeValueAsString(beansJson);
-            var callsJsonVariable = objectMapper.writeValueAsString(callsJson);
-            writer.write(String.format("window.beansJson = %s;\nwindow.callsJson = %s;", beansJsonVariable, callsJsonVariable));
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
     private static void copyStaticFiles(File destinationFolder) throws IOException {
@@ -98,6 +63,58 @@ public class ReportService {
             var srcFile = new File(source, file);
             var destFile = new File(destination, file);
             copyFolder(srcFile, destFile);
+        }
+    }
+
+    /**
+     * Generate JavaScript beans report
+     *
+     * @param beansReport       beans report data
+     * @param callsReport       calls report data
+     * @param connectionsReport connections report data
+     */
+    public void generateReport(
+            BeansReport beansReport,
+            CallsReport callsReport,
+            ConnectionsReport connectionsReport
+    ) {
+        var reportFile = new File(reportFilePath);
+        var parentFile = reportFile.getParentFile();
+        if (!parentFile.exists()) {
+            if (!parentFile.mkdirs()) {
+                throw new RuntimeException("Couldn't create directory " + parentFile);
+            }
+        } else if (!parentFile.isDirectory()) {
+            throw new RuntimeException("Not a directory: " + parentFile);
+        }
+
+        log.info("Creating bean report...");
+        try {
+            copyStaticFiles(parentFile);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try (var fileWriter = new FileWriter(reportFile);
+             var writer = new BufferedWriter(fileWriter)) {
+            var beansJson = objectMapper.writeValueAsString(beansReport);
+            var callsJson = objectMapper.writeValueAsString(callsReport);
+            var connectionsJson = objectMapper.writeValueAsString(connectionsReport);
+            var beansJsonVariable = objectMapper.writeValueAsString(beansJson);
+            var callsJsonVariable = objectMapper.writeValueAsString(callsJson);
+            var connectionsJsonVariable = objectMapper.writeValueAsString(connectionsJson);
+            writer.write(
+                    String.format(
+                            "window.beansJson = %s;%n" +
+                                    "window.callsJson = %s;%n" +
+                                    "window.connectionsJson = %s;%n",
+                            beansJsonVariable,
+                            callsJsonVariable,
+                            connectionsJsonVariable
+                    )
+            );
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
         }
     }
 

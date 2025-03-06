@@ -2,6 +2,7 @@ package io.github.sibmaks.spring.jfr;
 
 import io.github.sibmaks.spring.jfr.report.BeansReportCreator;
 import io.github.sibmaks.spring.jfr.report.CallsReportCreator;
+import io.github.sibmaks.spring.jfr.report.connections.ConnectionsReportCreator;
 import io.github.sibmaks.spring.jfr.service.EventReader;
 import io.github.sibmaks.spring.jfr.service.ReportService;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +38,11 @@ public class Application {
             var callsReportCreator = context.getBean(CallsReportCreator.class);
             var callsReport = callsReportCreator.create(events);
 
+            var connectionsReportCreator = context.getBean(ConnectionsReportCreator.class);
+            var connectionsReport = connectionsReportCreator.get();
+
             var reportService = context.getBean(ReportService.class);
-            reportService.generateReport(beansReport, callsReport);
+            reportService.generateReport(beansReport, callsReport, connectionsReport);
         }
     }
 }

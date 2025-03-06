@@ -3,7 +3,10 @@ package io.github.sibmaks.spring.jfr.service;
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedEvents;
 import io.github.sibmaks.spring.jfr.event.reading.core.recorded.RecordedEventFactory;
 import jdk.jfr.consumer.RecordingFile;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -15,12 +18,10 @@ import java.nio.file.Path;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class EventReader {
     private final RecordedEventFactory recordedEventFactory;
-
-    public EventReader(RecordedEventFactory recordedEventFactory) {
-        this.recordedEventFactory = recordedEventFactory;
-    }
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public RecordedEvents read(Path path) {
         var recordedEvents = new RecordedEvents();
@@ -33,6 +34,7 @@ public class EventReader {
                     continue;
                 }
                 recordedEvents.add(event);
+                applicationEventPublisher.publishEvent(event);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

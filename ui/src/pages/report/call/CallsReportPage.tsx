@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Alert, Badge, Col, Container, Form, Row } from 'react-bootstrap';
 import { CallTrace } from '../../../api/types';
-import BackButton from '../../../components/BackButton';
 import { toISOString } from '../../../utils/datetime';
 import { CallReportContext } from '../../../context/CallReportProvider';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +19,7 @@ const getStatusRepresentation = (it: CallTrace) => {
 const CallsReportPage = () => {
   const { callReport, isLoading } = useContext(CallReportContext);
   const navigate = useNavigate();
-  const [filteredRoots, setFilteredRoots] = useState<CallTrace[]>([...callReport.roots].slice(0, MAX_TRACE_ON_PAGE));
+  const [filteredRoots, setFilteredRoots] = useState<CallTrace[]>([]);
   const [showAlert, setShowAlert] = useState<boolean>(callReport.roots.length > MAX_TRACE_ON_PAGE);
   const [leftTimeBound, setLeftTimeBound] = useState<string>('');
   const [rightTimeBound, setRightTimeBound] = useState<string>('');
@@ -59,14 +58,6 @@ const CallsReportPage = () => {
 
   return (
     <Container fluid className="d-flex flex-column" style={{ minHeight: '100vh' }}>
-      <Row className={'mt-4 mb-4'}>
-        <h3><BackButton /> Calls Report</h3>
-      </Row>
-      {showAlert && (
-        <Alert variant={'warning'}>
-          Shown only first {MAX_TRACE_ON_PAGE} traces on the page.
-        </Alert>
-      )}
       <Row className="flex-grow-1">
         <Col md={3}>
           <Form className="p-2 shadow bg-body-tertiary rounded">
@@ -124,6 +115,11 @@ const CallsReportPage = () => {
               />
             </Form.Group>
           </Form>
+          {showAlert && (
+            <Alert variant={'warning'}>
+              Shown only first {MAX_TRACE_ON_PAGE} traces on the page.
+            </Alert>
+          )}
         </Col>
         <Col md={9} className="d-flex flex-column">
           <CustomTable

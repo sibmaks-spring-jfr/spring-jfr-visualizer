@@ -4,7 +4,7 @@ import { CallTrace } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CallReportContext } from '../../../context/CallReportProvider';
-import { Loader } from '../../../components/Loader';
+import { Loader } from '@sibdevtools/frontend-common';
 
 const getTraceStatusBadge = (trace: CallTrace) => {
   return (
@@ -151,12 +151,6 @@ const CallReportPage = () => {
   const navigate = useNavigate();
   const { contextId, callId } = useParams();
 
-  if (isLoading) {
-    return (
-      <Loader />
-    );
-  }
-
   if (!context2id2Trace || !contextId || !callId) {
     navigate('/calls');
     return;
@@ -175,20 +169,22 @@ const CallReportPage = () => {
           <Button variant={'outline-secondary'} onClick={() => navigate('/calls')}>Back</Button> Call Trace Report
         </h3>
       </Row>
-      {getCallTraceSystemDescription(callTrace)}
-      {getCallTraceDetails(callTrace)}
-      {callTrace.children.length > 0 && (
-        <>
-          <h4>Children</h4>
-          <Row>
-            <Accordion>
-              {callTrace.children.map((child) => (
-                <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
-              ))}
-            </Accordion>
-          </Row>
-        </>
-      )}
+      <Loader loading={isLoading}>
+        {getCallTraceSystemDescription(callTrace)}
+        {getCallTraceDetails(callTrace)}
+        {callTrace.children.length > 0 && (
+          <>
+            <h4>Children</h4>
+            <Row>
+              <Accordion>
+                {callTrace.children.map((child) => (
+                  <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
+                ))}
+              </Accordion>
+            </Row>
+          </>
+        )}
+      </Loader>
     </Container>
   );
 };

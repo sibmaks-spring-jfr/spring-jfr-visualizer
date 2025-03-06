@@ -49,3 +49,25 @@ export interface BeanReport {
 export interface CallReport {
   roots: CallTrace[];
 }
+
+export interface Exception {
+  type: string;
+  message: string;
+}
+
+export interface ConnectionEvent {
+  type: 'CREATE' | 'COMMIT' | 'ROLLBACK' | 'CLOSE';
+  date: number;
+  exception?: Exception;
+}
+
+export interface Connection {
+  id: string;
+  events: ConnectionEvent[];
+  duration: number;
+  hasExceptions: boolean;
+}
+
+export interface ConnectionReport {
+  connections: Connection[];
+}
