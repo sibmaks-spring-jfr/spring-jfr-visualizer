@@ -19,12 +19,7 @@ export interface Bean {
 }
 
 
-export enum InvocationType {
-  ASYNC,
-  JPA,
-  CONTROLLER,
-  SCHEDULED
-}
+export type InvocationType = 'ASYNC' | 'JPA' | 'CONTROLLER' | 'SCHEDULED' | 'SERVICE' | 'COMPONENT'
 
 export interface CallTrace {
   contextId: string;
