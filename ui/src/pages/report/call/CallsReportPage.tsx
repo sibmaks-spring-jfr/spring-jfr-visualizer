@@ -215,6 +215,10 @@ const CallsReportPage = () => {
                   filterable: true,
                   className: 'text-center'
                 },
+              },
+              defaultSort: {
+                column: 'callStartedAt',
+                direction: 'desc'
               }
             }}
             tbody={{

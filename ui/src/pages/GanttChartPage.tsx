@@ -142,7 +142,7 @@ const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
                 <p>Grid Step: {gridStep} ms</p>
                 <p>Base Min Time: {baseMinTime} ms</p>
               </Row>
-              <Container className="timeline">
+              <Container className="timeline" fluid={true}>
                 {/* Сетка */}
                 <div className="timeline-grid mb-4">
                   {gridLines.map((time, index) => (
@@ -180,7 +180,6 @@ const GanttChartPage: React.FC<GanttChartPageProps> = ({ spans }) => {
                             title={span.label}
                             onMouseUp={(e) => handleMouse(span, e)}
                           >
-                            {span.label}
                           </div>
                         );
                       })}

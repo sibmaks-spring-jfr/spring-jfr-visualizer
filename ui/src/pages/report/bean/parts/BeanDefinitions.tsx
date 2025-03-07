@@ -60,13 +60,13 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   label: 'Class Name',
                   sortable: true,
                   filterable: true,
-                  className: 'text-break'
+                  className: 'text-center text-break'
                 },
                 beanName: {
                   label: 'Bean Name',
                   sortable: true,
                   filterable: true,
-                  className: 'text-break'
+                  className: 'text-center text-break'
                 },
                 dependenciesCount: {
                   label: 'Dependencies Count',
@@ -80,6 +80,10 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   filterable: true,
                   className: 'text-center text-break'
                 },
+              },
+              defaultSort: {
+                column: 'beanName',
+                direction: 'asc'
               }
             }}
             tbody={{
@@ -89,12 +93,12 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
                   generated: it.generated ? 'Yes' : 'No',
                   beanClassName: {
-                    representation: <div className="content-scroll">{it.beanClassName}</div>,
+                    representation: <div className="text-break">{it.beanClassName}</div>,
                     value: it.beanClassName,
                     className: 'td-512'
                   },
                   beanName: {
-                    representation: <div className="content-scroll">{it.beanName}</div>,
+                    representation: <div className="text-break">{it.beanName}</div>,
                     value: it.beanName,
                     className: 'td-512'
                   },
@@ -104,7 +108,7 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                     className: 'td-32 text-center'
                   },
                   dependencies: {
-                    representation: <ul className="content-scroll">
+                    representation: <ul className="text-break">
                       {it.dependencies?.map(it => {
                         return (<li key={it}>{it}</li>);
                       })}
