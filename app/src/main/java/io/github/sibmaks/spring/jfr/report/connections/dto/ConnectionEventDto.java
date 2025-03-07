@@ -22,5 +22,6 @@ public class ConnectionEventDto {
     private long startedAt;
     private long finishedAt;
     private String threadName;
+    private Integer transactionIsolation;
 
 }

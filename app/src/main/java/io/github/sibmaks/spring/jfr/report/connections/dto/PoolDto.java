@@ -54,6 +54,7 @@ public final class PoolDto {
                             .startedAt(value.getStartedAt())
                             .finishedAt(value.getFinishedAt())
                             .threadName(value.getThreadName())
+                            .transactionIsolation(value.getTransactionIsolation())
                             .build();
                 })
                 .toList();

@@ -14,7 +14,8 @@ public record ConnectionEvent(
         ConnectionException exception,
         long startedAt,
         long finishedAt,
-        String threadName
+        String threadName,
+        Integer transactionIsolation
 ) {
 
 }

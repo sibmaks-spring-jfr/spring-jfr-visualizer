@@ -4,6 +4,7 @@ import io.github.sibmaks.spring.jfr.dto.view.connections.Connection;
 import io.github.sibmaks.spring.jfr.dto.view.connections.ConnectionException;
 import io.github.sibmaks.spring.jfr.dto.view.connections.ConnectionsReport;
 import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.ConnectionRequestedRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.ConnectionTransactionLevelSetRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.action.ConnectionActionFailedRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.action.ConnectionActionRequestedRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.action.ConnectionActionSucceedRecordedEvent;
@@ -55,6 +56,7 @@ public class ConnectionsReportCreator {
                     .startedAt(startTime.toEpochMilli())
                     .finishedAt(-1)
                     .threadName(getThreadName(event))
+                    .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {
@@ -78,6 +80,7 @@ public class ConnectionsReportCreator {
                     .startedAt(startTime.toEpochMilli())
                     .finishedAt(-1)
                     .threadName(getThreadName(event))
+                    .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {
@@ -99,6 +102,7 @@ public class ConnectionsReportCreator {
                     .index(event.getActionIndex())
                     .finishedAt(startTime.toEpochMilli())
                     .threadName(getThreadName(event))
+                    .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {
@@ -126,10 +130,26 @@ public class ConnectionsReportCreator {
                     .exception(connectionException)
                     .finishedAt(startTime.toEpochMilli())
                     .threadName(getThreadName(event))
+                    .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {
             log.error("ConnectionActionFailedRecordedEvent processing error", e);
+        }
+    }
+
+    @EventListener
+    public void onConnectionTransactionLevelSet(ConnectionTransactionLevelSetRecordedEvent event) {
+        try {
+            var connection = getConnectionDto(event.getConnectionId());
+            if (connection == null)  {
+                log.error("ConnectionTransactionLevelSetRecordedEvent processing error, connection not found");
+                return;
+            }
+
+            connection.setTransactionIsolation(event.getTransactionLevel());
+        } catch (Exception e) {
+            log.error("ConnectionTransactionLevelSetRecordedEvent processing error", e);
         }
     }
 

@@ -25,6 +25,7 @@ public final class ConnectionDto {
     private final NavigableMap<Long, ConnectionEventDto> events;
     private String id;
     private boolean hasExceptions;
+    private Integer transactionIsolation;
 
     public static <T> void mergeParameter(
             String name,
