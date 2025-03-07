@@ -1,10 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { Alert, Badge, Col, Container, Form, Row } from 'react-bootstrap';
+import { Alert, Badge, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import { CallTrace } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate } from 'react-router-dom';
-import { CustomTable } from '@sibdevtools/frontend-common';
+import { CustomTable, Loader } from '@sibdevtools/frontend-common';
 import { RootReportContext } from '../../../context/RootReportProvider';
+import { MaterialSymbolsSearchRounded } from '../../../icons';
 
 const MAX_TRACE_ON_PAGE = 25;
 
@@ -58,70 +59,129 @@ const CallsReportPage = () => {
 
   return (
     <Container fluid className="d-flex flex-column" style={{ minHeight: '100vh' }}>
-      <Row className="flex-grow-1">
-        <Col md={3}>
-          <Form className="p-2 shadow bg-body-tertiary rounded">
-            <Form.Group controlId="formLeftTimeBound">
-              <Form.Label>Left Time Bound</Form.Label>
-              <Form.Control
-                type="datetime-local"
-                value={leftTimeBound}
-                onChange={(e) => setLeftTimeBound(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="formRightTimeBound">
-              <Form.Label>Right Time Bound</Form.Label>
-              <Form.Control
-                type="datetime-local"
-                value={rightTimeBound}
-                onChange={(e) => setRightTimeBound(e.target.value)}
-              />
-            </Form.Group>
-            <Form.Group controlId="formMinDuration">
-              <Form.Label>Minimal Duration (ms)</Form.Label>
-              <Form.Control
-                type="number"
-                min={0}
-                value={minDuration === null ? '' : minDuration}
-                onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
-              />
-            </Form.Group>
-            <Form.Group controlId="formMaxDuration">
-              <Form.Label>Maximum Duration (ms)</Form.Label>
-              <Form.Control
-                type="number"
-                min={minDuration || 0}
-                value={maxDuration === null ? '' : maxDuration}
-                onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
-              />
-            </Form.Group>
-            <Form.Group controlId="formStatusFilter">
-              <Form.Label>Status</Form.Label>
-              <Form.Select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as 'all' | 'success' | 'fail')}
-              >
-                <option value="all">All</option>
-                <option value="success">Success</option>
-                <option value="fail">Fail</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group controlId="formSubmit">
-              <Form.Control
-                type="button"
-                value="Submit"
-                onClick={handleFilterSubmit}
-                className="btn btn-primary mt-2"
-              />
-            </Form.Group>
-          </Form>
+      <Row className="mb-4 ms-2 me-2">
+        <Form className="p-2 shadow bg-body-tertiary rounded">
+          <Row className={'mb-2'}>
+            <Col xxl={6}>
+              <Row>
+                <Col xxl={2}>
+                  <Form.Label>Time</Form.Label>
+                </Col>
+                <Col xxl={10}>
+                  <InputGroup>
+                    <InputGroup.Text><label htmlFor={'leftTimeBoundInput'}>from</label></InputGroup.Text>
+                    <Form.Control
+                      id={'leftTimeBoundInput'}
+                      type="datetime-local"
+                      value={leftTimeBound}
+                      onChange={(e) => setLeftTimeBound(e.target.value)}
+                    />
+                    <InputGroup.Text><label htmlFor={'rightTimeBoundInput'}>to</label></InputGroup.Text>
+                    <Form.Control
+                      id={'rightTimeBoundInput'}
+                      type="datetime-local"
+                      value={rightTimeBound}
+                      onChange={(e) => setRightTimeBound(e.target.value)}
+                    />
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Col>
+            <Col xxl={6}>
+              <Form.Group>
+                <Row>
+                  <Col xxl={2} md={12}>
+                    <Form.Label htmlFor={'minDurationInput'}>Duration</Form.Label>
+                  </Col>
+                  <Col xxl={10} md={12} className={'d-none d-md-block'}>
+                    <InputGroup>
+                      <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
+                      <Form.Control
+                        id={'minDurationInput'}
+                        type="number"
+                        min={0}
+                        value={minDuration === null ? '' : minDuration}
+                        onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                      />
+                      <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                      <Form.Control
+                        id={'maxDurationInput'}
+                        type="number"
+                        min={minDuration || 0}
+                        value={maxDuration === null ? '' : maxDuration}
+                        onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                      />
+                      <InputGroup.Text>ms</InputGroup.Text>
+                      <Button
+                        variant={'primary'}
+                        onClick={handleFilterSubmit}
+                        disabled={isLoading}
+                      >
+                        <MaterialSymbolsSearchRounded />
+                      </Button>
+                    </InputGroup>
+                  </Col>
+                  <Col xs={12} className={'d-md-none'}>
+                    <Form.Label htmlFor={'minDurationXSInput'}>From</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        id={'minDurationXSInput'}
+                        type="number"
+                        min={0}
+                        value={minDuration === null ? '' : minDuration}
+                        onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                      />
+                      <InputGroup.Text>ms</InputGroup.Text>
+                    </InputGroup>
+                  </Col>
+                  <Col xs={12} className={'d-md-none'}>
+                    <Form.Label htmlFor={'maxDurationXSInput'}>To</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        id={'maxDurationXSInput'}
+                        type="number"
+                        min={minDuration || 0}
+                        value={maxDuration === null ? '' : maxDuration}
+                        onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                      />
+                      <InputGroup.Text>ms</InputGroup.Text>
+                    </InputGroup>
+                  </Col>
+                </Row>
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className={'mb-2'}>
+            <Col xxl={6}>
+              <Row>
+                <Col xxl={2}>
+                  <Form.Label htmlFor={'statusSelect'}>Status</Form.Label>
+                </Col>
+                <Col xxl={10}>
+                  <Form.Select
+                    id={'statusSelect'}
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value as 'all' | 'success' | 'fail')}
+                  >
+                    <option value="all">All</option>
+                    <option value="success">Success</option>
+                    <option value="fail">Fail</option>
+                  </Form.Select>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Form>
+      </Row>
+      <Row>
+        <Loader loading={isLoading}>
           {showAlert && (
-            <Alert variant={'warning'}>
-              Shown only first {MAX_TRACE_ON_PAGE} traces on the page.
-            </Alert>
+            <Row className="p-4">
+              <Alert variant={'warning'}>
+                Shown only first {MAX_TRACE_ON_PAGE} traces on the page.
+              </Alert>
+            </Row>
           )}
-        </Col>
-        <Col md={9} className="d-flex flex-column">
           <CustomTable
             table={{
               striped: true,
@@ -188,7 +248,7 @@ const CallsReportPage = () => {
             }}
             loading={isLoading}
           />
-        </Col>
+        </Loader>
       </Row>
     </Container>
   );
