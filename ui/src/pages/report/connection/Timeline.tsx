@@ -14,10 +14,25 @@ export interface TimelineProps {
   connections: Connection[];
 }
 
+interface TransactionIsolation {
+  code: string;
+  name: string;
+}
+
+const transactionIsolations = new Map<number, TransactionIsolation>();
+transactionIsolations.set(0, { code: 'TRANSACTION_NONE', name: 'Transactions are not supported' });
+transactionIsolations.set(1, { code: 'TRANSACTION_READ_UNCOMMITTED', name: 'Read uncommitted' });
+transactionIsolations.set(2, { code: 'TRANSACTION_READ_COMMITTED', name: 'Read committed' });
+transactionIsolations.set(4, { code: 'TRANSACTION_REPEATABLE_READ', name: 'Repeatable read' });
+transactionIsolations.set(8, { code: 'TRANSACTION_SERIALIZABLE', name: 'Serializable' });
+
+
 const Timeline: React.FC<TimelineProps> = ({ connections }) => {
-  const getIconTooltip = (id: string, tooltip: string) => {
+  const getIconTooltip = (id: string, tooltip: string, transactionIsolation?: number) => {
+    const isolation = transactionIsolation ? (transactionIsolations.get(transactionIsolation)?.name ?? '') : '';
+
     return (
-      <Tooltip id={`event-${id}-tooltip`}>{tooltip}</Tooltip>
+      <Tooltip id={`event-${id}-tooltip`}>{tooltip}{isolation ? ` - ${isolation}` : ''}</Tooltip>
     );
   };
   const getExceptionTooltip = (id: string, exception: Exception) => {
@@ -38,7 +53,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
           <OverlayTrigger
             placement="left"
             delay={{ show: 0, hide: 250 }}
-            overlay={getIconTooltip(connectionId, 'Create')}
+            overlay={getIconTooltip(connectionId, 'Create', event.transactionIsolation)}
           >
             <div>
               <MaterialSymbolsLightFiberNewOutlineRounded color="blue" />
@@ -50,7 +65,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
           <OverlayTrigger
             placement="left"
             delay={{ show: 50, hide: 250 }}
-            overlay={getIconTooltip(connectionId, 'Commit')}
+            overlay={getIconTooltip(connectionId, 'Commit', event.transactionIsolation)}
           >
             <div>
               <MaterialSymbolsLightCommitRounded color="green" />
@@ -62,7 +77,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
           <OverlayTrigger
             placement="left"
             delay={{ show: 50, hide: 250 }}
-            overlay={getIconTooltip(connectionId, 'Rollback')}
+            overlay={getIconTooltip(connectionId, 'Rollback', event.transactionIsolation)}
           >
             <div>
               <MaterialSymbolsLightSettingsBackupRestoreRounded color="red" />
@@ -74,7 +89,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
           <OverlayTrigger
             placement="left"
             delay={{ show: 50, hide: 250 }}
-            overlay={getIconTooltip(connectionId, 'Close')}
+            overlay={getIconTooltip(connectionId, 'Close', event.transactionIsolation)}
           >
             <div>
               <MaterialSymbolsLightCloseSmallOutlineRounded color="gray" />
