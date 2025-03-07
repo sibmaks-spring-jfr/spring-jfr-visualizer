@@ -25,10 +25,10 @@ const ApplicationLayout = () => {
         </Nav.Item>
         <Nav.Item>
           <NavLink
-            to="/connections"
+            to="/connection-pools"
             className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
           >
-            Connection Report
+            Connection Pools Report
           </NavLink>
         </Nav.Item>
       </Nav>

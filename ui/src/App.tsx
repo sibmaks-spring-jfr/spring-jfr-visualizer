@@ -6,7 +6,7 @@ import { HashRouter, Route, Routes } from 'react-router-dom';
 import ApplicationLayout from './components/ApplicationLayout';
 import CallReportPage from './pages/report/call/CallReportPage';
 import { RootReportProvider } from './context/RootReportProvider';
-import ConnectionsReportPage from './pages/report/connection/ConnectionsReportPage';
+import ConnectionPoolsReportPage from './pages/report/connection-pools/ConnectionPoolsReportPage';
 import CallsReportPage from './pages/report/call/CallsReportPage';
 
 const App: React.FC = () => {
@@ -23,7 +23,7 @@ const App: React.FC = () => {
               </Route>
             </Route>
             <Route path="beans" element={<BeansReportPage />} />
-            <Route path="connections" element={<ConnectionsReportPage />} />
+            <Route path="connection-pools" element={<ConnectionPoolsReportPage />} />
           </Route>
         </Routes>
       </HashRouter>
