@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Accordion, Badge, Button, Col, Container, Form, InputGroup, Row, Table } from 'react-bootstrap';
+import { Accordion, Alert, Badge, Button, Col, Container, Form, InputGroup, Row, Table } from 'react-bootstrap';
 import { CallTrace, InvocationType } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '@sibdevtools/frontend-common';
 import { RootReportContext } from '../../../context/RootReportProvider';
+
+const MAX_CHILDREN_ON_PAGE = 25
 
 type Status = 'all' | 'success' | 'fail'
 
@@ -233,8 +235,15 @@ const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
               </Form>
             </Row>
             <Row>
+              {children.length > MAX_CHILDREN_ON_PAGE && (
+                <Row className="p-4">
+                  <Alert variant={'warning'}>
+                    Shown only first {MAX_CHILDREN_ON_PAGE} traces on the page.
+                  </Alert>
+                </Row>
+              )}
               <Accordion>
-                {children.map((child) => (
+                {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
                   <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
                 ))}
               </Accordion>
@@ -381,7 +390,14 @@ const CallReportPage = () => {
             </Row>
             <Row>
               <Accordion>
-                {children.map((child) => (
+                {children.length > MAX_CHILDREN_ON_PAGE && (
+                  <Row className="p-4">
+                    <Alert variant={'warning'}>
+                      Shown only first {MAX_CHILDREN_ON_PAGE} traces on the page.
+                    </Alert>
+                  </Row>
+                )}
+                {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
                   <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
                 ))}
               </Accordion>
