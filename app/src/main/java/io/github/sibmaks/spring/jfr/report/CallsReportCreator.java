@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+import static io.github.sibmaks.spring.jfr.utils.JavaFlightRecorderUtils.getThreadName;
+
 /**
  * @author sibmaks
  * @since 0.0.2
@@ -90,11 +92,6 @@ public class CallsReportCreator {
             callTracesByStartId.put(invocationId, trace);
         }
         return callTracesByStartId;
-    }
-
-    private static String getThreadName(RecordedData event) {
-        var thread = event.getThread();
-        return thread == null ? null : thread.getJavaName();
     }
 
     private static Map<String, CallTrace> readJPAEvents(RecordedEvents events) {

@@ -13,7 +13,8 @@ public record ConnectionEvent(
         ConnectionAction action,
         ConnectionException exception,
         long startedAt,
-        long finishedAt
+        long finishedAt,
+        String threadName
 ) {
 
 }

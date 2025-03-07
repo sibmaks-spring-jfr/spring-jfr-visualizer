@@ -53,6 +53,7 @@ public final class PoolDto {
                             .exception(value.getException())
                             .startedAt(value.getStartedAt())
                             .finishedAt(value.getFinishedAt())
+                            .threadName(value.getThreadName())
                             .build();
                 })
                 .toList();

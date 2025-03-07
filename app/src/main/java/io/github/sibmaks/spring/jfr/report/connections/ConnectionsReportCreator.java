@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static io.github.sibmaks.spring.jfr.utils.JavaFlightRecorderUtils.getThreadName;
+
 /**
  * @author sibmaks
  * @since 0.0.2
@@ -52,6 +54,7 @@ public class ConnectionsReportCreator {
                     .action(event.getConnectionAction())
                     .startedAt(startTime.toEpochMilli())
                     .finishedAt(-1)
+                    .threadName(getThreadName(event))
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {
@@ -63,7 +66,10 @@ public class ConnectionsReportCreator {
     public void onConnectionActionRequested(ConnectionActionRequestedRecordedEvent event) {
         try {
             var connection = getConnectionDto(event.getConnectionId());
-            if (connection == null) return;
+            if (connection == null) {
+                log.error("ConnectionActionRequestedRecordedEvent processing error, connection not found");
+                return;
+            }
 
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
@@ -71,6 +77,7 @@ public class ConnectionsReportCreator {
                     .action(event.getConnectionAction())
                     .startedAt(startTime.toEpochMilli())
                     .finishedAt(-1)
+                    .threadName(getThreadName(event))
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {
@@ -82,12 +89,16 @@ public class ConnectionsReportCreator {
     public void onConnectionActionSucceed(ConnectionActionSucceedRecordedEvent event) {
         try {
             var connection = getConnectionDto(event.getConnectionId());
-            if (connection == null) return;
+            if (connection == null)  {
+                log.error("ConnectionActionSucceedRecordedEvent processing error, connection not found");
+                return;
+            }
 
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
                     .index(event.getActionIndex())
                     .finishedAt(startTime.toEpochMilli())
+                    .threadName(getThreadName(event))
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {
@@ -99,7 +110,10 @@ public class ConnectionsReportCreator {
     public void onConnectionActionFailed(ConnectionActionFailedRecordedEvent event) {
         try {
             var connection = getConnectionDto(event.getConnectionId());
-            if (connection == null) return;
+            if (connection == null)  {
+                log.error("ConnectionActionFailedRecordedEvent processing error, connection not found");
+                return;
+            }
 
             var connectionException = ConnectionException.builder()
                     .type(event.getExceptionClass())
@@ -111,6 +125,7 @@ public class ConnectionsReportCreator {
                     .index(event.getActionIndex())
                     .exception(connectionException)
                     .finishedAt(startTime.toEpochMilli())
+                    .threadName(getThreadName(event))
                     .build();
             connection.addEvent(connectionEvent);
         } catch (Exception e) {

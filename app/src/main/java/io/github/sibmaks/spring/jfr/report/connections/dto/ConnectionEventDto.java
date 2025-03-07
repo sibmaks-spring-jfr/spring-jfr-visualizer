@@ -21,5 +21,6 @@ public class ConnectionEventDto {
     private ConnectionException exception;
     private long startedAt;
     private long finishedAt;
+    private String threadName;
 
 }

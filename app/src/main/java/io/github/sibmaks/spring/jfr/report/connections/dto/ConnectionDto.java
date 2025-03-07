@@ -59,6 +59,7 @@ public final class ConnectionDto {
         mergeParameter("finishedAt", event.getFinishedAt(), it -> it > 0, existed::getFinishedAt, existed::setFinishedAt);
         mergeParameter("action", event.getAction(), Objects::nonNull, existed::getAction, existed::setAction);
         mergeParameter("exception", event.getException(), Objects::nonNull, existed::getException, existed::setException);
+        mergeParameter("threadName", event.getThreadName(), Objects::nonNull, existed::getThreadName, existed::setThreadName);
     }
 
     public long getDuration() {

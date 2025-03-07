@@ -67,6 +67,7 @@ export interface ConnectionEvent {
   startedAt: number;
   finishedAt: number;
   exception?: Exception;
+  threadName?: string;
 }
 
 export interface Connection {
