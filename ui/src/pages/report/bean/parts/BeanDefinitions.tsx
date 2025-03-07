@@ -28,20 +28,12 @@ const BeanDefinitionDetails: React.FC<BeanDefinitionDetailsProps> = ({ row }) =>
 };
 
 export interface BeanDefinitionsPageProps {
-  contextBeanDefinitions: Record<string, BeanDefinition[]>;
+  beanDefinitions: BeanDefinition[];
 }
 
 const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
-                                                               contextBeanDefinitions
+                                                               beanDefinitions
                                                              }) => {
-  const [contextId, setContextId] = useState<string>('');
-  const [filteredBeanDefinitions, setFilteredBeanDefinitions] = useState<BeanDefinition[]>([]);
-  const contextIds = Object.keys(contextBeanDefinitions);
-
-  const handleBuild = () => {
-    setFilteredBeanDefinitions(contextBeanDefinitions[contextId] || []);
-  };
-
   return (
     <Card>
       <Card.Header
@@ -52,30 +44,7 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
         role={'button'}>
         <Card.Title className="h4">Bean Definitions</Card.Title>
       </Card.Header>
-      <div id="beanDefinitionsCollapse" className="table-responsive collapse">
-        <Row className="align-items-center m-2">
-          <Col md={'auto'}>
-            <FormLabel htmlFor={'beanName'}>Context</FormLabel>
-          </Col>
-          <Col md={'auto'}>
-            <InputGroup>
-              <FormSelect
-                id={'beanDefinitionContextId'}
-                value={contextId}
-                onChange={e => setContextId(e.target.value)}
-              >
-                <option value={''}>*</option>
-                {
-                  contextIds
-                    .map(it => <option key={it} value={it}>{it}</option>)
-                }
-              </FormSelect>
-              <Button variant="outline-secondary" onClick={handleBuild}>
-                Build Table
-              </Button>
-            </InputGroup>
-          </Col>
-        </Row>
+      <div id="beanDefinitionsCollapse" className="collapse">
         <Row className={'m-2 h-100'}>
           <CustomTable
             table={{
@@ -91,13 +60,13 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   label: 'Class Name',
                   sortable: true,
                   filterable: true,
-                  className: 'text-center'
+                  className: 'text-break'
                 },
                 beanName: {
                   label: 'Bean Name',
                   sortable: true,
                   filterable: true,
-                  className: 'text-center'
+                  className: 'text-break'
                 },
                 dependenciesCount: {
                   label: 'Dependencies Count',
@@ -109,12 +78,12 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   label: 'Dependencies',
                   sortable: true,
                   filterable: true,
-                  className: 'text-center'
+                  className: 'text-center text-break'
                 },
               }
             }}
             tbody={{
-              data: filteredBeanDefinitions.map(it => {
+              data: beanDefinitions.map(it => {
                 return {
                   scope: it.scope,
                   primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),

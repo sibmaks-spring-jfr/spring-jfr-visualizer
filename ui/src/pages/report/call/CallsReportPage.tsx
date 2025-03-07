@@ -2,9 +2,9 @@ import React, { useContext, useState } from 'react';
 import { Alert, Badge, Col, Container, Form, Row } from 'react-bootstrap';
 import { CallTrace } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
-import { CallReportContext } from '../../../context/CallReportProvider';
 import { useNavigate } from 'react-router-dom';
 import { CustomTable } from '@sibdevtools/frontend-common';
+import { RootReportContext } from '../../../context/RootReportProvider';
 
 const MAX_TRACE_ON_PAGE = 25;
 
@@ -17,10 +17,10 @@ const getStatusRepresentation = (it: CallTrace) => {
 };
 
 const CallsReportPage = () => {
-  const { callReport, isLoading } = useContext(CallReportContext);
+  const { rootReport, isLoading } = useContext(RootReportContext);
   const navigate = useNavigate();
   const [filteredRoots, setFilteredRoots] = useState<CallTrace[]>([]);
-  const [showAlert, setShowAlert] = useState<boolean>(callReport.roots.length > MAX_TRACE_ON_PAGE);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
   const [leftTimeBound, setLeftTimeBound] = useState<string>('');
   const [rightTimeBound, setRightTimeBound] = useState<string>('');
   const [minDuration, setMinDuration] = useState<number | null>(null);
@@ -28,7 +28,7 @@ const CallsReportPage = () => {
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'fail'>('all');
 
   const handleFilterSubmit = () => {
-    let filtered = [...callReport.roots];
+    let filtered = [...rootReport.calls.roots];
 
     if (leftTimeBound) {
       const leftBound = new Date(leftTimeBound).getTime();

@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -97,22 +98,13 @@ public class ReportService {
 
         try (var fileWriter = new FileWriter(reportFile);
              var writer = new BufferedWriter(fileWriter)) {
-            var beansJson = objectMapper.writeValueAsString(beansReport);
-            var callsJson = objectMapper.writeValueAsString(callsReport);
-            var connectionsJson = objectMapper.writeValueAsString(connectionsReport);
-            var beansJsonVariable = objectMapper.writeValueAsString(beansJson);
-            var callsJsonVariable = objectMapper.writeValueAsString(callsJson);
-            var connectionsJsonVariable = objectMapper.writeValueAsString(connectionsJson);
-            writer.write(
-                    String.format(
-                            "window.beansJson = %s;%n" +
-                                    "window.callsJson = %s;%n" +
-                                    "window.connectionsJson = %s;%n",
-                            beansJsonVariable,
-                            callsJsonVariable,
-                            connectionsJsonVariable
-                    )
+            var report = Map.ofEntries(
+                    Map.entry("beans", beansReport),
+                    Map.entry("calls", callsReport),
+                    Map.entry("connections", connectionsReport)
             );
+            var reportJson = objectMapper.writeValueAsString(report);
+            writer.write(String.format("window.rootReport = %s;%n", reportJson));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }

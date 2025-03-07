@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Accordion, Badge, Button, Col, Container, Row, Table } from 'react-bootstrap';
 import { CallTrace } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CallReportContext } from '../../../context/CallReportProvider';
 import { Loader } from '@sibdevtools/frontend-common';
+import { RootReportContext } from '../../../context/RootReportProvider';
 
 const getTraceStatusBadge = (trace: CallTrace) => {
   return (
@@ -146,15 +146,30 @@ const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
 };
 
 const CallReportPage = () => {
-  const { context2id2Trace, isLoading } = useContext(CallReportContext);
+  const { rootReport, isLoading } = useContext(RootReportContext);
 
   const navigate = useNavigate();
   const { contextId, callId } = useParams();
+  const [context2id2Trace, setContext2id2Trace] = useState<Map<string, Map<string, CallTrace>>>(new Map());
+
+  useEffect(() => {
+    const context2id2Trace = new Map<string, Map<string, CallTrace>>();
+    for (let root of rootReport.calls.roots) {
+      let id2Trace = context2id2Trace.get(root.contextId);
+      if (!id2Trace) {
+        id2Trace = new Map();
+        context2id2Trace.set(root.contextId, id2Trace);
+      }
+      id2Trace.set(root.invocationId, root);
+    }
+    setContext2id2Trace(context2id2Trace);
+  }, [rootReport]);
 
   if (!context2id2Trace || !contextId || !callId) {
     navigate('/calls');
     return;
   }
+
   const id2Trace = context2id2Trace.get(contextId);
   const callTrace = id2Trace?.get(callId);
   if (!callTrace) {

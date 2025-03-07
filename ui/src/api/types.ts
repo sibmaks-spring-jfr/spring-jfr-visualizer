@@ -50,6 +50,12 @@ export interface CallReport {
   roots: CallTrace[];
 }
 
+export interface RootReport {
+  beans: BeanReport
+  calls: CallReport
+  connections: ConnectionReport
+}
+
 export interface Exception {
   type: string;
   message: string;
