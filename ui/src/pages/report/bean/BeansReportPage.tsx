@@ -50,7 +50,7 @@ const BeansReportPage = () => {
       <Row className="flex-grow-1">
         <Col md={3}>
           <Form className="p-2 shadow bg-body-tertiary rounded">
-            <Form.Group controlId="formRightTimeBound">
+            <Form.Group controlId="formContext">
               <Form.Label>Context</Form.Label>
               <SuggestiveInput
                 mode={'strict'}

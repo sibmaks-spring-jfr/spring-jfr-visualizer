@@ -32,12 +32,12 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
   };
 
   const getIcon = (connectionId: string, event: ConnectionEvent) => {
-    switch (event.type) {
+    switch (event.action) {
       case 'CREATE':
         return (
           <OverlayTrigger
             placement="left"
-            delay={{ show: 50, hide: 250 }}
+            delay={{ show: 0, hide: 250 }}
             overlay={getIconTooltip(connectionId, 'Create')}
           >
             <div>
@@ -137,7 +137,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
                         delay={{ show: 50, hide: 250 }}
                         overlay={getLineTooltip(
                           connection.id,
-                          +new Date(event.date) - +new Date(connection.events[index - 1]?.date ?? 0)
+                          +new Date(event.startedAt) - +new Date(connection.events[index - 1]?.startedAt ?? 0)
                         )}
                       >
                         <div
@@ -152,8 +152,8 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
                     )}
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                       {getEventIcon(connection.id, event)}
-                      <Badge bg="light" text="dark" style={{ marginTop: '5px' }} title={event.type}>
-                        {formatDate(event.date)}
+                      <Badge bg="light" text="dark" style={{ marginTop: '5px' }} title={event.action}>
+                        {formatDate(event.startedAt)}
                       </Badge>
                     </div>
                   </React.Fragment>

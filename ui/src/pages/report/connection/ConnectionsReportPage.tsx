@@ -1,9 +1,10 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Col, Container, Form, Row } from 'react-bootstrap';
 import Timeline from './Timeline';
-import { Loader } from '@sibdevtools/frontend-common';
+import { Loader, SuggestiveInput } from '@sibdevtools/frontend-common';
 import { Connection } from '../../../api/types';
 import { RootReportContext } from '../../../context/RootReportProvider';
+import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
 
 const MAX_CONNECTIONS_ON_PAGE = 25;
 
@@ -11,11 +12,42 @@ const ConnectionsReportPage: React.FC = () => {
   const { rootReport, isLoading } = useContext(RootReportContext);
   const [connections, setConnections] = useState<Connection[]>([]);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+
+  const [context, setContext] = useState<string>('');
+  const [contexts, setContexts] = useState<SuggestiveItem[]>([]);
+  const [pool, setPool] = useState<string>('');
+  const [pools, setPools] = useState<SuggestiveItem[]>([]);
   const [minDuration, setMinDuration] = useState<number | null>(null);
   const [maxDuration, setMaxDuration] = useState<number | null>(null);
 
+  useEffect(() => {
+    const contexts = Object.keys(rootReport?.connections?.contexts ?? {})
+      .map(it => ({
+          key: it,
+          value: it
+        }
+      ));
+
+    setContexts(contexts);
+  }, [rootReport]);
+
+  useEffect(() => {
+    const pools = Object.keys(rootReport?.connections?.contexts[context] ?? {})
+      .map(it => ({
+          key: it,
+          value: it
+        }
+      ));
+
+    setPools(pools);
+  }, [context]);
+
   const handleFilterSubmit = () => {
-    let filtered = [...rootReport.connections.connections];
+    if(!context || !pool) {
+      return
+    }
+
+    let filtered = [...rootReport.connections.contexts[context][pool]];
 
     if (minDuration !== null) {
       filtered = filtered.filter(it => it.duration >= minDuration);
@@ -34,6 +66,28 @@ const ConnectionsReportPage: React.FC = () => {
       <Row className="flex-grow-1">
         <Col md={3}>
           <Form className="p-2 shadow bg-body-tertiary rounded">
+            <Form.Group controlId="formContext">
+              <Form.Label>Context</Form.Label>
+              <SuggestiveInput
+                mode={'strict'}
+                onChange={it => setContext(it.value)
+                }
+                suggestions={contexts}
+                disabled={contexts.length === 0}
+                required={true}
+              />
+            </Form.Group>
+            <Form.Group controlId="formContext">
+              <Form.Label>Pool</Form.Label>
+              <SuggestiveInput
+                mode={'strict'}
+                onChange={it => setPool(it.value)
+                }
+                suggestions={pools}
+                disabled={context === ''}
+                required={true}
+              />
+            </Form.Group>
             <Form.Group controlId="formMinDuration">
               <Form.Label>Minimal Duration (ms)</Form.Label>
               <Form.Control
@@ -56,7 +110,7 @@ const ConnectionsReportPage: React.FC = () => {
               <Form.Control
                 type="button"
                 value="Submit"
-                disabled={isLoading}
+                disabled={isLoading || !context || !pool}
                 onClick={handleFilterSubmit}
                 className="btn btn-primary mt-2"
               />

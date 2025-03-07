@@ -62,8 +62,14 @@ public final class ConnectionDto {
     }
 
     public long getDuration() {
-        var first = events.firstKey();
-        var last = events.lastKey();
-        return last - first;
+        var first = events.firstEntry();
+        var firstValue = first.getValue();
+        var begin = firstValue.getStartedAt() < 0 ? Math.max(0, firstValue.getFinishedAt()) : firstValue.getStartedAt();
+
+        var last = events.lastEntry();
+        var lastValue = last.getValue();
+        var finished = lastValue.getFinishedAt() < 0 ? Math.max(0, lastValue.getStartedAt()) : lastValue.getFinishedAt();
+
+        return finished - begin;
     }
 }

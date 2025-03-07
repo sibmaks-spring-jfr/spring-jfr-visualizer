@@ -11,7 +11,7 @@ const defaultReport: RootReport = {
     roots: []
   },
   connections: {
-    connections: []
+    contexts: {}
   },
   beans: {
     beans: [],

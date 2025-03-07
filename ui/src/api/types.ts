@@ -62,8 +62,10 @@ export interface Exception {
 }
 
 export interface ConnectionEvent {
-  type: 'CREATE' | 'COMMIT' | 'ROLLBACK' | 'CLOSE';
-  date: number;
+  index: number;
+  action: 'CREATE' | 'COMMIT' | 'ROLLBACK' | 'CLOSE';
+  startedAt: number;
+  finishedAt: number;
   exception?: Exception;
 }
 
@@ -75,5 +77,5 @@ export interface Connection {
 }
 
 export interface ConnectionReport {
-  connections: Connection[];
+  contexts: Record<string, Record<string, Connection[]>>;
 }
