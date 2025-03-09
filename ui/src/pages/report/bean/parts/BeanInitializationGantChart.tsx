@@ -1,22 +1,26 @@
 import React from 'react';
-import { Bean } from '../../../../api/types';
-import GanttChartPage from '../../../GanttChartPage';
+import { Bean, Common } from '../../../../api/types';
+import GanttChartPage, { Span } from '../../../GanttChartPage';
 
 interface BeanInitializationGantChartProps {
+  common: Common;
   beans: Bean[];
 }
 
 
-const BeanInitializationGantChart: React.FC<BeanInitializationGantChartProps> = ({ beans }) => {
+const BeanInitializationGantChart: React.FC<BeanInitializationGantChartProps> = ({
+                                                                                   common,
+                                                                                   beans
+                                                                                 }) => {
   const spans = beans
     .filter(it => it.preInitializedAt)
     .map(bean => {
       return {
-        id: bean.beanName,
+        id: common.stringConstants[bean.beanName],
         start: bean.preInitializedAt || 0,
         end: bean.postInitializedAt,
-        label: bean.beanName,
-      };
+        label: common.stringConstants[bean.beanName],
+      } as Span;
     });
   return <GanttChartPage spans={spans} />;
 };

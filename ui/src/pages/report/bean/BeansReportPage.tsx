@@ -6,27 +6,30 @@ import GraphPage from '../../GraphPage';
 import BeanDefinitions from './parts/BeanDefinitions';
 import { RootReportContext } from '../../../context/RootReportProvider';
 import { Loader, SuggestiveInput } from '@sibdevtools/frontend-common';
-import { Bean, BeanDefinition } from '../../../api/types';
+import { Bean, BeanDefinition, Common } from '../../../api/types';
 import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
 import { MaterialSymbolsSearchRounded } from '../../../icons';
 
 const BeansReportPage = () => {
   const { rootReport, isLoading } = useContext(RootReportContext);
 
+  const [common, setCommon] = useState<Common>({
+    stringConstants: {}
+  });
   const [beans, setBeans] = useState<Bean[]>([]);
   const [beanDefinitions, setBeanDefinitions] = useState<BeanDefinition[]>([]);
 
-  const [context, setContext] = useState<string>('');
+  const [context, setContext] = useState<number>();
   const [contexts, setContexts] = useState<SuggestiveItem[]>([]);
 
   useEffect(() => {
     const beansContexts = rootReport.beans.beans.map(it => it.contextId);
-    const beanDefinitionsContexts = Object.keys(rootReport.beans.beanDefinitions);
+    const beanDefinitionsContexts = Object.keys(rootReport.beans.beanDefinitions).map(it => +it);
 
     const contexts = Array.from(new Set([...beansContexts, ...beanDefinitionsContexts]))
       .map(it => ({
-          key: it,
-          value: it
+          key: `${it}`,
+          value: rootReport.common.stringConstants[+it]
         }
       ));
 
@@ -35,6 +38,9 @@ const BeansReportPage = () => {
 
   const handleFilterSubmit = () => {
     if (!context) {
+      setCommon({
+        stringConstants: {}
+      });
       setBeans([]);
       setBeanDefinitions([]);
       return;
@@ -42,6 +48,7 @@ const BeansReportPage = () => {
     const beans = rootReport.beans.beans.filter(it => it.contextId === context);
     const beanDefinitions = rootReport.beans.beanDefinitions[context] ?? [];
 
+    setCommon(rootReport.common);
     setBeans(beans);
     setBeanDefinitions(beanDefinitions);
   };
@@ -60,7 +67,7 @@ const BeansReportPage = () => {
                   <InputGroup>
                     <SuggestiveInput
                       mode={'strict'}
-                      onChange={it => setContext(it.value)
+                      onChange={it => setContext(it.key ? +it.key : undefined)
                       }
                       suggestions={contexts}
                       disabled={contexts.length === 0}
@@ -84,22 +91,22 @@ const BeansReportPage = () => {
         <Loader loading={isLoading}>
           <Row className="mb-4">
             <Col>
-              <BeanDefinitions beanDefinitions={beanDefinitions} />
+              <BeanDefinitions common={common} beanDefinitions={beanDefinitions} />
             </Col>
           </Row>
           <Row className="mb-4">
             <Col>
-              <BeansStatistic beans={beans} />
+              <BeansStatistic common={common} beans={beans} />
             </Col>
           </Row>
           <Row className="mb-4">
             <Col>
-              <BeanInitializationGantChart beans={beans} />
+              <BeanInitializationGantChart common={common} beans={beans} />
             </Col>
           </Row>
           <Row className="mb-4">
             <Col>
-              <GraphPage beanDefinitions={beanDefinitions} />
+              <GraphPage common={common} beanDefinitions={beanDefinitions} />
             </Col>
           </Row>
         </Loader>

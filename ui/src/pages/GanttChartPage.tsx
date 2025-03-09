@@ -10,7 +10,7 @@ import './GanttChartPage.css';
 import { format } from 'date-fns';
 import { v4 as uuidv4 } from 'uuid';
 
-interface Span {
+export interface Span {
   id: string;
   start: number;
   end: number;

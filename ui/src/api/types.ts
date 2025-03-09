@@ -1,18 +1,18 @@
 export type Stereotype = 'UNKNOWN' | 'COMPONENT' | 'CONTROLLER' | 'REST_CONTROLLER' | 'SERVICE' | 'REPOSITORY'
 
 export interface BeanDefinition {
-  scope: string | null;
-  beanClassName: string | null;
-  beanName: string;
-  primary: 'true' | 'false' | null;
-  dependencies: string[] | null;
-  stereotype: Stereotype | null;
+  scope: number | null;
+  beanClassName: number | null;
+  beanName: number;
+  primary: number | null;
+  dependencies: number[] | null;
+  stereotype: number | null;
   generated: boolean;
 }
 
 export interface Bean {
-  contextId: string;
-  beanName: string;
+  contextId: number;
+  beanName: number;
   preInitializedAt: number | null;
   postInitializedAt: number;
   duration: number;
@@ -38,7 +38,7 @@ export interface CallTrace {
 
 export interface BeanReport {
   beans: Bean[];
-  beanDefinitions: Record<string, BeanDefinition[]>;
+  beanDefinitions: Record<number, BeanDefinition[]>;
 }
 
 export interface CallReport {
@@ -46,9 +46,14 @@ export interface CallReport {
 }
 
 export interface RootReport {
-  beans: BeanReport
-  calls: CallReport
-  connections: ConnectionReport
+  common: Common;
+  beans: BeanReport;
+  calls: CallReport;
+  connections: ConnectionReport;
+}
+
+export interface Common {
+  stringConstants: Record<number, string>;
 }
 
 export interface Exception {

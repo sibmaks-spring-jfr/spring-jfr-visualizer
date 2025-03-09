@@ -1,17 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
-import { Card, Form, Button, Row, Col, FormLabel, InputGroup, FormSelect } from 'react-bootstrap';
+import { Card, Button, Row, Col, FormLabel, InputGroup } from 'react-bootstrap';
 import { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
-import { BeanDefinition, Stereotype } from '../api/types';
+import { BeanDefinition, Common, Stereotype } from '../api/types';
 import { SuggestiveInput } from '@sibdevtools/frontend-common';
 import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
 
 interface GraphProps {
+  common: Common;
   beanDefinitions: BeanDefinition[];
 }
 
 interface Node extends SimulationNodeDatum {
-  id: string;
+  id: number;
   name: string;
   stereotype: Stereotype | null;
 }
@@ -19,19 +20,18 @@ interface Node extends SimulationNodeDatum {
 interface Edge extends SimulationLinkDatum<Node> {
 }
 
-interface BeanId {
-  beanName: string;
-}
-
-const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
+const GraphPage: React.FC<GraphProps> = ({
+                                           common,
+                                           beanDefinitions
+                                         }) => {
   const graphRef = useRef<SVGSVGElement | null>(null);
-  const [beanId, setBeanId] = useState<BeanId>({ beanName: '' });
+  const [beanId, setBeanId] = useState<number>();
   const [beanNames, setBeanNames] = useState<SuggestiveItem[]>([]);
   const [svg, setSVG] = useState<d3.Selection<SVGGElement, Node, null, undefined> | null>(null);
-  const [beanDependencies, setBeanDependencies] = useState<Map<string, string[]> | null>();
+  const [beanDependencies, setBeanDependencies] = useState<Map<number, number[]> | null>();
 
   useEffect(() => {
-    const beanDependencies = new Map<string, string[]>();
+    const beanDependencies = new Map<number, number[]>();
     for (let beanDefinition of beanDefinitions) {
       const dependencies = beanDefinition.dependencies || [];
       const length = dependencies.length || 0;
@@ -47,7 +47,7 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
       if ((beanDefinition.dependencies?.length ?? 0) <= 0) {
         continue;
       }
-      newBeanNames.push({ key: beanDefinition.beanName, value: beanDefinition.beanName });
+      newBeanNames.push({ key: `${beanDefinition.beanName}`, value: common.stringConstants[beanDefinition.beanName] });
     }
     setBeanNames(newBeanNames);
   }, [beanDefinitions]);
@@ -86,7 +86,7 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
     return node;
   };
 
-  const highlightNode = (nodeId: string) => {
+  const highlightNode = (nodeId: number) => {
     const node = d3.selectAll<SVGCircleElement, Node>('.node');
     const link = d3.selectAll<SVGLineElement, Edge>('.link');
 
@@ -142,19 +142,20 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
   };
 
   const handleBuild = () => {
-    if (!beanId || !beanId.beanName || !graphRef.current || !svg) return;
+    if (!beanId || !graphRef.current || !svg) return;
 
     const width = graphRef.current.clientWidth;
     const height = graphRef.current.clientHeight;
+    const stereotype = beanDefinitions.find(b => b.beanName === beanId)?.stereotype || null;
     const nodes: Node[] = [{
-      id: beanId.beanName,
-      name: beanId.beanName,
-      stereotype: beanDefinitions.find(b => b.beanName === beanId.beanName)?.stereotype || null
+      id: beanId,
+      name: common.stringConstants[beanId],
+      stereotype: stereotype ? common.stringConstants[stereotype] as Stereotype : null
     }];
     const edges: Edge[] = [];
-    const visited = new Set<string>();
+    const visited = new Set<number>();
 
-    const traverse = (bean: string) => {
+    const traverse = (bean: number) => {
       if (visited.has(bean)) return;
       visited.add(bean);
 
@@ -162,10 +163,11 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
       dependencies.forEach(dependency => {
         if (!visited.has(dependency)) {
           const beanDefinition = beanDefinitions.find(b => b.beanName === dependency);
+          const stereotype = beanDefinition?.stereotype || null;
           nodes.push({
             id: dependency,
-            name: dependency,
-            stereotype: beanDefinition?.stereotype || null
+            name: common.stringConstants[dependency],
+            stereotype: stereotype ? common.stringConstants[stereotype] as Stereotype : null
           });
           traverse(dependency);
         }
@@ -173,7 +175,7 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
       });
     };
 
-    traverse(beanId.beanName);
+    traverse(beanId);
 
     svg.selectAll('g').remove();
 
@@ -271,7 +273,7 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
         .attr('transform', d => `translate(${d.x},${d.y})`);
     });
 
-    highlightNode(beanId.beanName);
+    highlightNode(beanId);
   };
 
   return (
@@ -293,9 +295,8 @@ const GraphPage: React.FC<GraphProps> = ({ beanDefinitions }) => {
               <SuggestiveInput
                 id="beanName"
                 mode={'strict'}
-                onChange={it => setBeanId({ ...beanId, beanName: it.value })
-                }
-                value={beanId.beanName}
+                onChange={it => setBeanId(it.key ? +it.key : undefined)}
+                value={beanId ? common.stringConstants[beanId] : ''}
                 suggestions={beanNames}
                 placeholder={'Bean Name'}
                 required={true}

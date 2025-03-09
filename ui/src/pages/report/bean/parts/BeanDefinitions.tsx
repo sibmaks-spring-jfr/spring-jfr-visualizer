@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Card, Col, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
-import { BeanDefinition } from '../../../../api/types';
+import React from 'react';
+import { Card, Col, Row } from 'react-bootstrap';
+import { BeanDefinition, Common } from '../../../../api/types';
 import { CustomTable } from '@sibdevtools/frontend-common';
 import { CustomTableParts } from '@sibdevtools/frontend-common/dist/components/custom-table/types';
 
@@ -28,10 +28,12 @@ const BeanDefinitionDetails: React.FC<BeanDefinitionDetailsProps> = ({ row }) =>
 };
 
 export interface BeanDefinitionsPageProps {
+  common: Common;
   beanDefinitions: BeanDefinition[];
 }
 
 const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
+                                                               common,
                                                                beanDefinitions
                                                              }) => {
   return (
@@ -89,17 +91,17 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
             tbody={{
               data: beanDefinitions.map(it => {
                 return {
-                  scope: it.scope,
-                  primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
+                  scope: it.scope ? common.stringConstants[it.scope] : '',
+                  primary: it.primary === null ? 'Unknown' : (common.stringConstants[it.primary] === 'true' ? 'Yes' : 'No'),
                   generated: it.generated ? 'Yes' : 'No',
                   beanClassName: {
-                    representation: <div className="text-break">{it.beanClassName}</div>,
-                    value: it.beanClassName,
+                    representation: <div className="text-break">{it.beanClassName ? common.stringConstants[it.beanClassName] : ''}</div>,
+                    value: it.beanClassName ? common.stringConstants[it.beanClassName] : '',
                     className: 'td-512'
                   },
                   beanName: {
-                    representation: <div className="text-break">{it.beanName}</div>,
-                    value: it.beanName,
+                    representation: <div className="text-break">{common.stringConstants[it.beanName]}</div>,
+                    value: common.stringConstants[it.beanName],
                     className: 'td-512'
                   },
                   dependenciesCount: {
@@ -110,10 +112,10 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   dependencies: {
                     representation: <ul className="text-break">
                       {it.dependencies?.map(it => {
-                        return (<li key={it}>{it}</li>);
+                        return (<li key={it}>{common.stringConstants[it]}</li>);
                       })}
                     </ul>,
-                    value: it.dependencies?.join(', '),
+                    value: it.dependencies?.map(it => common.stringConstants[it])?.join(', '),
                     className: 'td-1024'
                   },
                 };

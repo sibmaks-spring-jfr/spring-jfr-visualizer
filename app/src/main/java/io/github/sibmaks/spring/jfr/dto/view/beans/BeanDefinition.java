@@ -2,13 +2,15 @@ package io.github.sibmaks.spring.jfr.dto.view.beans;
 
 import io.github.sibmaks.spring.jfr.event.api.bean.BeanDefinitionRegisteredFact;
 import io.github.sibmaks.spring.jfr.event.api.bean.MergedBeanDefinitionRegisteredFact;
-import io.github.sibmaks.spring.jfr.event.api.bean.ResolveBeanDependencyFact;
 import io.github.sibmaks.spring.jfr.event.api.bean.Stereotype;
 import io.github.sibmaks.spring.jfr.event.core.converter.DependencyConverter;
+import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.Getter;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 /**
@@ -17,57 +19,60 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class BeanDefinition {
-    private String scope;
-    private String beanClassName;
-    private String beanName;
-    private String primary;
-    private final SortedSet<String> dependencies;
-    private Stereotype stereotype;
+    private Long scope;
+    private long beanClassName;
+    private long beanName;
+    private Long primary;
+    private final SortedSet<Long> dependencies;
+    private long stereotype;
     private final boolean generated;
 
-    public BeanDefinition(BeanDefinitionRegisteredFact fact) {
-        this.scope = fact.getScope();
-        this.beanClassName = fact.getBeanClassName();
-        this.beanName = fact.getBeanName();
-        this.primary = fact.getPrimary();
+    public BeanDefinition(StringConstantRegistry stringConstantRegistry, BeanDefinitionRegisteredFact fact) {
+        this.scope = stringConstantRegistry.getOrRegister(fact.getScope());
+        this.beanClassName = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
+        this.beanName = stringConstantRegistry.getOrRegister(fact.getBeanName());
+        this.primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
         this.dependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
+                .map(stringConstantRegistry::getOrRegister)
                 .collect(Collectors.toCollection(TreeSet::new));
-        this.stereotype = Optional.ofNullable(fact.getStereotype())
-                .map(Stereotype::valueOf)
-                .orElse(Stereotype.UNKNOWN);
+        this.stereotype = stringConstantRegistry.getOrRegister(
+                Optional.ofNullable(fact.getStereotype())
+                        .map(Stereotype::valueOf)
+                        .orElse(Stereotype.UNKNOWN)
+                        .name()
+        );
         this.generated = fact.isGenerated();
     }
 
-    public void patch(MergedBeanDefinitionRegisteredFact fact) {
-        if (!StringUtils.hasText(scope)) {
-            scope = fact.getScope();
+    public void patch(StringConstantRegistry stringConstantRegistry, MergedBeanDefinitionRegisteredFact fact) {
+        if (scope != -1) {
+            scope = stringConstantRegistry.getOrRegister(fact.getScope());
         }
-        if (!StringUtils.hasText(beanClassName)) {
-            beanClassName = fact.getBeanClassName();
+        if (beanClassName != -1) {
+            beanClassName = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
         }
-        if (!StringUtils.hasText(beanName)) {
-            beanName = fact.getBeanName();
+        if (beanName != -1) {
+            beanName = stringConstantRegistry.getOrRegister(fact.getBeanName());
         }
-        if (!StringUtils.hasText(primary)) {
-            primary = fact.getPrimary();
+        if (primary != -1) {
+            primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
         }
-        if (stereotype == null) {
-            var newStereotype = Optional.ofNullable(fact.getStereotype())
-                    .map(Stereotype::valueOf)
+        if (stereotype != -1) {
+            long newStereotype = Optional.ofNullable(fact.getStereotype())
+                    .map(stringConstantRegistry::getOrRegister)
                     .orElse(stereotype);
-            if (stereotype != newStereotype && newStereotype != Stereotype.UNKNOWN) {
+            if (stereotype != newStereotype && newStereotype != stringConstantRegistry.getOrRegister("UNKNOWN")) {
                 stereotype = newStereotype;
             }
         }
-        patchDependencies(fact);
+
+        var mergedDependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
+                .map(stringConstantRegistry::getOrRegister)
+                .toList();
+        dependencies.addAll(mergedDependencies);
     }
 
-    private void patchDependencies(MergedBeanDefinitionRegisteredFact fact) {
-        var mergedDependencies = DependencyConverter.convert(fact.getDependencies());
-        dependencies.addAll(List.of(mergedDependencies));
-    }
-
-    public void patch(ResolveBeanDependencyFact event) {
-        dependencies.add(event.getDependencyBeanName());
+    public void patch(long dependency) {
+        dependencies.add(dependency);
     }
 }

@@ -7,6 +7,9 @@ type RootReportContextType = {
 };
 
 const defaultReport: RootReport = {
+  common: {
+    stringConstants: {}
+  },
   calls: {
     roots: []
   },

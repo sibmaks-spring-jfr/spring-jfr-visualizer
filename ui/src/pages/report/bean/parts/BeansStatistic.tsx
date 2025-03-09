@@ -1,14 +1,16 @@
 import React from 'react';
 import { Card, Row } from 'react-bootstrap';
-import { Bean } from '../../../../api/types';
+import { Bean, Common } from '../../../../api/types';
 import { toISOString } from '../../../../utils/datetime';
 import { CustomTable } from '@sibdevtools/frontend-common';
 
 export interface BeansPageProps {
+  common: Common;
   beans: Bean[];
 }
 
 const BeansStatistic: React.FC<BeansPageProps> = ({
+                                                    common,
                                                     beans
                                                   }) => {
   return (
@@ -67,8 +69,8 @@ const BeansStatistic: React.FC<BeansPageProps> = ({
               data: beans.map(it => {
                 return {
                   beanName: {
-                    representation: it.beanName,
-                    value: it.beanName,
+                    representation: common.stringConstants[it.beanName],
+                    value: common.stringConstants[it.beanName],
                     className: 'td-128 text-break'
                   },
                   preInitializedAt: {

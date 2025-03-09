@@ -2,20 +2,13 @@ package io.github.sibmaks.spring.jfr.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.sibmaks.spring.jfr.Application;
-import io.github.sibmaks.spring.jfr.dto.view.beans.BeansReport;
-import io.github.sibmaks.spring.jfr.dto.view.calls.CallsReport;
-import io.github.sibmaks.spring.jfr.dto.view.connections.ConnectionsReport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -70,14 +63,10 @@ public class ReportService {
     /**
      * Generate JavaScript beans report
      *
-     * @param beansReport       beans report data
-     * @param callsReport       calls report data
-     * @param connectionsReport connections report data
+     * @param rootReport report data
      */
     public void generateReport(
-            BeansReport beansReport,
-            CallsReport callsReport,
-            ConnectionsReport connectionsReport
+            io.github.sibmaks.spring.jfr.dto.view.common.RootReport rootReport
     ) {
         var reportFile = new File(reportFilePath);
         var parentFile = reportFile.getParentFile();
@@ -98,16 +87,11 @@ public class ReportService {
 
         try (var fileWriter = new FileWriter(reportFile);
              var writer = new BufferedWriter(fileWriter)) {
-            var report = Map.ofEntries(
-                    Map.entry("beans", beansReport),
-                    Map.entry("calls", callsReport),
-                    Map.entry("connections", connectionsReport)
-            );
-            var reportJson = objectMapper.writeValueAsString(report);
+            var reportJson = objectMapper.writeValueAsString(rootReport);
             writer.write(String.format("window.rootReport = %s;%n", reportJson));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
-    }
 
+    }
 }
