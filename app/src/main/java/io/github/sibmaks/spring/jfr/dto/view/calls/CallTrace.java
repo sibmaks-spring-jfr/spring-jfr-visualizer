@@ -14,7 +14,7 @@ public record CallTrace(
         long contextId,
         Long correlationId,
         long invocationId,
-        boolean success,
+        int success,
         long type,
         long startTime,
         long endTime,

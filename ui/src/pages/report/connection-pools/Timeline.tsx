@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion, Badge, Col, Container, ListGroup, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
+import { Accordion, Badge, Col, Container, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import {
   MaterialSymbolsLightCloseSmallOutlineRounded,
   MaterialSymbolsLightCommitRounded,
@@ -7,10 +7,11 @@ import {
   MaterialSymbolsLightFiberNewOutlineRounded,
   MaterialSymbolsLightSettingsBackupRestoreRounded
 } from '../../../icons';
-import { Connection, ConnectionEvent, Exception } from '../../../api/types';
+import { Common, Connection, ConnectionEvent, Exception } from '../../../api/types';
 
 
 export interface TimelineProps {
+  common: Common;
   connections: Connection[];
 }
 
@@ -27,7 +28,10 @@ transactionIsolations.set(4, { code: 'TRANSACTION_REPEATABLE_READ', name: 'Repea
 transactionIsolations.set(8, { code: 'TRANSACTION_SERIALIZABLE', name: 'Serializable' });
 
 
-const Timeline: React.FC<TimelineProps> = ({ connections }) => {
+const Timeline: React.FC<TimelineProps> = ({
+                                             common,
+                                             connections
+                                           }) => {
   const getIconTooltip = (id: string, tooltip: string, transactionIsolation?: number) => {
     const isolation = transactionIsolation ? (transactionIsolations.get(transactionIsolation)?.name ?? '') : '';
 
@@ -47,7 +51,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
   };
 
   const getIcon = (connectionId: string, event: ConnectionEvent) => {
-    switch (event.action) {
+    switch (common.stringConstants[event.action]) {
       case 'CREATE':
         return (
           <OverlayTrigger
@@ -134,7 +138,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
       return null;
     }
     const event = connection.events[0];
-    if (!event || event.action !== 'CREATE') {
+    if (!event || common.stringConstants[event.action] !== 'CREATE') {
       return null;
     }
     return event.threadName ?? null;
@@ -145,7 +149,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
       return null;
     }
     const event = connection.events[connection.events.length - 1];
-    if (!event || event.action !== 'CLOSE') {
+    if (!event || common.stringConstants[event.action] !== 'CLOSE') {
       return null;
     }
     return event.threadName ?? null;
@@ -214,7 +218,7 @@ const Timeline: React.FC<TimelineProps> = ({ connections }) => {
                                 bg="light"
                                 text="dark"
                                 className={'mt-2'}
-                                title={event.action}
+                                title={common.stringConstants[event.action]}
                               >
                                 {formatDate(event.startedAt)}
                               </Badge>

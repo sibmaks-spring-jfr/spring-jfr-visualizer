@@ -1,6 +1,5 @@
 package io.github.sibmaks.spring.jfr.dto.view.connections;
 
-import io.github.sibmaks.spring.jfr.event.api.pool.jdbc.connection.action.ConnectionAction;
 import lombok.Builder;
 
 /**
@@ -10,11 +9,11 @@ import lombok.Builder;
 @Builder
 public record ConnectionEvent(
         long index,
-        ConnectionAction action,
+        long action,
         ConnectionException exception,
         long startedAt,
         long finishedAt,
-        String threadName,
+        long threadName,
         Integer transactionIsolation
 ) {
 

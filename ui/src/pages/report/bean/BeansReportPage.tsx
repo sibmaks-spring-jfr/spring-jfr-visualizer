@@ -19,7 +19,7 @@ const BeansReportPage = () => {
   const [beans, setBeans] = useState<Bean[]>([]);
   const [beanDefinitions, setBeanDefinitions] = useState<BeanDefinition[]>([]);
 
-  const [context, setContext] = useState<number>();
+  const [context, setContext] = useState<number>(-1);
   const [contexts, setContexts] = useState<SuggestiveItem[]>([]);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const BeansReportPage = () => {
   }, [rootReport]);
 
   const handleFilterSubmit = () => {
-    if (!context) {
+    if (context === -1) {
       setCommon({
         stringConstants: []
       });
@@ -67,8 +67,7 @@ const BeansReportPage = () => {
                   <InputGroup>
                     <SuggestiveInput
                       mode={'strict'}
-                      onChange={it => setContext(it.key ? +it.key : undefined)
-                      }
+                      onChange={it => setContext(it.key ? +it.key : -1)}
                       suggestions={contexts}
                       disabled={contexts.length === 0}
                       required={true}
@@ -76,7 +75,7 @@ const BeansReportPage = () => {
                     <Button
                       variant={'primary'}
                       onClick={handleFilterSubmit}
-                      disabled={isLoading || !context}
+                      disabled={isLoading || context === -1}
                     >
                       <MaterialSymbolsSearchRounded />
                     </Button>

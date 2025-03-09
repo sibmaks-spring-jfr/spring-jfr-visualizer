@@ -14,9 +14,9 @@ const ConnectionPoolsReportPage: React.FC = () => {
   const [connections, setConnections] = useState<Connection[]>([]);
   const [showAlert, setShowAlert] = useState<boolean>(false);
 
-  const [context, setContext] = useState<string>('');
+  const [context, setContext] = useState<number>(-1);
   const [contexts, setContexts] = useState<SuggestiveItem[]>([]);
-  const [pool, setPool] = useState<string>('');
+  const [pool, setPool] = useState<number>(-1);
   const [pools, setPools] = useState<SuggestiveItem[]>([]);
   const [minDuration, setMinDuration] = useState<number | null>(null);
   const [maxDuration, setMaxDuration] = useState<number | null>(null);
@@ -25,7 +25,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
     const contexts = Object.keys(rootReport?.connections?.contexts ?? {})
       .map(it => ({
           key: it,
-          value: it
+          value: rootReport.common.stringConstants[+it]
         }
       ));
 
@@ -33,10 +33,14 @@ const ConnectionPoolsReportPage: React.FC = () => {
   }, [rootReport]);
 
   useEffect(() => {
+    if (context === -1) {
+      return;
+    }
+
     const pools = Object.keys(rootReport?.connections?.contexts[context] ?? {})
       .map(it => ({
           key: it,
-          value: it
+          value: rootReport.common.stringConstants[+it]
         }
       ));
 
@@ -44,7 +48,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
   }, [context]);
 
   const handleFilterSubmit = () => {
-    if (!context || !pool) {
+    if (context === -1 || pool === -1) {
       return;
     }
 
@@ -76,8 +80,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
                   <Col xxl={10} xs={12}>
                     <SuggestiveInput
                       mode={'strict'}
-                      onChange={it => setContext(it.value)
-                      }
+                      onChange={it => setContext(it.key ? +it.key : -1)}
                       suggestions={contexts}
                       disabled={contexts.length === 0}
                       required={true}
@@ -96,16 +99,15 @@ const ConnectionPoolsReportPage: React.FC = () => {
                     <InputGroup>
                       <SuggestiveInput
                         mode={'strict'}
-                        onChange={it => setPool(it.value)
-                        }
+                        onChange={it => setPool(it.key ? +it.key : -1)}
                         suggestions={pools}
-                        disabled={context === ''}
+                        disabled={context === -1}
                         required={true}
                       />
                       <Button
                         variant={'primary'}
                         onClick={handleFilterSubmit}
-                        disabled={isLoading || !context || !pool}
+                        disabled={isLoading || context === -1 || pool === -1}
                       >
                         <MaterialSymbolsSearchRounded />
                       </Button>
@@ -190,7 +192,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
                 There are no connections.
               </Alert>
             </Row>
-          ) : <Timeline connections={connections} />
+          ) : <Timeline common={rootReport.common} connections={connections} />
           }
         </Loader>
       </Row>

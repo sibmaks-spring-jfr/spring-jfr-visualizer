@@ -11,6 +11,7 @@ import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.actio
 import io.github.sibmaks.spring.jfr.report.connections.dto.ConnectionDto;
 import io.github.sibmaks.spring.jfr.report.connections.dto.ConnectionEventDto;
 import io.github.sibmaks.spring.jfr.report.connections.dto.ContextDto;
+import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -28,22 +29,24 @@ import static io.github.sibmaks.spring.jfr.utils.JavaFlightRecorderUtils.getThre
 @Slf4j
 @Component
 public class ConnectionsReportCreator {
-    private final Map<String, ContextDto> contexts;
+    private final Map<Long, ContextDto> contexts;
     private final Map<String, ConnectionDto> connections;
+    private final StringConstantRegistry stringConstantRegistry;
 
-    public ConnectionsReportCreator() {
+    public ConnectionsReportCreator(StringConstantRegistry stringConstantRegistry) {
         this.contexts = new HashMap<>();
         this.connections = new HashMap<>();
+        this.stringConstantRegistry = stringConstantRegistry;
     }
 
     @EventListener
     public void onConnectionRequested(ConnectionRequestedRecordedEvent event) {
         try {
             var contextId = event.getContextId();
-            var context = contexts.computeIfAbsent(contextId, it -> new ContextDto());
+            var context = contexts.computeIfAbsent(stringConstantRegistry.getOrRegister(contextId), it -> new ContextDto());
 
             var poolId = event.getPoolId();
-            var pool = context.get(poolId);
+            var pool = context.get(stringConstantRegistry.getOrRegister(poolId));
 
             var connectionId = event.getConnectionId();
             var connection = pool.getOrCreate(connectionId);
@@ -52,10 +55,10 @@ public class ConnectionsReportCreator {
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
                     .index(event.getActionIndex())
-                    .action(event.getConnectionAction())
+                    .action(stringConstantRegistry.getOrRegister(event.getConnectionAction().name()))
                     .startedAt(startTime.toEpochMilli())
                     .finishedAt(-1)
-                    .threadName(getThreadName(event))
+                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -76,10 +79,10 @@ public class ConnectionsReportCreator {
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
                     .index(event.getActionIndex())
-                    .action(event.getConnectionAction())
+                    .action(stringConstantRegistry.getOrRegister(event.getConnectionAction().name()))
                     .startedAt(startTime.toEpochMilli())
                     .finishedAt(-1)
-                    .threadName(getThreadName(event))
+                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -101,7 +104,7 @@ public class ConnectionsReportCreator {
             var connectionEvent = ConnectionEventDto.builder()
                     .index(event.getActionIndex())
                     .finishedAt(startTime.toEpochMilli())
-                    .threadName(getThreadName(event))
+                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -120,8 +123,8 @@ public class ConnectionsReportCreator {
             }
 
             var connectionException = ConnectionException.builder()
-                    .type(event.getExceptionClass())
-                    .message(event.getExceptionMessage())
+                    .type(stringConstantRegistry.getOrRegister(event.getExceptionClass()))
+                    .message(stringConstantRegistry.getOrRegister(event.getExceptionMessage()))
                     .build();
 
             var startTime = event.getStartTime();
@@ -129,7 +132,7 @@ public class ConnectionsReportCreator {
                     .index(event.getActionIndex())
                     .exception(connectionException)
                     .finishedAt(startTime.toEpochMilli())
-                    .threadName(getThreadName(event))
+                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -163,7 +166,7 @@ public class ConnectionsReportCreator {
     }
 
     public ConnectionsReport get() {
-        var contextMap = new HashMap<String, Map<String, List<Connection>>>();
+        var contextMap = new HashMap<Long, Map<Long, List<Connection>>>();
 
         for (var entry : this.contexts.entrySet()) {
             var key = entry.getKey();

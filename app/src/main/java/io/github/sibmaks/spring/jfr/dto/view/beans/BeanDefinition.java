@@ -25,7 +25,7 @@ public class BeanDefinition {
     private long primary;
     private final SortedSet<Long> dependencies;
     private long stereotype;
-    private final boolean generated;
+    private final int generated;
 
     public BeanDefinition(StringConstantRegistry stringConstantRegistry, BeanDefinitionRegisteredFact fact) {
         this.scope = stringConstantRegistry.getOrRegister(fact.getScope());
@@ -41,7 +41,7 @@ public class BeanDefinition {
                         .orElse(Stereotype.UNKNOWN)
                         .name()
         );
-        this.generated = fact.isGenerated();
+        this.generated = fact.isGenerated() ? 1 : 0;
     }
 
     public void patch(StringConstantRegistry stringConstantRegistry, MergedBeanDefinitionRegisteredFact fact) {

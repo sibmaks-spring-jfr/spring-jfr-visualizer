@@ -7,7 +7,7 @@ export interface BeanDefinition {
   primary: number;
   dependencies: number[] | null;
   stereotype: number;
-  generated: boolean;
+  generated: 0 | 1;
 }
 
 export interface Bean {
@@ -25,7 +25,7 @@ export interface CallTrace {
   contextId: number;
   correlationId: number | null;
   invocationId: number;
-  success: boolean;
+  success: 0 | 1;
   type: number;
   startTime: number;
   endTime: number;
@@ -57,17 +57,19 @@ export interface Common {
 }
 
 export interface Exception {
-  type: string;
-  message: string;
+  type: number;
+  message: number;
 }
+
+export type ConnectionAction = 'CREATE' | 'COMMIT' | 'ROLLBACK' | 'CLOSE'
 
 export interface ConnectionEvent {
   index: number;
-  action: 'CREATE' | 'COMMIT' | 'ROLLBACK' | 'CLOSE';
+  action: number;
   startedAt: number;
   finishedAt: number;
   exception?: Exception;
-  threadName?: string;
+  threadName?: number;
   transactionIsolation?: number;
 }
 
@@ -79,5 +81,5 @@ export interface Connection {
 }
 
 export interface ConnectionReport {
-  contexts: Record<string, Record<string, Connection[]>>;
+  contexts: Record<number, Record<number, Connection[]>>;
 }

@@ -15,18 +15,18 @@ import java.util.Map;
 @Getter
 @Setter
 public final class ContextDto {
-    private final Map<String, PoolDto> pools;
+    private final Map<Long, PoolDto> pools;
 
     public ContextDto() {
         this.pools = new HashMap<>();
     }
 
-    public PoolDto get(String poolId) {
+    public PoolDto get(long poolId) {
         return pools.computeIfAbsent(poolId, it -> new PoolDto());
     }
 
-    public Map<String, List<Connection>> toPoolMap() {
-        var poolMap = new HashMap<String, List<Connection>>();
+    public Map<Long, List<Connection>> toPoolMap() {
+        var poolMap = new HashMap<Long, List<Connection>>();
 
         for (var entry : this.pools.entrySet()) {
             var key = entry.getKey();
