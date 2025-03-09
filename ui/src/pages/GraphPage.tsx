@@ -38,7 +38,7 @@ const GraphPage: React.FC<GraphProps> = ({
       if (length <= 0) {
         continue;
       }
-      beanDependencies.set(beanDefinition.beanName, dependencies);
+      beanDependencies.set(beanDefinition.name, dependencies);
     }
     setBeanDependencies(beanDependencies);
 
@@ -47,7 +47,7 @@ const GraphPage: React.FC<GraphProps> = ({
       if ((beanDefinition.dependencies?.length ?? 0) <= 0) {
         continue;
       }
-      newBeanNames.push({ key: `${beanDefinition.beanName}`, value: common.stringConstants[beanDefinition.beanName] });
+      newBeanNames.push({ key: `${beanDefinition.name}`, value: common.stringConstants[beanDefinition.name] });
     }
     setBeanNames(newBeanNames);
   }, [beanDefinitions]);
@@ -146,11 +146,11 @@ const GraphPage: React.FC<GraphProps> = ({
 
     const width = graphRef.current.clientWidth;
     const height = graphRef.current.clientHeight;
-    const stereotype = beanDefinitions.find(b => b.beanName === beanId)?.stereotype || null;
+    const stereotype = beanDefinitions.find(b => b.name === beanId)?.stereotype ?? -1;
     const nodes: Node[] = [{
       id: beanId,
       name: common.stringConstants[beanId],
-      stereotype: stereotype ? common.stringConstants[stereotype] as Stereotype : null
+      stereotype: stereotype === -1 ? null : common.stringConstants[stereotype] as Stereotype
     }];
     const edges: Edge[] = [];
     const visited = new Set<number>();
@@ -162,12 +162,12 @@ const GraphPage: React.FC<GraphProps> = ({
       const dependencies = beanDependencies?.get(bean) || [];
       dependencies.forEach(dependency => {
         if (!visited.has(dependency)) {
-          const beanDefinition = beanDefinitions.find(b => b.beanName === dependency);
-          const stereotype = beanDefinition?.stereotype || null;
+          const beanDefinition = beanDefinitions.find(b => b.name === dependency);
+          const stereotype = beanDefinition?.stereotype ?? -1;
           nodes.push({
             id: dependency,
             name: common.stringConstants[dependency],
-            stereotype: stereotype ? common.stringConstants[stereotype] as Stereotype : null
+            stereotype: stereotype === -1 ? null : common.stringConstants[stereotype] as Stereotype
           });
           traverse(dependency);
         }

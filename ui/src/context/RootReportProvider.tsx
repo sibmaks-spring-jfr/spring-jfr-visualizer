@@ -8,7 +8,7 @@ type RootReportContextType = {
 
 const defaultReport: RootReport = {
   common: {
-    stringConstants: {}
+    stringConstants: []
   },
   calls: {
     roots: []
@@ -20,7 +20,7 @@ const defaultReport: RootReport = {
     beans: [],
     beanDefinitions: {}
   },
-}
+};
 
 export const RootReportContext = createContext<RootReportContextType>({
   rootReport: defaultReport,

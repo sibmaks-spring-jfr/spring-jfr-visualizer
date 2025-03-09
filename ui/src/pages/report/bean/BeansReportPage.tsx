@@ -14,7 +14,7 @@ const BeansReportPage = () => {
   const { rootReport, isLoading } = useContext(RootReportContext);
 
   const [common, setCommon] = useState<Common>({
-    stringConstants: {}
+    stringConstants: []
   });
   const [beans, setBeans] = useState<Bean[]>([]);
   const [beanDefinitions, setBeanDefinitions] = useState<BeanDefinition[]>([]);
@@ -39,7 +39,7 @@ const BeansReportPage = () => {
   const handleFilterSubmit = () => {
     if (!context) {
       setCommon({
-        stringConstants: {}
+        stringConstants: []
       });
       setBeans([]);
       setBeanDefinitions([]);

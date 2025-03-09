@@ -28,6 +28,8 @@ const CallsReportPage = () => {
   const [maxDuration, setMaxDuration] = useState<number | null>(null);
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'fail'>('all');
 
+  const stringConstants = rootReport.common.stringConstants;
+
   const handleFilterSubmit = () => {
     let filtered = [...rootReport.calls.roots];
 
@@ -226,7 +228,7 @@ const CallsReportPage = () => {
                 return {
                   contextId: it.contextId,
                   invocationId: it.invocationId,
-                  qualifier: `${it.className}#${it.methodName}`,
+                  qualifier: `${stringConstants[it.className]}#${stringConstants[it.methodName]}`,
                   callStartedAt: {
                     representation: <code>{toISOString(it.startTime)}</code>,
                     value: toISOString(it.startTime),

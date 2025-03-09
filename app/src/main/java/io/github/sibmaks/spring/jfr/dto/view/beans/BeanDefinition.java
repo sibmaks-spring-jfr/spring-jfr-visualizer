@@ -19,18 +19,18 @@ import java.util.stream.Collectors;
  */
 @Getter
 public class BeanDefinition {
-    private Long scope;
-    private long beanClassName;
-    private long beanName;
-    private Long primary;
+    private long scope;
+    private long className;
+    private long name;
+    private long primary;
     private final SortedSet<Long> dependencies;
     private long stereotype;
     private final boolean generated;
 
     public BeanDefinition(StringConstantRegistry stringConstantRegistry, BeanDefinitionRegisteredFact fact) {
         this.scope = stringConstantRegistry.getOrRegister(fact.getScope());
-        this.beanClassName = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
-        this.beanName = stringConstantRegistry.getOrRegister(fact.getBeanName());
+        this.className = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
+        this.name = stringConstantRegistry.getOrRegister(fact.getBeanName());
         this.primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
         this.dependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
                 .map(stringConstantRegistry::getOrRegister)
@@ -48,11 +48,11 @@ public class BeanDefinition {
         if (scope != -1) {
             scope = stringConstantRegistry.getOrRegister(fact.getScope());
         }
-        if (beanClassName != -1) {
-            beanClassName = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
+        if (className != -1) {
+            className = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
         }
-        if (beanName != -1) {
-            beanName = stringConstantRegistry.getOrRegister(fact.getBeanName());
+        if (name != -1) {
+            name = stringConstantRegistry.getOrRegister(fact.getBeanName());
         }
         if (primary != -1) {
             primary = stringConstantRegistry.getOrRegister(fact.getPrimary());

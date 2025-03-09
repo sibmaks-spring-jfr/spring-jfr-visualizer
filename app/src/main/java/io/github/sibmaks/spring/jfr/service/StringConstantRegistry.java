@@ -3,10 +3,10 @@ package io.github.sibmaks.spring.jfr.service;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.stream.Collectors;
 
 /**
  * @author sibmaks
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class StringConstantRegistry {
-    private final AtomicLong counter = new AtomicLong();
+    private final AtomicLong counter = new AtomicLong(0);
     private final Map<String, Long> constants;
 
     public StringConstantRegistry() {
@@ -25,12 +25,14 @@ public class StringConstantRegistry {
         if (constantName == null) {
             return -1;
         }
-        return constants.computeIfAbsent(constantName, it -> counter.incrementAndGet());
+        return constants.computeIfAbsent(constantName, it -> counter.getAndIncrement());
     }
 
-    public Map<Long, String> getConstants() {
+    public List<String> getConstants() {
         return constants.entrySet()
                 .stream()
-                .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+                .sorted(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .toList();
     }
 }

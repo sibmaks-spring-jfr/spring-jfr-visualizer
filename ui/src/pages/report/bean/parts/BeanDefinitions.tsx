@@ -91,17 +91,17 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
             tbody={{
               data: beanDefinitions.map(it => {
                 return {
-                  scope: it.scope ? common.stringConstants[it.scope] : '',
-                  primary: it.primary === null ? 'Unknown' : (common.stringConstants[it.primary] === 'true' ? 'Yes' : 'No'),
+                  scope: it.scope === -1 ? '' : common.stringConstants[it.scope],
+                  primary: it.primary === -1 ? 'Unknown' : (common.stringConstants[it.primary] === 'true' ? 'Yes' : 'No'),
                   generated: it.generated ? 'Yes' : 'No',
                   beanClassName: {
-                    representation: <div className="text-break">{it.beanClassName ? common.stringConstants[it.beanClassName] : ''}</div>,
-                    value: it.beanClassName ? common.stringConstants[it.beanClassName] : '',
+                    representation: <div className="text-break">{it.className === -1 ? '' : common.stringConstants[it.className]}</div>,
+                    value: it.className ? common.stringConstants[it.className] : '',
                     className: 'td-512'
                   },
                   beanName: {
-                    representation: <div className="text-break">{common.stringConstants[it.beanName]}</div>,
-                    value: common.stringConstants[it.beanName],
+                    representation: <div className="text-break">{common.stringConstants[it.name]}</div>,
+                    value: common.stringConstants[it.name],
                     className: 'td-512'
                   },
                   dependenciesCount: {

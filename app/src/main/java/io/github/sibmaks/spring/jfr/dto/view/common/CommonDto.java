@@ -2,7 +2,7 @@ package io.github.sibmaks.spring.jfr.dto.view.common;
 
 import lombok.Builder;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * @author sibmaks
@@ -10,6 +10,6 @@ import java.util.Map;
  */
 @Builder
 public record CommonDto(
-        Map<Long, String> stringConstants
+        List<String> stringConstants
 ) {
 }

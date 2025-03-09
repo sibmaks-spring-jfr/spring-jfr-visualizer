@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Accordion, Alert, Badge, Button, Col, Container, Form, InputGroup, Row, Table } from 'react-bootstrap';
-import { CallTrace, InvocationType } from '../../../api/types';
+import { CallTrace, Common, InvocationType } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '@sibdevtools/frontend-common';
 import { RootReportContext } from '../../../context/RootReportProvider';
 
-const MAX_CHILDREN_ON_PAGE = 25
+const MAX_CHILDREN_ON_PAGE = 25;
 
 type Status = 'all' | 'success' | 'fail'
 
@@ -18,16 +18,16 @@ const getTraceStatusBadge = (trace: CallTrace) => {
   );
 };
 
-const getTraceName = (trace: CallTrace) => {
+const getTraceName = (stringConstants: Record<number, string>, trace: CallTrace) => {
   return (
     <>
-      <strong>{trace.type}</strong>{' '} - {trace.className}#{trace.methodName}{' '}
+      <strong>{stringConstants[trace.type]}</strong>{' '} - {stringConstants[trace.className]}#{stringConstants[trace.methodName]}{' '}
       - {getTraceStatusBadge(trace)} - {trace.endTime - trace.startTime} ms
     </>
   );
 };
 
-function getCallTraceSystemDescription(trace: CallTrace) {
+function getCallTraceSystemDescription(stringConstants: Record<number, string>, trace: CallTrace) {
   return (
     <Row className={'mb-2'}>
       <Row>
@@ -35,7 +35,7 @@ function getCallTraceSystemDescription(trace: CallTrace) {
           <strong>Thread Name:</strong>
         </Col>
         <Col md={10}>
-          <code>{trace.threadName}</code>
+          <code>{stringConstants[trace.threadName]}</code>
         </Col>
       </Row>
       <Row>
@@ -43,7 +43,7 @@ function getCallTraceSystemDescription(trace: CallTrace) {
           <strong>Class Name:</strong>
         </Col>
         <Col md={10}>
-          <code>{trace.className}</code>
+          <code>{stringConstants[trace.className]}</code>
         </Col>
       </Row>
       <Row>
@@ -51,7 +51,7 @@ function getCallTraceSystemDescription(trace: CallTrace) {
           <strong>Method Name:</strong>
         </Col>
         <Col md={10}>
-          <code>{trace.methodName}</code>
+          <code>{stringConstants[trace.methodName]}</code>
         </Col>
       </Row>
       <Row>
@@ -90,14 +90,14 @@ function getCallTraceSystemDescription(trace: CallTrace) {
   );
 }
 
-function getCallTraceDetails(trace: CallTrace) {
+function getCallTraceDetails(stringConstants: Record<number, string>, trace: CallTrace) {
   if (Object.keys(trace.details).length <= 0) {
     return <></>;
   }
   return (
     <Row className={'mb-2'}>
       <Accordion className="mt-3">
-        <Accordion.Item eventKey={`${trace.contextId + trace.invocationId}-parameters`}>
+        <Accordion.Item eventKey={`${trace.contextId}_${trace.invocationId}-parameters`}>
           <Accordion.Header><strong>Details</strong></Accordion.Header>
           <Accordion.Body>
             <Table bordered={true}>
@@ -110,8 +110,8 @@ function getCallTraceDetails(trace: CallTrace) {
               <tbody>
               {Object.entries(trace.details).map(([key, value]) => (
                 <tr key={key}>
-                  <td>{key}</td>
-                  <td>{value}</td>
+                  <td>{stringConstants[+key]}</td>
+                  <td>{stringConstants[value]}</td>
                 </tr>
               ))}
               </tbody>
@@ -123,7 +123,15 @@ function getCallTraceDetails(trace: CallTrace) {
   );
 }
 
-const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
+interface CallTraceTreeProps {
+  common: Common;
+  trace: CallTrace;
+}
+
+const CallTraceTree: React.FC<CallTraceTreeProps> = ({
+                                                       common,
+                                                       trace
+                                                     }) => {
   const [minDurationFilter, setMinDurationFilter] = useState<number | null>(null);
   const [maxDurationFilter, setMaxDurationFilter] = useState<number | null>(null);
   const [statusFilter, setStatusFilter] = useState<Status>('all');
@@ -144,17 +152,17 @@ const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
   }
 
   if (typeFilter) {
-    children = children.filter(it => it.type === typeFilter);
+    children = children.filter(it => common.stringConstants[it.type] === typeFilter);
   }
 
   return (
-    <Accordion.Item eventKey={trace.contextId + trace.invocationId}>
+    <Accordion.Item eventKey={`${trace.contextId}_${trace.invocationId}`}>
       <Accordion.Header>
-        {getTraceName(trace)}
+        {getTraceName(common.stringConstants, trace)}
       </Accordion.Header>
       <Accordion.Body>
-        {getCallTraceSystemDescription(trace)}
-        {getCallTraceDetails(trace)}
+        {getCallTraceSystemDescription(common.stringConstants, trace)}
+        {getCallTraceDetails(common.stringConstants, trace)}
         {trace.children.length > 0 && (
           <>
             <Row className={'mb-2'}>
@@ -244,7 +252,7 @@ const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
               )}
               <Accordion>
                 {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
-                  <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
+                  <CallTraceTree key={`${child.contextId}_${child.invocationId}`} common={common} trace={child} />
                 ))}
               </Accordion>
             </Row>
@@ -271,8 +279,10 @@ const CallReportPage = () => {
       navigate('/calls');
       return;
     }
+    const contextIdNumber = +contextId;
+    const callIdNumber = +callId;
 
-    const callTrace = rootReport.calls.roots.find(it => it.contextId === contextId && it.invocationId === callId);
+    const callTrace = rootReport.calls.roots.find(it => it.contextId === contextIdNumber && it.invocationId === callIdNumber);
     setCallTrace(callTrace);
   }, [rootReport]);
 
@@ -296,7 +306,7 @@ const CallReportPage = () => {
   }
 
   if (typeFilter) {
-    children = children.filter(it => it.type === typeFilter);
+    children = children.filter(it => rootReport.common.stringConstants[it.type] === typeFilter);
   }
 
   return (
@@ -307,8 +317,8 @@ const CallReportPage = () => {
         </h3>
       </Row>
       <Loader loading={isLoading}>
-        {callTrace && getCallTraceSystemDescription(callTrace)}
-        {callTrace && getCallTraceDetails(callTrace)}
+        {callTrace && getCallTraceSystemDescription(rootReport.common.stringConstants, callTrace)}
+        {callTrace && getCallTraceDetails(rootReport.common.stringConstants, callTrace)}
         {(callTrace?.children ?? []).length > 0 && (
           <>
             <Row className={'mb-2'}>
@@ -398,7 +408,7 @@ const CallReportPage = () => {
                   </Row>
                 )}
                 {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
-                  <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
+                  <CallTraceTree key={`${child.contextId}_${child.invocationId}`} common={rootReport.common} trace={child} />
                 ))}
               </Accordion>
             </Row>

@@ -1,12 +1,12 @@
 export type Stereotype = 'UNKNOWN' | 'COMPONENT' | 'CONTROLLER' | 'REST_CONTROLLER' | 'SERVICE' | 'REPOSITORY'
 
 export interface BeanDefinition {
-  scope: number | null;
-  beanClassName: number | null;
-  beanName: number;
-  primary: number | null;
+  scope: number;
+  className: number;
+  name: number;
+  primary: number;
   dependencies: number[] | null;
-  stereotype: number | null;
+  stereotype: number;
   generated: boolean;
 }
 
@@ -22,17 +22,17 @@ export interface Bean {
 export type InvocationType = 'ASYNC' | 'JPA' | 'CONTROLLER' | 'SCHEDULED' | 'SERVICE' | 'COMPONENT'
 
 export interface CallTrace {
-  contextId: string;
-  correlationId: string | null;
-  invocationId: string;
+  contextId: number;
+  correlationId: number | null;
+  invocationId: number;
   success: boolean;
-  type: InvocationType;
+  type: number;
   startTime: number;
   endTime: number;
-  threadName: string;
-  className: string;
-  methodName: string;
-  details: Record<string, string>;
+  threadName: number;
+  className: number;
+  methodName: number;
+  details: Record<number, number>;
   children: CallTrace[];
 }
 
@@ -53,7 +53,7 @@ export interface RootReport {
 }
 
 export interface Common {
-  stringConstants: Record<number, string>;
+  stringConstants: string[];
 }
 
 export interface Exception {
