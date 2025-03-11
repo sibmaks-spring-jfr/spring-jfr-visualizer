@@ -86,39 +86,29 @@ const CallsReportPage = () => {
       <Row className="mb-4 ms-2 me-2">
         <Form className="p-2 shadow bg-body-tertiary rounded">
           <Row className={'mb-2'}>
-            <Form.Group controlId="formContext">
+            <Col xxl={6}>
               <Row>
-                <Col xxl={2} xs={12}>
-                  <Form.Label>Context</Form.Label>
+                <Col xxl={1} xs={12}>
+                  <Form.Label htmlFor={'contextInput'}>Context</Form.Label>
                 </Col>
-                <Col xxl={10} xs={12}>
-                  <InputGroup>
+                <Col xxl={11} xs={12}>
                     <SuggestiveInput
+                      id={'contextInput'}
                       mode={'strict'}
                       onChange={it => setContext(it.key ? +it.key : -1)}
                       suggestions={contexts}
                       disabled={contexts.length === 0}
                       required={true}
                     />
-                    <Button
-                      variant={'primary'}
-                      onClick={handleFilterSubmit}
-                      disabled={isLoading || context === -1}
-                    >
-                      <MaterialSymbolsSearchRounded />
-                    </Button>
-                  </InputGroup>
                 </Col>
               </Row>
-            </Form.Group>
-          </Row>
-          <Row className={'mb-2'}>
+            </Col>
             <Col xxl={6}>
               <Row>
-                <Col xxl={2}>
+                <Col xxl={1}>
                   <Form.Label>Time</Form.Label>
                 </Col>
-                <Col xxl={10}>
+                <Col xxl={11}>
                   <InputGroup>
                     <InputGroup.Text><label htmlFor={'leftTimeBoundInput'}>from</label></InputGroup.Text>
                     <Form.Control
@@ -134,81 +124,79 @@ const CallsReportPage = () => {
                       value={rightTimeBound}
                       onChange={(e) => setRightTimeBound(e.target.value)}
                     />
+                    <Button
+                      variant={'primary'}
+                      onClick={handleFilterSubmit}
+                      disabled={isLoading}
+                    >
+                      <MaterialSymbolsSearchRounded />
+                    </Button>
                   </InputGroup>
                 </Col>
               </Row>
-            </Col>
-            <Col xxl={6}>
-              <Form.Group>
-                <Row>
-                  <Col xxl={2} md={12}>
-                    <Form.Label htmlFor={'minDurationInput'}>Duration</Form.Label>
-                  </Col>
-                  <Col xxl={10} md={12} className={'d-none d-md-block'}>
-                    <InputGroup>
-                      <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
-                      <Form.Control
-                        id={'minDurationInput'}
-                        type="number"
-                        min={0}
-                        value={minDuration === null ? '' : minDuration}
-                        onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
-                      />
-                      <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
-                      <Form.Control
-                        id={'maxDurationInput'}
-                        type="number"
-                        min={minDuration || 0}
-                        value={maxDuration === null ? '' : maxDuration}
-                        onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
-                      />
-                      <InputGroup.Text>ms</InputGroup.Text>
-                      <Button
-                        variant={'primary'}
-                        onClick={handleFilterSubmit}
-                        disabled={isLoading}
-                      >
-                        <MaterialSymbolsSearchRounded />
-                      </Button>
-                    </InputGroup>
-                  </Col>
-                  <Col xs={12} className={'d-md-none'}>
-                    <Form.Label htmlFor={'minDurationXSInput'}>From</Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        id={'minDurationXSInput'}
-                        type="number"
-                        min={0}
-                        value={minDuration === null ? '' : minDuration}
-                        onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
-                      />
-                      <InputGroup.Text>ms</InputGroup.Text>
-                    </InputGroup>
-                  </Col>
-                  <Col xs={12} className={'d-md-none'}>
-                    <Form.Label htmlFor={'maxDurationXSInput'}>To</Form.Label>
-                    <InputGroup>
-                      <Form.Control
-                        id={'maxDurationXSInput'}
-                        type="number"
-                        min={minDuration || 0}
-                        value={maxDuration === null ? '' : maxDuration}
-                        onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
-                      />
-                      <InputGroup.Text>ms</InputGroup.Text>
-                    </InputGroup>
-                  </Col>
-                </Row>
-              </Form.Group>
             </Col>
           </Row>
           <Row className={'mb-2'}>
             <Col xxl={6}>
               <Row>
-                <Col xxl={2}>
+                <Col xxl={1} md={12}>
+                  <Form.Label htmlFor={'minDurationInput'}>Duration</Form.Label>
+                </Col>
+                <Col xxl={11} md={12} className={'d-none d-md-block'}>
+                  <InputGroup>
+                    <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
+                    <Form.Control
+                      id={'minDurationInput'}
+                      type="number"
+                      min={0}
+                      value={minDuration === null ? '' : minDuration}
+                      onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                    />
+                    <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                    <Form.Control
+                      id={'maxDurationInput'}
+                      type="number"
+                      min={minDuration || 0}
+                      value={maxDuration === null ? '' : maxDuration}
+                      onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                    />
+                    <InputGroup.Text>ms</InputGroup.Text>
+                  </InputGroup>
+                </Col>
+                <Col xs={12} className={'d-md-none'}>
+                  <Form.Label htmlFor={'minDurationXSInput'}>From</Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      id={'minDurationXSInput'}
+                      type="number"
+                      min={0}
+                      value={minDuration === null ? '' : minDuration}
+                      onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                    />
+                    <InputGroup.Text>ms</InputGroup.Text>
+                  </InputGroup>
+                </Col>
+                <Col xs={12} className={'d-md-none'}>
+                  <Form.Label htmlFor={'maxDurationXSInput'}>To</Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      id={'maxDurationXSInput'}
+                      type="number"
+                      min={minDuration || 0}
+                      value={maxDuration === null ? '' : maxDuration}
+                      onChange={(e) => setMaxDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
+                    />
+                    <InputGroup.Text>ms</InputGroup.Text>
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Col>
+            <Col xxl={6}>
+              <Row>
+                <Col xxl={1}>
                   <Form.Label htmlFor={'statusSelect'}>Status</Form.Label>
                 </Col>
-                <Col xxl={10}>
+                <Col xxl={11}>
                   <Form.Select
                     id={'statusSelect'}
                     value={statusFilter}
