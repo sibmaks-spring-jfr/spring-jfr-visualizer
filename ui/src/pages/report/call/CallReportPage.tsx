@@ -97,7 +97,7 @@ function getCallTraceDetails(stringConstants: Record<number, string>, trace: Cal
   return (
     <Row className={'mb-2'}>
       <Accordion className="mt-3">
-        <Accordion.Item eventKey={`${trace.contextId}_${trace.invocationId}-parameters`}>
+        <Accordion.Item eventKey={`${trace.invocationId}-parameters`}>
           <Accordion.Header><strong>Details</strong></Accordion.Header>
           <Accordion.Body>
             <Table bordered={true}>
@@ -156,7 +156,7 @@ const CallTraceTree: React.FC<CallTraceTreeProps> = ({
   }
 
   return (
-    <Accordion.Item eventKey={`${trace.contextId}_${trace.invocationId}`}>
+    <Accordion.Item eventKey={`${trace.invocationId}`}>
       <Accordion.Header>
         {getTraceName(common.stringConstants, trace)}
       </Accordion.Header>
@@ -252,7 +252,7 @@ const CallTraceTree: React.FC<CallTraceTreeProps> = ({
               )}
               <Accordion>
                 {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
-                  <CallTraceTree key={`${child.contextId}_${child.invocationId}`} common={common} trace={child} />
+                  <CallTraceTree key={`${child.invocationId}`} common={common} trace={child} />
                 ))}
               </Accordion>
             </Row>
@@ -282,7 +282,7 @@ const CallReportPage = () => {
     const contextIdNumber = +contextId;
     const callIdNumber = +callId;
 
-    const callTrace = rootReport.calls.roots.find(it => it.contextId === contextIdNumber && it.invocationId === callIdNumber);
+    const callTrace = rootReport.calls.contexts[contextIdNumber].find(it => it.invocationId === callIdNumber);
     setCallTrace(callTrace);
   }, [rootReport]);
 
@@ -408,7 +408,7 @@ const CallReportPage = () => {
                   </Row>
                 )}
                 {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
-                  <CallTraceTree key={`${child.contextId}_${child.invocationId}`} common={rootReport.common} trace={child} />
+                  <CallTraceTree key={`${child.invocationId}`} common={rootReport.common} trace={child} />
                 ))}
               </Accordion>
             </Row>

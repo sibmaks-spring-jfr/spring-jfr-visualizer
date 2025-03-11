@@ -1,11 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import { CallTrace } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate } from 'react-router-dom';
-import { CustomTable, Loader } from '@sibdevtools/frontend-common';
+import { CustomTable, Loader, SuggestiveInput } from '@sibdevtools/frontend-common';
 import { RootReportContext } from '../../../context/RootReportProvider';
 import { MaterialSymbolsSearchRounded } from '../../../icons';
+import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
 
 const MAX_TRACE_ON_PAGE = 25;
 
@@ -22,16 +23,37 @@ const CallsReportPage = () => {
   const navigate = useNavigate();
   const [filteredRoots, setFilteredRoots] = useState<CallTrace[]>([]);
   const [showAlert, setShowAlert] = useState<boolean>(false);
+
+  const [context, setContext] = useState<number>(-1);
+  const [contexts, setContexts] = useState<SuggestiveItem[]>([]);
   const [leftTimeBound, setLeftTimeBound] = useState<string>('');
   const [rightTimeBound, setRightTimeBound] = useState<string>('');
   const [minDuration, setMinDuration] = useState<number | null>(null);
   const [maxDuration, setMaxDuration] = useState<number | null>(null);
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'fail'>('all');
 
+  useEffect(() => {
+    const beansContexts = rootReport.beans.beans.map(it => it.contextId);
+    const beanDefinitionsContexts = Object.keys(rootReport.beans.beanDefinitions).map(it => +it);
+
+    const contexts = Array.from(new Set([...beansContexts, ...beanDefinitionsContexts]))
+      .map(it => ({
+          key: `${it}`,
+          value: rootReport.common.stringConstants[+it]
+        }
+      ));
+
+    setContexts(contexts);
+  }, [rootReport]);
+
   const stringConstants = rootReport.common.stringConstants;
 
   const handleFilterSubmit = () => {
-    let filtered = [...rootReport.calls.roots];
+    if (context === -1) {
+      setFilteredRoots([]);
+      return;
+    }
+    let filtered = [...rootReport.calls.contexts[context]];
 
     if (leftTimeBound) {
       const leftBound = new Date(leftTimeBound).getTime();
@@ -63,6 +85,33 @@ const CallsReportPage = () => {
     <Container fluid className="d-flex flex-column" style={{ minHeight: '100vh' }}>
       <Row className="mb-4 ms-2 me-2">
         <Form className="p-2 shadow bg-body-tertiary rounded">
+          <Row className={'mb-2'}>
+            <Form.Group controlId="formContext">
+              <Row>
+                <Col xxl={2} xs={12}>
+                  <Form.Label>Context</Form.Label>
+                </Col>
+                <Col xxl={10} xs={12}>
+                  <InputGroup>
+                    <SuggestiveInput
+                      mode={'strict'}
+                      onChange={it => setContext(it.key ? +it.key : -1)}
+                      suggestions={contexts}
+                      disabled={contexts.length === 0}
+                      required={true}
+                    />
+                    <Button
+                      variant={'primary'}
+                      onClick={handleFilterSubmit}
+                      disabled={isLoading || context === -1}
+                    >
+                      <MaterialSymbolsSearchRounded />
+                    </Button>
+                  </InputGroup>
+                </Col>
+              </Row>
+            </Form.Group>
+          </Row>
           <Row className={'mb-2'}>
             <Col xxl={6}>
               <Row>
@@ -226,7 +275,6 @@ const CallsReportPage = () => {
             tbody={{
               data: filteredRoots.map(it => {
                 return {
-                  contextId: it.contextId,
                   invocationId: it.invocationId,
                   qualifier: `${stringConstants[it.className]}#${stringConstants[it.methodName]}`,
                   callStartedAt: {
@@ -248,7 +296,7 @@ const CallsReportPage = () => {
               }),
               rowBehavior: {
                 handler: (row) => {
-                  navigate(`/calls/${row.contextId}/${row.invocationId}`);
+                  navigate(`/calls/${context}/${row.invocationId}`);
                 }
               }
             }}

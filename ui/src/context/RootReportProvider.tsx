@@ -11,7 +11,7 @@ const defaultReport: RootReport = {
     stringConstants: []
   },
   calls: {
-    roots: []
+    contexts: {}
   },
   connections: {
     contexts: {}

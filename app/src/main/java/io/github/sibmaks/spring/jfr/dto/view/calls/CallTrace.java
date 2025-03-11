@@ -1,5 +1,6 @@
 package io.github.sibmaks.spring.jfr.dto.view.calls;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 
 import java.util.List;
@@ -11,7 +12,9 @@ import java.util.Map;
  */
 @Builder
 public record CallTrace(
+        @JsonIgnore
         long contextId,
+        @JsonIgnore
         Long correlationId,
         long invocationId,
         int success,

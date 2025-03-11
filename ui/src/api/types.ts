@@ -22,8 +22,6 @@ export interface Bean {
 export type InvocationType = 'ASYNC' | 'JPA' | 'CONTROLLER' | 'SCHEDULED' | 'SERVICE' | 'COMPONENT'
 
 export interface CallTrace {
-  contextId: number;
-  correlationId: number | null;
   invocationId: number;
   success: 0 | 1;
   type: number;
@@ -42,7 +40,7 @@ export interface BeanReport {
 }
 
 export interface CallReport {
-  roots: CallTrace[];
+  contexts: Record<string, CallTrace[]>;
 }
 
 export interface RootReport {

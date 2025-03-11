@@ -1,4 +1,4 @@
-package io.github.sibmaks.spring.jfr.report;
+package io.github.sibmaks.spring.jfr.report.calls;
 
 import io.github.sibmaks.spring.jfr.dto.recorded.RecordedEvents;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallTrace;
@@ -24,14 +24,14 @@ public class CallsReportCreator {
     private final StringConstantRegistry stringConstantRegistry;
 
     public CallsReport create(RecordedEvents events) {
-        var roots = buildCallTraces(events);
+        var contextsTrace = buildCallTraces(events);
 
         return CallsReport.builder()
-                .roots(roots)
+                .contexts(contextsTrace)
                 .build();
     }
 
-    private List<CallTrace> buildCallTraces(RecordedEvents events) {
+    private Map<Long, List<CallTrace>> buildCallTraces(RecordedEvents events) {
         var callTracesByStartId = new HashMap<Long, CallTrace>();
 
         callTracesByStartId.putAll(readControllerEvents(events));
@@ -40,18 +40,19 @@ public class CallsReportCreator {
         callTracesByStartId.putAll(readServiceEvents(events));
         callTracesByStartId.putAll(readComponentEvents(events));
 
-        var roots = new ArrayList<CallTrace>();
+        var roots = new HashMap<Long, List<CallTrace>>();
 
         for (var trace : callTracesByStartId.values()) {
             var parentId = trace.correlationId();
+            var contextTraces = roots.computeIfAbsent(trace.contextId(), k -> new ArrayList<>());
             if (parentId == null) {
-                roots.add(trace);
+                contextTraces.add(trace);
             } else {
                 var parent = callTracesByStartId.get(parentId);
                 if (parent != null) {
                     parent.children().add(trace);
                 } else {
-                    roots.add(trace);
+                    contextTraces.add(trace);
                 }
             }
         }
@@ -253,6 +254,16 @@ public class CallsReportCreator {
             callTracesByStartId.put(invocationIdCode, trace);
         }
         return callTracesByStartId;
+    }
+
+    private void sortTracesRecursively(Map<Long, List<CallTrace>> contextTraces) {
+        for (var entry : contextTraces.entrySet()) {
+            var traces = entry.getValue();
+            traces.sort(Comparator.comparing(CallTrace::startTime));
+            for (var trace : traces) {
+                sortTracesRecursively(trace.children());
+            }
+        }
     }
 
     private void sortTracesRecursively(List<CallTrace> traces) {
