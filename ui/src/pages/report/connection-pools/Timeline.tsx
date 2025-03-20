@@ -164,7 +164,7 @@ const Timeline: React.FC<TimelineProps> = ({
           const closingThread = getClosingThread(connection);
 
           return (
-            <Accordion.Item eventKey={connection.id}>
+            <Accordion.Item key={connection.id} eventKey={connection.id}>
               <Accordion.Header>
                 <Container fluid={true}>
                   <Row>
@@ -182,7 +182,7 @@ const Timeline: React.FC<TimelineProps> = ({
                         const transactionIsolation = event.transactionIsolation ? transactionIsolations.get(event.transactionIsolation) : null;
 
                         return (
-                          <React.Fragment key={index}>
+                          <React.Fragment key={`timeline-${event.index}`}>
                             {index > 0 && (
                               <OverlayTrigger
                                 placement="top"
