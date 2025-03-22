@@ -35,9 +35,14 @@ export const RootReportProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   useEffect(() => {
     try {
-      // @ts-ignore
-      const raw = (window.rootReport ?? '') as string;
-      const decoded = Base64.Decoder.text2buffer(raw);
+      if (!('rootReport' in window)) {
+        return;
+      }
+      const windowRootReport = window.rootReport;
+      if (!windowRootReport) {
+        return;
+      }
+      const decoded = Base64.Decoder.text2buffer(windowRootReport as string);
       const decompressed = pako.ungzip(decoded);
       const rootReport = RootReport.decode(decompressed);
       setRootReport(rootReport);
