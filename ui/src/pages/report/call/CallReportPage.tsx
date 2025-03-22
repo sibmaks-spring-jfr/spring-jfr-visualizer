@@ -1,10 +1,14 @@
-import React, { useContext } from 'react';
-import { Accordion, Badge, Button, Col, Container, Row, Table } from 'react-bootstrap';
-import { CallTrace } from '../../../api/types';
+import React, { useContext, useEffect, useState } from 'react';
+import { Accordion, Alert, Badge, Button, Col, Container, Form, InputGroup, Row, Table } from 'react-bootstrap';
+import { CallTrace, Common, InvocationType } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CallReportContext } from '../../../context/CallReportProvider';
-import { Loader } from '../../../components/Loader';
+import { Loader } from '@sibdevtools/frontend-common';
+import { RootReportContext } from '../../../context/RootReportProvider';
+
+const MAX_CHILDREN_ON_PAGE = 25;
+
+type Status = 'all' | 'success' | 'fail'
 
 const getTraceStatusBadge = (trace: CallTrace) => {
   return (
@@ -14,16 +18,16 @@ const getTraceStatusBadge = (trace: CallTrace) => {
   );
 };
 
-const getTraceName = (trace: CallTrace) => {
+const getTraceName = (stringConstants: Record<number, string>, trace: CallTrace) => {
   return (
     <>
-      <strong>{trace.type}</strong>{' '} - {trace.className}#{trace.methodName}{' '}
+      <strong>{stringConstants[trace.type]}</strong>{' '} - {stringConstants[trace.className]}#{stringConstants[trace.methodName]}{' '}
       - {getTraceStatusBadge(trace)} - {trace.endTime - trace.startTime} ms
     </>
   );
 };
 
-function getCallTraceSystemDescription(trace: CallTrace) {
+function getCallTraceSystemDescription(stringConstants: Record<number, string>, trace: CallTrace) {
   return (
     <Row className={'mb-2'}>
       <Row>
@@ -31,7 +35,7 @@ function getCallTraceSystemDescription(trace: CallTrace) {
           <strong>Thread Name:</strong>
         </Col>
         <Col md={10}>
-          <code>{trace.threadName}</code>
+          <code>{stringConstants[trace.threadName]}</code>
         </Col>
       </Row>
       <Row>
@@ -39,7 +43,7 @@ function getCallTraceSystemDescription(trace: CallTrace) {
           <strong>Class Name:</strong>
         </Col>
         <Col md={10}>
-          <code>{trace.className}</code>
+          <code>{stringConstants[trace.className]}</code>
         </Col>
       </Row>
       <Row>
@@ -47,7 +51,7 @@ function getCallTraceSystemDescription(trace: CallTrace) {
           <strong>Method Name:</strong>
         </Col>
         <Col md={10}>
-          <code>{trace.methodName}</code>
+          <code>{stringConstants[trace.methodName]}</code>
         </Col>
       </Row>
       <Row>
@@ -86,14 +90,14 @@ function getCallTraceSystemDescription(trace: CallTrace) {
   );
 }
 
-function getCallTraceDetails(trace: CallTrace) {
+function getCallTraceDetails(stringConstants: Record<number, string>, trace: CallTrace) {
   if (Object.keys(trace.details).length <= 0) {
     return <></>;
   }
   return (
     <Row className={'mb-2'}>
       <Accordion className="mt-3">
-        <Accordion.Item eventKey={`${trace.contextId + trace.invocationId}-parameters`}>
+        <Accordion.Item eventKey={`${trace.invocationId}-parameters`}>
           <Accordion.Header><strong>Details</strong></Accordion.Header>
           <Accordion.Body>
             <Table bordered={true}>
@@ -106,8 +110,8 @@ function getCallTraceDetails(trace: CallTrace) {
               <tbody>
               {Object.entries(trace.details).map(([key, value]) => (
                 <tr key={key}>
-                  <td>{key}</td>
-                  <td>{value}</td>
+                  <td>{stringConstants[+key]}</td>
+                  <td>{stringConstants[value]}</td>
                 </tr>
               ))}
               </tbody>
@@ -119,22 +123,136 @@ function getCallTraceDetails(trace: CallTrace) {
   );
 }
 
-const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
+interface CallTraceTreeProps {
+  common: Common;
+  trace: CallTrace;
+}
+
+const CallTraceTree: React.FC<CallTraceTreeProps> = ({
+                                                       common,
+                                                       trace
+                                                     }) => {
+  const [minDurationFilter, setMinDurationFilter] = useState<number | null>(null);
+  const [maxDurationFilter, setMaxDurationFilter] = useState<number | null>(null);
+  const [statusFilter, setStatusFilter] = useState<Status>('all');
+  const [typeFilter, setTypeFilter] = useState<InvocationType>();
+
+  let children = [...(trace.children ?? [])];
+
+  if (minDurationFilter !== null) {
+    children = children.filter(it => (it.endTime - it.startTime) >= minDurationFilter);
+  }
+
+  if (maxDurationFilter !== null) {
+    children = children.filter(it => (it.endTime - it.startTime) <= maxDurationFilter);
+  }
+
+  if (statusFilter !== 'all') {
+    children = children.filter(it => (it.success ? 'success' : 'fail') === statusFilter);
+  }
+
+  if (typeFilter) {
+    children = children.filter(it => common.stringConstants[it.type] === typeFilter);
+  }
+
   return (
-    <Accordion.Item eventKey={trace.contextId + trace.invocationId}>
+    <Accordion.Item eventKey={`${trace.invocationId}`}>
       <Accordion.Header>
-        {getTraceName(trace)}
+        {getTraceName(common.stringConstants, trace)}
       </Accordion.Header>
       <Accordion.Body>
-        {getCallTraceSystemDescription(trace)}
-        {getCallTraceDetails(trace)}
+        {getCallTraceSystemDescription(common.stringConstants, trace)}
+        {getCallTraceDetails(common.stringConstants, trace)}
         {trace.children.length > 0 && (
           <>
-            <h4>Children</h4>
+            <Row className={'mb-2'}>
+              <Form className="p-2 shadow bg-body-tertiary rounded">
+                <Row className={'mb-2'}>
+                  <h4>Children</h4>
+                </Row>
+                <Row className={'mb-2'}>
+                  <Col xxl={6}>
+                    <Row>
+                      <Col xxl={2} md={12}>
+                        <Form.Label htmlFor={'minDurationInput'}>Duration</Form.Label>
+                      </Col>
+                      <Col xxl={10} md={12}>
+                        <InputGroup>
+                          <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
+                          <Form.Control
+                            id={'minDurationInput'}
+                            type="number"
+                            min={0}
+                            value={minDurationFilter === null ? '' : minDurationFilter}
+                            onChange={(e) => setMinDurationFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
+                          />
+                          <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                          <Form.Control
+                            id={'maxDurationInput'}
+                            type="number"
+                            min={minDurationFilter || 0}
+                            value={maxDurationFilter === null ? '' : maxDurationFilter}
+                            onChange={(e) => setMaxDurationFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
+                          />
+                          <InputGroup.Text>ms</InputGroup.Text>
+                        </InputGroup>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xxl={3}>
+                    <Row>
+                      <Col xxl={2} md={12}>
+                        <Form.Label htmlFor={'statusSelect'}>Status</Form.Label>
+                      </Col>
+                      <Col xxl={10} md={12}>
+                        <Form.Select
+                          id={'statusSelect'}
+                          value={statusFilter}
+                          onChange={(e) => setStatusFilter(e.target.value as Status)}
+                        >
+                          <option value="all">All</option>
+                          <option value="success">Success</option>
+                          <option value="fail">Fail</option>
+                        </Form.Select>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xxl={3}>
+                    <Row>
+                      <Col xxl={2} md={12}>
+                        <Form.Label htmlFor={'typeSelect'}>Type</Form.Label>
+                      </Col>
+                      <Col xxl={10} md={12}>
+                        <Form.Select
+                          id={'typeSelect'}
+                          value={typeFilter}
+                          onChange={(e) => setTypeFilter(e.target.value ? e.target.value as InvocationType : undefined)}
+                        >
+                          <option value={''}>All</option>
+                          <option value="ASYNC">ASYNC</option>
+                          <option value="JPA">JPA</option>
+                          <option value="CONTROLLER">CONTROLLER</option>
+                          <option value="SCHEDULED">SCHEDULED</option>
+                          <option value="SERVICE">SERVICE</option>
+                          <option value="COMPONENT">COMPONENT</option>
+                        </Form.Select>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Form>
+            </Row>
             <Row>
+              {children.length > MAX_CHILDREN_ON_PAGE && (
+                <Row className="p-4">
+                  <Alert variant={'warning'}>
+                    Shown only first {MAX_CHILDREN_ON_PAGE} traces on the page.
+                  </Alert>
+                </Row>
+              )}
               <Accordion>
-                {trace.children.map((child) => (
-                  <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
+                {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
+                  <CallTraceTree key={`${child.invocationId}`} common={common} trace={child} />
                 ))}
               </Accordion>
             </Row>
@@ -146,26 +264,49 @@ const CallTraceTree: React.FC<{ trace: CallTrace }> = ({ trace }) => {
 };
 
 const CallReportPage = () => {
-  const { context2id2Trace, isLoading } = useContext(CallReportContext);
+  const { rootReport, isLoading } = useContext(RootReportContext);
 
   const navigate = useNavigate();
   const { contextId, callId } = useParams();
+  const [callTrace, setCallTrace] = useState<CallTrace>();
+  const [minDurationFilter, setMinDurationFilter] = useState<number | null>(null);
+  const [maxDurationFilter, setMaxDurationFilter] = useState<number | null>(null);
+  const [statusFilter, setStatusFilter] = useState<Status>('all');
+  const [typeFilter, setTypeFilter] = useState<InvocationType>();
 
-  if (isLoading) {
-    return (
-      <Loader />
-    );
-  }
+  useEffect(() => {
+    if (!contextId || !callId) {
+      navigate('/calls');
+      return;
+    }
+    const contextIdNumber = +contextId;
+    const callIdNumber = +callId;
 
-  if (!context2id2Trace || !contextId || !callId) {
+    const callTrace = rootReport.calls.contexts[contextIdNumber].find(it => it.invocationId === callIdNumber);
+    setCallTrace(callTrace);
+  }, [rootReport]);
+
+  if (!contextId || !callId) {
     navigate('/calls');
     return;
   }
-  const id2Trace = context2id2Trace.get(contextId);
-  const callTrace = id2Trace?.get(callId);
-  if (!callTrace) {
-    navigate('/calls');
-    return;
+
+  let children = [...(callTrace?.children ?? [])];
+
+  if (minDurationFilter !== null) {
+    children = children.filter(it => (it.endTime - it.startTime) >= minDurationFilter);
+  }
+
+  if (maxDurationFilter !== null) {
+    children = children.filter(it => (it.endTime - it.startTime) <= maxDurationFilter);
+  }
+
+  if (statusFilter !== 'all') {
+    children = children.filter(it => (it.success ? 'success' : 'fail') === statusFilter);
+  }
+
+  if (typeFilter) {
+    children = children.filter(it => rootReport.common.stringConstants[it.type] === typeFilter);
   }
 
   return (
@@ -175,20 +316,105 @@ const CallReportPage = () => {
           <Button variant={'outline-secondary'} onClick={() => navigate('/calls')}>Back</Button> Call Trace Report
         </h3>
       </Row>
-      {getCallTraceSystemDescription(callTrace)}
-      {getCallTraceDetails(callTrace)}
-      {callTrace.children.length > 0 && (
-        <>
-          <h4>Children</h4>
-          <Row>
-            <Accordion>
-              {callTrace.children.map((child) => (
-                <CallTraceTree key={child.contextId + child.invocationId} trace={child} />
-              ))}
-            </Accordion>
-          </Row>
-        </>
-      )}
+      <Loader loading={isLoading}>
+        {callTrace && getCallTraceSystemDescription(rootReport.common.stringConstants, callTrace)}
+        {callTrace && getCallTraceDetails(rootReport.common.stringConstants, callTrace)}
+        {(callTrace?.children ?? []).length > 0 && (
+          <>
+            <Row className={'mb-2'}>
+              <Form className="p-2 shadow bg-body-tertiary rounded">
+                <Row className={'mb-2'}>
+                  <h4>Children</h4>
+                </Row>
+                <Row className={'mb-2'}>
+                  <Col xxl={6}>
+                    <Row>
+                      <Col xxl={2} md={12}>
+                        <Form.Label htmlFor={'minDurationInput'}>Duration</Form.Label>
+                      </Col>
+                      <Col xxl={10} md={12}>
+                        <InputGroup>
+                          <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
+                          <Form.Control
+                            id={'minDurationInput'}
+                            type="number"
+                            min={0}
+                            value={minDurationFilter === null ? '' : minDurationFilter}
+                            onChange={(e) => setMinDurationFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
+                          />
+                          <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                          <Form.Control
+                            id={'maxDurationInput'}
+                            type="number"
+                            min={minDurationFilter || 0}
+                            value={maxDurationFilter === null ? '' : maxDurationFilter}
+                            onChange={(e) => setMaxDurationFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
+                          />
+                          <InputGroup.Text>ms</InputGroup.Text>
+                        </InputGroup>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xxl={3}>
+                    <Row>
+                      <Col xxl={2} md={12}>
+                        <Form.Label htmlFor={'statusSelect'}>Status</Form.Label>
+                      </Col>
+                      <Col xxl={10} md={12}>
+                        <Form.Select
+                          id={'statusSelect'}
+                          value={statusFilter}
+                          onChange={(e) => setStatusFilter(e.target.value as Status)}
+                        >
+                          <option value="all">All</option>
+                          <option value="success">Success</option>
+                          <option value="fail">Fail</option>
+                        </Form.Select>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xxl={3}>
+                    <Row>
+                      <Col xxl={2} md={12}>
+                        <Form.Label htmlFor={'typeSelect'}>Type</Form.Label>
+                      </Col>
+                      <Col xxl={10} md={12}>
+                        <Form.Select
+                          id={'typeSelect'}
+                          value={typeFilter}
+                          onChange={(e) => setTypeFilter(e.target.value ? e.target.value as InvocationType : undefined)}
+                        >
+                          <option value={''}>All</option>
+                          <option value="ASYNC">ASYNC</option>
+                          <option value="JPA">JPA</option>
+                          <option value="CONTROLLER">CONTROLLER</option>
+                          <option value="SCHEDULED">SCHEDULED</option>
+                          <option value="SERVICE">SERVICE</option>
+                          <option value="COMPONENT">COMPONENT</option>
+                        </Form.Select>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Form>
+            </Row>
+            <Row>
+              <Accordion>
+                {children.length > MAX_CHILDREN_ON_PAGE && (
+                  <Row className="p-4">
+                    <Alert variant={'warning'}>
+                      Shown only first {MAX_CHILDREN_ON_PAGE} traces on the page.
+                    </Alert>
+                  </Row>
+                )}
+                {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
+                  <CallTraceTree key={`${child.invocationId}`} common={rootReport.common} trace={child} />
+                ))}
+              </Accordion>
+            </Row>
+          </>
+        )}
+      </Loader>
     </Container>
   );
 };

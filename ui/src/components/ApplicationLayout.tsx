@@ -1,4 +1,4 @@
-import { Link, Outlet } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import React from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
@@ -7,14 +7,29 @@ const ApplicationLayout = () => {
     <Container fluid className="p-0">
       <Nav variant="tabs" defaultActiveKey="/beans" className="mb-3" fill>
         <Nav.Item>
-          <Nav.Link as={Link} to={'/beans'} eventKey="beans-report">
+          <NavLink
+            to="/beans"
+            end
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
             Beans Report
-          </Nav.Link>
+          </NavLink>
         </Nav.Item>
         <Nav.Item>
-          <Nav.Link as={Link} to={'/calls'} eventKey="calls-report">
+          <NavLink
+            to="/calls"
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
             Calls Report
-          </Nav.Link>
+          </NavLink>
+        </Nav.Item>
+        <Nav.Item>
+          <NavLink
+            to="/connection-pools"
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            Connection Pools Report
+          </NavLink>
         </Nav.Item>
       </Nav>
       <main className="flex-nowrap">

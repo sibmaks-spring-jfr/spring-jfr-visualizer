@@ -1,8 +1,7 @@
 package io.github.sibmaks.spring.jfr.dto.view.calls;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
-import lombok.Getter;
 
 import java.util.List;
 import java.util.Map;
@@ -11,20 +10,21 @@ import java.util.Map;
  * @author sibmaks
  * @since 0.0.2
  */
-@Getter
 @Builder
-@AllArgsConstructor
-public class CallTrace {
-    private final String contextId;
-    private final String correlationId;
-    private final String invocationId;
-    private final boolean success;
-    private final InvocationType type;
-    private final long startTime;
-    private final long endTime;
-    private final String threadName;
-    private final String className;
-    private final String methodName;
-    private final Map<String, String> details;
-    private final List<CallTrace> children;
+public record CallTrace(
+        @JsonIgnore
+        long contextId,
+        @JsonIgnore
+        Long correlationId,
+        long invocationId,
+        int success,
+        long type,
+        long startTime,
+        long endTime,
+        long threadName,
+        long className,
+        long methodName,
+        Map<Long, Long> details,
+        List<CallTrace> children
+) {
 }

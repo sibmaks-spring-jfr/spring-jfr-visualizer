@@ -11,6 +11,7 @@ import io.github.sibmaks.spring.jfr.event.reading.api.jpa.JPAMethodCalledRecorde
 import io.github.sibmaks.spring.jfr.event.reading.api.scheduled.ScheduledMethodCalledRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.service.ServiceMethodCalledRecordedEvent;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Instant;
 import java.util.*;
@@ -19,6 +20,7 @@ import java.util.*;
  * @author sibmaks
  * @since 0.0.2
  */
+@Slf4j
 @Getter
 public class RecordedEvents {
     private final Queue<BeanDefinitionRegisteredRecordedEvent> beanDefinitionRegistered;
@@ -50,7 +52,7 @@ public class RecordedEvents {
         this.failedInvocations = new HashMap<>();
     }
 
-    public void add(RecordedData event) {
+    public void add(Object event) {
         if (event instanceof BeanDefinitionRegisteredRecordedEvent recordedEvent) {
             beanDefinitionRegistered.add(recordedEvent);
         } else if (event instanceof MergedBeanDefinitionRegisteredRecordedEvent recordedEvent) {
@@ -77,7 +79,8 @@ public class RecordedEvents {
         } else if (event instanceof InvocationFailedRecordedEvent recordedEvent) {
             failedInvocations.put(recordedEvent.getInvocationId(), recordedEvent);
         } else {
-            throw new IllegalArgumentException("Unknown event type: " + event.getClass().getName());
+            log.warn("Unknown event type: {}", event);
+            return;
         }
         count++;
     }

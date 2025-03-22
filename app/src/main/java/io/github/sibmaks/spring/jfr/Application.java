@@ -1,9 +1,13 @@
 package io.github.sibmaks.spring.jfr;
 
+import io.github.sibmaks.spring.jfr.dto.view.common.CommonDto;
+import io.github.sibmaks.spring.jfr.dto.view.common.RootReport;
 import io.github.sibmaks.spring.jfr.report.BeansReportCreator;
-import io.github.sibmaks.spring.jfr.report.CallsReportCreator;
+import io.github.sibmaks.spring.jfr.report.calls.CallsReportCreator;
+import io.github.sibmaks.spring.jfr.report.connections.ConnectionsReportCreator;
 import io.github.sibmaks.spring.jfr.service.EventReader;
 import io.github.sibmaks.spring.jfr.service.ReportService;
+import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -37,8 +41,24 @@ public class Application {
             var callsReportCreator = context.getBean(CallsReportCreator.class);
             var callsReport = callsReportCreator.create(events);
 
+            var connectionsReportCreator = context.getBean(ConnectionsReportCreator.class);
+            var connectionsReport = connectionsReportCreator.get();
+
+            var stringConstantRegistry = context.getBean(StringConstantRegistry.class);
+
+            var common = CommonDto.builder()
+                    .stringConstants(stringConstantRegistry.getConstants())
+                    .build();
+
+            var rootReport = RootReport.builder()
+                    .common(common)
+                    .beans(beansReport)
+                    .calls(callsReport)
+                    .connections(connectionsReport)
+                    .build();
+
             var reportService = context.getBean(ReportService.class);
-            reportService.generateReport(beansReport, callsReport);
+            reportService.generateReport(rootReport);
         }
     }
 }

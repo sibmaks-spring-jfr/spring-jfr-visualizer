@@ -37,10 +37,3 @@
   max-width: 1024px;
   width: 1024px;
 }
-
-.content-scroll {
-  white-space: nowrap;
-  overflow-x: auto;
-  max-width: 100%;
-  display: block;
-}

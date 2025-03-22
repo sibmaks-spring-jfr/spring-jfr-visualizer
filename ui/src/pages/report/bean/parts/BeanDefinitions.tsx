@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import CustomTable, { CustomTableRow } from '../../../../components/CustomTable';
-import { Button, Card, Col, Container, FormLabel, FormSelect, InputGroup, Row } from 'react-bootstrap';
-import { BeanDefinition } from '../../../../api/types';
+import React from 'react';
+import { Card, Col, Row } from 'react-bootstrap';
+import { BeanDefinition, Common } from '../../../../api/types';
+import { CustomTable } from '@sibdevtools/frontend-common';
+import { CustomTableParts } from '@sibdevtools/frontend-common/dist/components/custom-table/types';
 
 interface BeanDefinitionDetailsProps {
-  row: CustomTableRow;
+  row: CustomTableParts.Row;
 }
 
 const BeanDefinitionDetails: React.FC<BeanDefinitionDetailsProps> = ({ row }) => {
@@ -27,20 +28,14 @@ const BeanDefinitionDetails: React.FC<BeanDefinitionDetailsProps> = ({ row }) =>
 };
 
 export interface BeanDefinitionsPageProps {
-  contextBeanDefinitions: Record<string, BeanDefinition[]>;
+  common: Common;
+  beanDefinitions: BeanDefinition[];
 }
 
 const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
-                                                               contextBeanDefinitions
+                                                               common,
+                                                               beanDefinitions
                                                              }) => {
-  const [contextId, setContextId] = useState<string>('');
-  const [filteredBeanDefinitions, setFilteredBeanDefinitions] = useState<BeanDefinition[]>([]);
-  const contextIds = Object.keys(contextBeanDefinitions);
-
-  const handleBuild = () => {
-    setFilteredBeanDefinitions(contextBeanDefinitions[contextId] || []);
-  };
-
   return (
     <Card>
       <Card.Header
@@ -51,97 +46,83 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
         role={'button'}>
         <Card.Title className="h4">Bean Definitions</Card.Title>
       </Card.Header>
-      <div id="beanDefinitionsCollapse" className="table-responsive collapse">
-        <Row className="align-items-center m-2">
-          <Col md={'auto'}>
-            <FormLabel htmlFor={'beanName'}>Context</FormLabel>
-          </Col>
-          <Col md={'auto'}>
-            <InputGroup>
-              <FormSelect
-                id={'beanDefinitionContextId'}
-                value={contextId}
-                onChange={e => setContextId(e.target.value)}
-              >
-                <option value={''}>*</option>
-                {
-                  contextIds
-                    .map(it => <option key={it} value={it}>{it}</option>)
-                }
-              </FormSelect>
-              <Button variant="outline-secondary" onClick={handleBuild}>
-                Build Table
-              </Button>
-            </InputGroup>
-          </Col>
-        </Row>
+      <div id="beanDefinitionsCollapse" className="collapse">
         <Row className={'m-2 h-100'}>
           <CustomTable
-            className={'card-body overflow-scroll table table-striped table-hover'}
-            thead={{ className: 'table-dark' }}
-            columns={[
-              {
-                key: 'beanClassName',
-                label: 'Class Name'
-              },
-              {
-                key: 'beanName',
-                label: 'Bean Name'
-              },
-              {
-                key: 'dependenciesCount',
-                label: 'Dependencies Count'
-              },
-              {
-                key: 'dependencies',
-                label: 'Dependencies'
-              },
-            ]}
-            data={filteredBeanDefinitions.map(it => {
-              return {
-                scope: it.scope,
-                primary: it.primary === null ? 'Unknown' : (it.primary === 'true' ? 'Yes' : 'No'),
-                generated: it.generated ? 'Yes' : 'No',
+            table={{
+              className: 'card-body',
+              striped: true,
+              hover: true,
+              responsive: true
+            }}
+            thead={{
+              className: 'table-dark',
+              columns: {
                 beanClassName: {
-                  representation: <div className="content-scroll">{it.beanClassName}</div>,
-                  value: it.beanClassName,
-                  className: 'td-512'
+                  label: 'Class Name',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center text-break'
                 },
                 beanName: {
-                  representation: <div className="content-scroll">{it.beanName}</div>,
-                  value: it.beanName,
-                  className: 'td-512'
+                  label: 'Bean Name',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center text-break'
                 },
                 dependenciesCount: {
-                  representation: <code>{it.dependencies?.length ?? 0}</code>,
-                  value: it.dependencies?.length ?? 0,
-                  className: 'td-32 text-center'
+                  label: 'Dependencies Count',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center text-nowrap'
                 },
                 dependencies: {
-                  representation: <ul className="content-scroll">
-                    {it.dependencies?.map(it => {
-                      return (<li key={it}>{it}</li>);
-                    })}
-                  </ul>,
-                  value: it.dependencies?.join(', '),
-                  className: 'td-1024'
+                  label: 'Dependencies',
+                  sortable: true,
+                  filterable: true,
+                  className: 'text-center text-break'
                 },
-              };
-            })}
-            filterableColumns={[
-              'beanClassName',
-              'beanName',
-              'dependenciesCount',
-              'dependencies',
-            ]}
-            sortableColumns={[
-              'beanClassName',
-              'beanName',
-              'dependenciesCount',
-              'dependencies',
-            ]}
-            rowBehavior={{
-              expandableContent: (row) => <BeanDefinitionDetails row={row} />
+              },
+              defaultSort: {
+                column: 'beanName',
+                direction: 'asc'
+              }
+            }}
+            tbody={{
+              data: beanDefinitions.map(it => {
+                return {
+                  scope: it.scope === -1 ? '' : common.stringConstants[it.scope],
+                  primary: it.primary === -1 ? 'Unknown' : (common.stringConstants[it.primary] === 'true' ? 'Yes' : 'No'),
+                  generated: it.generated ? 'Yes' : 'No',
+                  beanClassName: {
+                    representation: <div className="text-break">{it.className === -1 ? '' : common.stringConstants[it.className]}</div>,
+                    value: it.className ? common.stringConstants[it.className] : '',
+                    className: 'td-512'
+                  },
+                  beanName: {
+                    representation: <div className="text-break">{common.stringConstants[it.name]}</div>,
+                    value: common.stringConstants[it.name],
+                    className: 'td-512'
+                  },
+                  dependenciesCount: {
+                    representation: <code>{it.dependencies?.length ?? 0}</code>,
+                    value: it.dependencies?.length ?? 0,
+                    className: 'td-32 text-center'
+                  },
+                  dependencies: {
+                    representation: <ul className="text-break">
+                      {it.dependencies?.map(it => {
+                        return (<li key={it}>{common.stringConstants[it]}</li>);
+                      })}
+                    </ul>,
+                    value: it.dependencies?.map(it => common.stringConstants[it])?.join(', '),
+                    className: 'td-1024'
+                  },
+                };
+              }),
+              rowBehavior: {
+                expandableContent: (row) => <BeanDefinitionDetails row={row} />
+              }
             }}
           />
         </Row>
