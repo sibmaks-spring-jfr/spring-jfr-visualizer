@@ -90,7 +90,8 @@ const BeansStatistic: React.FC<BeansPageProps> = ({
                     className: 'td-64 text-center text-break'
                   },
                 };
-              })
+              }),
+              pageSize: 25
             }}
           />
         </Row>

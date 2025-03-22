@@ -96,7 +96,8 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
                   primary: it.primary === -1 ? 'Unknown' : (common.stringConstants[it.primary] === 'true' ? 'Yes' : 'No'),
                   generated: it.generated ? 'Yes' : 'No',
                   beanClassName: {
-                    representation: <div className="text-break">{it.className === -1 ? '' : common.stringConstants[it.className]}</div>,
+                    representation: <div
+                      className="text-break">{it.className === -1 ? '' : common.stringConstants[it.className]}</div>,
                     value: it.className ? common.stringConstants[it.className] : '',
                     className: 'td-512'
                   },
@@ -123,7 +124,8 @@ const BeanDefinitions: React.FC<BeanDefinitionsPageProps> = ({
               }),
               rowBehavior: {
                 expandableContent: (row) => <BeanDefinitionDetails row={row} />
-              }
+              },
+              pageSize: 25
             }}
           />
         </Row>
