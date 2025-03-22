@@ -20,8 +20,4 @@ public final class Connection {
     private String id;
     private long duration;
     private boolean hasExceptions;
-
-    public void addEvent(ConnectionEvent event) {
-        this.events.add(event);
-    }
 }
