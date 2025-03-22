@@ -9,6 +9,8 @@ slf4j = "2.0.7"
 spring-framework = "2.7.18"
 spring-dependency-managment = "1.1.6"
 
+protobuf = "4.30.1"
+
 junit-jupiter = "5.10.3"
 
 [libraries]
@@ -16,7 +18,10 @@ junit-jupiter = "5.10.3"
 spring-jfr-api-common = { module = "io.github.sibmaks.spring-jfr.api:common", version.ref = "spring-jfr-api" }
 spring-jfr-api-reading = { module = "io.github.sibmaks.spring-jfr.api:reading", version.ref = "spring-jfr-api" }
 spring-jfr-api-recording = { module = "io.github.sibmaks.spring-jfr.api:recording", version.ref = "spring-jfr-api" }
+
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+protobuf = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf" }
 
 # jackson
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }

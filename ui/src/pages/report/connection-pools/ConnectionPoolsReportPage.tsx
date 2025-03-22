@@ -2,10 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
 import Timeline from './Timeline';
 import { Loader, SuggestiveInput } from '@sibdevtools/frontend-common';
-import { Connection } from '../../../api/types';
 import { RootReportContext } from '../../../context/RootReportProvider';
 import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
 import { MaterialSymbolsSearchRounded } from '../../../icons';
+import { Connection } from '../../../api/protobuf/connections';
 
 const MAX_CONNECTIONS_ON_PAGE = 25;
 
@@ -25,7 +25,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
     const contexts = Object.keys(rootReport?.connections?.contexts ?? {})
       .map(it => ({
           key: it,
-          value: rootReport.common.stringConstants[+it]
+          value: rootReport.common?.stringConstants[+it] ?? 'Unknown',
         }
       ));
 
@@ -37,10 +37,10 @@ const ConnectionPoolsReportPage: React.FC = () => {
       return;
     }
 
-    const pools = Object.keys(rootReport?.connections?.contexts[context] ?? {})
+    const pools = Object.keys(rootReport?.connections?.contexts[context].connections ?? {})
       .map(it => ({
           key: it,
-          value: rootReport.common.stringConstants[+it]
+          value: rootReport.common?.stringConstants[+it] ?? 'Unknown',
         }
       ));
 
@@ -52,7 +52,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
       return;
     }
 
-    let filtered = [...rootReport.connections.contexts[context][pool]];
+    let filtered = [...(rootReport.connections?.contexts[context].connections[pool].connections ?? [])];
 
     if (minDuration !== null) {
       filtered = filtered.filter(it => it.duration >= minDuration);
@@ -192,7 +192,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
                 There are no connections.
               </Alert>
             </Row>
-          ) : <Timeline common={rootReport.common} connections={connections} />
+          ) : <Timeline common={rootReport.common ?? { stringConstants: [] }} connections={connections} />
           }
         </Loader>
       </Row>

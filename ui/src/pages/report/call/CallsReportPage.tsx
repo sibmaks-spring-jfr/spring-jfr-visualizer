@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Alert, Badge, Button, Col, Container, Form, InputGroup, Row } from 'react-bootstrap';
-import { CallTrace } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate } from 'react-router-dom';
 import { CustomTable, Loader, SuggestiveInput } from '@sibdevtools/frontend-common';
 import { RootReportContext } from '../../../context/RootReportProvider';
 import { MaterialSymbolsSearchRounded } from '../../../icons';
 import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
+import { CallTrace } from '../../../api/protobuf/calls';
 
 const MAX_TRACE_ON_PAGE = 25;
 
@@ -33,27 +33,27 @@ const CallsReportPage = () => {
   const [statusFilter, setStatusFilter] = useState<'all' | 'success' | 'fail'>('all');
 
   useEffect(() => {
-    const beansContexts = rootReport.beans.beans.map(it => it.contextId);
-    const beanDefinitionsContexts = Object.keys(rootReport.beans.beanDefinitions).map(it => +it);
+    const beansContexts = rootReport.beans?.beans.map(it => it.contextId) ?? [];
+    const beanDefinitionsContexts = Object.keys(rootReport.beans?.beanDefinitions ?? {}).map(it => +it);
 
     const contexts = Array.from(new Set([...beansContexts, ...beanDefinitionsContexts]))
       .map(it => ({
           key: `${it}`,
-          value: rootReport.common.stringConstants[+it]
+          value: rootReport.common?.stringConstants[+it] ?? 'Unknown',
         }
       ));
 
     setContexts(contexts);
   }, [rootReport]);
 
-  const stringConstants = rootReport.common.stringConstants;
+  const stringConstants = rootReport.common?.stringConstants ?? [];
 
   const handleFilterSubmit = () => {
     if (context === -1) {
       setFilteredRoots([]);
       return;
     }
-    let filtered = [...rootReport.calls.contexts[context]];
+    let filtered = [...(rootReport.calls?.contexts[context]?.callTraces ?? [])];
 
     if (leftTimeBound) {
       const leftBound = new Date(leftTimeBound).getTime();

@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package io.github.sibmaks.spring.jfr.dto.protobuf.calls;
+
+option java_multiple_files = true;
+option java_package = "io.github.sibmaks.spring.jfr.dto.protobuf.calls";
+
+message CallTrace {
+  int64 invocation_id = 1;
+  int32 success = 2;
+  int64 type = 3;
+  int64 start_time = 4;
+  int64 end_time = 5;
+  int64 thread_name = 6;
+  int64 class_name = 7;
+  int64 method_name = 8;
+  map<int64, int64> details = 9;
+  repeated CallTrace children = 10;
+}
+
+message CallTraceList {
+  repeated CallTrace call_traces = 1;
+}
+
+message CallsReport {
+  map<int64, CallTraceList> contexts = 1;
+}

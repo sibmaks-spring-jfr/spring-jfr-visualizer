@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package io.github.sibmaks.spring.jfr.dto.protobuf.common;
+
+option java_multiple_files = true;
+option java_package = "io.github.sibmaks.spring.jfr.dto.protobuf.common";
+
+import "beans.proto";
+import "calls.proto";
+import "connections.proto";
+
+message CommonDto {
+  repeated string string_constants = 1;
+}
+
+message RootReport {
+  CommonDto common = 1;
+  io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeansReport beans = 2;
+  io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallsReport calls = 3;
+  io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionsReport connections = 4;
+}

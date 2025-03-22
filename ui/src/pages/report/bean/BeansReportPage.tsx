@@ -6,30 +6,31 @@ import GraphPage from '../../GraphPage';
 import BeanDefinitions from './parts/BeanDefinitions';
 import { RootReportContext } from '../../../context/RootReportProvider';
 import { Loader, SuggestiveInput } from '@sibdevtools/frontend-common';
-import { Bean, BeanDefinition, Common } from '../../../api/types';
 import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
 import { MaterialSymbolsSearchRounded } from '../../../icons';
+import { BeanDefinition, BeanInitialized } from '../../../api/protobuf/beans';
+import { CommonDto } from '../../../api/protobuf/common';
 
 const BeansReportPage = () => {
   const { rootReport, isLoading } = useContext(RootReportContext);
 
-  const [common, setCommon] = useState<Common>({
+  const [common, setCommon] = useState<CommonDto>({
     stringConstants: []
   });
-  const [beans, setBeans] = useState<Bean[]>([]);
+  const [beans, setBeans] = useState<BeanInitialized[]>([]);
   const [beanDefinitions, setBeanDefinitions] = useState<BeanDefinition[]>([]);
 
   const [context, setContext] = useState<number>(-1);
   const [contexts, setContexts] = useState<SuggestiveItem[]>([]);
 
   useEffect(() => {
-    const beansContexts = rootReport.beans.beans.map(it => it.contextId);
-    const beanDefinitionsContexts = Object.keys(rootReport.beans.beanDefinitions).map(it => +it);
+    const beansContexts = rootReport.beans?.beans.map(it => it.contextId) ?? [];
+    const beanDefinitionsContexts = Object.keys(rootReport.beans?.beanDefinitions ?? {}).map(it => +it);
 
     const contexts = Array.from(new Set([...beansContexts, ...beanDefinitionsContexts]))
       .map(it => ({
           key: `${it}`,
-          value: rootReport.common.stringConstants[+it]
+          value: rootReport.common?.stringConstants[+it] ?? ''
         }
       ));
 
@@ -45,10 +46,12 @@ const BeansReportPage = () => {
       setBeanDefinitions([]);
       return;
     }
-    const beans = rootReport.beans.beans.filter(it => it.contextId === context);
-    const beanDefinitions = rootReport.beans.beanDefinitions[context] ?? [];
+    const beans = rootReport.beans?.beans.filter(it => it.contextId === context) ?? [];
+    const beanDefinitions = rootReport.beans?.beanDefinitions[context]?.beanDefinitions ?? [];
 
-    setCommon(rootReport.common);
+    setCommon(rootReport.common ?? {
+      stringConstants: []
+    });
     setBeans(beans);
     setBeanDefinitions(beanDefinitions);
   };

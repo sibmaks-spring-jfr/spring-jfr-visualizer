@@ -7,11 +7,12 @@ import {
   MaterialSymbolsLightFiberNewOutlineRounded,
   MaterialSymbolsLightSettingsBackupRestoreRounded
 } from '../../../icons';
-import { Common, Connection, ConnectionEvent, Exception } from '../../../api/types';
+import { Connection, ConnectionEvent, ConnectionException } from '../../../api/protobuf/connections';
+import { CommonDto } from '../../../api/protobuf/common';
 
 
 export interface TimelineProps {
-  common: Common;
+  common: CommonDto;
   connections: Connection[];
 }
 
@@ -39,7 +40,7 @@ const Timeline: React.FC<TimelineProps> = ({
       <Tooltip id={`event-${id}-tooltip`}>{tooltip}{isolation ? ` - ${isolation}` : ''}</Tooltip>
     );
   };
-  const getExceptionTooltip = (id: string, exception: Exception) => {
+  const getExceptionTooltip = (id: string, exception: ConnectionException) => {
     return (
       <Tooltip id={`event-${id}-exception-tooltip`}>{exception.type}: {exception.message}</Tooltip>
     );

@@ -1,10 +1,11 @@
 import React from 'react';
-import { Bean, Common } from '../../../../api/types';
 import GanttChartPage, { Span } from '../../../GanttChartPage';
+import { CommonDto } from '../../../../api/protobuf/common';
+import { BeanInitialized } from '../../../../api/protobuf/beans';
 
 interface BeanInitializationGantChartProps {
-  common: Common;
-  beans: Bean[];
+  common: CommonDto;
+  beans: BeanInitialized[];
 }
 
 

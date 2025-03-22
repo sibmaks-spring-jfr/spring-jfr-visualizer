@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package io.github.sibmaks.spring.jfr.dto.protobuf.beans;
+
+option java_multiple_files = true;
+option java_package = "io.github.sibmaks.spring.jfr.dto.protobuf.beans";
+
+message BeanDefinition {
+  int64 scope = 1;
+  int64 class_name = 2;
+  int64 name = 3;
+  int64 primary = 4;
+  repeated int64 dependencies = 5;
+  int64 stereotype = 6;
+  int32 generated = 7;
+}
+
+message BeanInitialized {
+  int64 context_id = 1;
+  int64 bean_name = 2;
+  optional int64 pre_initialized_at = 3;
+  optional int64 post_initialized_at = 4;
+  double duration = 5;
+}
+
+message BeanDefinitionList {
+  repeated BeanDefinition bean_definitions = 1;
+}
+
+message BeansReport {
+  map<int64, BeanDefinitionList> bean_definitions = 1;
+  repeated BeanInitialized beans = 2;
+}

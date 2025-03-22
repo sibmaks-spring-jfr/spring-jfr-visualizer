@@ -1,4 +1,4 @@
-export const toISOString = (millis: number | null): string => {
+export const toISOString = (millis: number | null | undefined): string => {
   if (!millis) {
     return 'Unknown';
   }

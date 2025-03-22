@@ -33,6 +33,8 @@ dependencies {
     implementation(libs.spring.jfr.api.reading)
     implementation(libs.spring.jfr.api.recording)
 
+    implementation(libs.protobuf)
+
     implementation("org.springframework:spring-context")
     implementation("org.springframework:spring-core")
 

@@ -2,12 +2,14 @@ import React, { useState, useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import { Card, Button, Row, Col, FormLabel, InputGroup } from 'react-bootstrap';
 import { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
-import { BeanDefinition, Common, Stereotype } from '../api/types';
 import { SuggestiveInput } from '@sibdevtools/frontend-common';
 import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
+import { BeanDefinition } from '../api/protobuf/beans';
+import { Stereotype } from '../api/types';
+import { CommonDto } from '../api/protobuf/common';
 
 interface GraphProps {
-  common: Common;
+  common: CommonDto;
   beanDefinitions: BeanDefinition[];
 }
 

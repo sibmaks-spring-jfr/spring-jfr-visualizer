@@ -1,12 +1,13 @@
 import React from 'react';
 import { Card, Row } from 'react-bootstrap';
-import { Bean, Common } from '../../../../api/types';
 import { toISOString } from '../../../../utils/datetime';
 import { CustomTable } from '@sibdevtools/frontend-common';
+import { CommonDto } from '../../../../api/protobuf/common';
+import { BeanInitialized } from '../../../../api/protobuf/beans';
 
 export interface BeansPageProps {
-  common: Common;
-  beans: Bean[];
+  common: CommonDto;
+  beans: BeanInitialized[];
 }
 
 const BeansStatistic: React.FC<BeansPageProps> = ({

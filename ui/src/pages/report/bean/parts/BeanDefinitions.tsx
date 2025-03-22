@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { BeanDefinition, Common } from '../../../../api/types';
 import { CustomTable } from '@sibdevtools/frontend-common';
 import { CustomTableParts } from '@sibdevtools/frontend-common/dist/components/custom-table/types';
+import { CommonDto } from '../../../../api/protobuf/common';
+import { BeanDefinition } from '../../../../api/protobuf/beans';
 
 interface BeanDefinitionDetailsProps {
   row: CustomTableParts.Row;
@@ -28,7 +29,7 @@ const BeanDefinitionDetails: React.FC<BeanDefinitionDetailsProps> = ({ row }) =>
 };
 
 export interface BeanDefinitionsPageProps {
-  common: Common;
+  common: CommonDto;
   beanDefinitions: BeanDefinition[];
 }
 

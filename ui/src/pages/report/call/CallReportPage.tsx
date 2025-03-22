@@ -1,10 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Accordion, Alert, Badge, Button, Col, Container, Form, InputGroup, Row, Table } from 'react-bootstrap';
-import { CallTrace, Common, InvocationType } from '../../../api/types';
+import { InvocationType } from '../../../api/types';
 import { toISOString } from '../../../utils/datetime';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '@sibdevtools/frontend-common';
 import { RootReportContext } from '../../../context/RootReportProvider';
+import { CommonDto } from '../../../api/protobuf/common';
+import { CallTrace } from '../../../api/protobuf/calls';
 
 const MAX_CHILDREN_ON_PAGE = 25;
 
@@ -124,7 +126,7 @@ function getCallTraceDetails(stringConstants: Record<number, string>, trace: Cal
 }
 
 interface CallTraceTreeProps {
-  common: Common;
+  common: CommonDto;
   trace: CallTrace;
 }
 
@@ -282,7 +284,7 @@ const CallReportPage = () => {
     const contextIdNumber = +contextId;
     const callIdNumber = +callId;
 
-    const callTrace = rootReport.calls.contexts[contextIdNumber].find(it => it.invocationId === callIdNumber);
+    const callTrace = rootReport.calls?.contexts[contextIdNumber].callTraces.find(it => it.invocationId === callIdNumber);
     setCallTrace(callTrace);
   }, [rootReport]);
 
@@ -306,7 +308,7 @@ const CallReportPage = () => {
   }
 
   if (typeFilter) {
-    children = children.filter(it => rootReport.common.stringConstants[it.type] === typeFilter);
+    children = children.filter(it => rootReport.common?.stringConstants[it.type] === typeFilter);
   }
 
   return (
@@ -317,8 +319,8 @@ const CallReportPage = () => {
         </h3>
       </Row>
       <Loader loading={isLoading}>
-        {callTrace && getCallTraceSystemDescription(rootReport.common.stringConstants, callTrace)}
-        {callTrace && getCallTraceDetails(rootReport.common.stringConstants, callTrace)}
+        {callTrace && getCallTraceSystemDescription(rootReport.common?.stringConstants ?? [], callTrace)}
+        {callTrace && getCallTraceDetails(rootReport.common?.stringConstants ?? [], callTrace)}
         {(callTrace?.children ?? []).length > 0 && (
           <>
             <Row className={'mb-2'}>
@@ -408,7 +410,9 @@ const CallReportPage = () => {
                   </Row>
                 )}
                 {children.slice(0, MAX_CHILDREN_ON_PAGE).map((child) => (
-                  <CallTraceTree key={`${child.invocationId}`} common={rootReport.common} trace={child} />
+                  <CallTraceTree key={`${child.invocationId}`}
+                                 common={rootReport.common ?? { stringConstants: [] }}
+                                 trace={child} />
                 ))}
               </Accordion>
             </Row>
