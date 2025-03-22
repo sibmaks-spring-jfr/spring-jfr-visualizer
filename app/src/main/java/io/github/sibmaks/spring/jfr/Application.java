@@ -39,7 +39,7 @@ public class Application {
             var beansReport = beansReportCreator.create(events);
 
             var callsReportCreator = context.getBean(CallsReportCreator.class);
-            var callsReport = callsReportCreator.create(events);
+            var callsReport = callsReportCreator.create();
 
             var connectionsReportCreator = context.getBean(ConnectionsReportCreator.class);
             var connectionsReport = connectionsReportCreator.get();

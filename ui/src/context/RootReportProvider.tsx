@@ -38,7 +38,6 @@ export const RootReportProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       const rootReport = window.rootReport ?? '';
       const decodedBase64 = Base64.Decoder.text2array(rootReport);
       const decoded = RootReport.decode(decodedBase64);
-      console.log(decoded);
       setRootReport(decoded);
     } catch (error) {
       console.error('Failed to load:', error);
