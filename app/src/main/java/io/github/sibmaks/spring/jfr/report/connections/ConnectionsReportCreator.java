@@ -29,7 +29,7 @@ import static io.github.sibmaks.spring.jfr.utils.JavaFlightRecorderUtils.getThre
 @Slf4j
 @Component
 public class ConnectionsReportCreator {
-    private final Map<Long, ContextDto> contexts;
+    private final Map<Integer, ContextDto> contexts;
     private final Map<String, ConnectionDto> connections;
     private final StringConstantRegistry stringConstantRegistry;
 
@@ -166,7 +166,7 @@ public class ConnectionsReportCreator {
     }
 
     public ConnectionsReport get() {
-        var contextMap = new HashMap<Long, Map<Long, List<Connection>>>();
+        var contextMap = new HashMap<Integer, Map<Integer, List<Connection>>>();
 
         for (var entry : this.contexts.entrySet()) {
             var key = entry.getKey();

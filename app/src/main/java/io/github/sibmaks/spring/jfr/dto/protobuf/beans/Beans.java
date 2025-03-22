@@ -61,11 +61,11 @@ public final class Beans {
     java.lang.String[] descriptorData = {
       "\n\013beans.proto\022/io.github.sibmaks.spring." +
       "jfr.dto.protobuf.beans\"\217\001\n\016BeanDefinitio" +
-      "n\022\r\n\005scope\030\001 \001(\003\022\022\n\nclass_name\030\002 \001(\003\022\014\n\004" +
-      "name\030\003 \001(\003\022\017\n\007primary\030\004 \001(\003\022\024\n\014dependenc" +
-      "ies\030\005 \003(\003\022\022\n\nstereotype\030\006 \001(\003\022\021\n\tgenerat" +
-      "ed\030\007 \001(\005\"\274\001\n\017BeanInitialized\022\022\n\ncontext_" +
-      "id\030\001 \001(\003\022\021\n\tbean_name\030\002 \001(\003\022\037\n\022pre_initi" +
+      "n\022\r\n\005scope\030\001 \001(\005\022\022\n\nclass_name\030\002 \001(\005\022\014\n\004" +
+      "name\030\003 \001(\005\022\017\n\007primary\030\004 \001(\005\022\024\n\014dependenc" +
+      "ies\030\005 \003(\005\022\022\n\nstereotype\030\006 \001(\005\022\021\n\tgenerat" +
+      "ed\030\007 \001(\010\"\274\001\n\017BeanInitialized\022\022\n\ncontext_" +
+      "id\030\001 \001(\005\022\021\n\tbean_name\030\002 \001(\005\022\037\n\022pre_initi" +
       "alized_at\030\003 \001(\003H\000\210\001\001\022 \n\023post_initialized" +
       "_at\030\004 \001(\003H\001\210\001\001\022\020\n\010duration\030\005 \001(\001B\025\n\023_pre" +
       "_initialized_atB\026\n\024_post_initialized_at\"" +
@@ -77,7 +77,7 @@ public final class Beans {
       "eans.BeansReport.BeanDefinitionsEntry\022O\n" +
       "\005beans\030\002 \003(\0132@.io.github.sibmaks.spring." +
       "jfr.dto.protobuf.beans.BeanInitialized\032{" +
-      "\n\024BeanDefinitionsEntry\022\013\n\003key\030\001 \001(\003\022R\n\005v" +
+      "\n\024BeanDefinitionsEntry\022\013\n\003key\030\001 \001(\005\022R\n\005v" +
       "alue\030\002 \001(\0132C.io.github.sibmaks.spring.jf" +
       "r.dto.protobuf.beans.BeanDefinitionList:" +
       "\0028\001B3\n/io.github.sibmaks.spring.jfr.dto." +

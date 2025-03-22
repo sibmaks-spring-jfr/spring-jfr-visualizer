@@ -60,10 +60,10 @@ function createBaseConnectionException(): ConnectionException {
 export const ConnectionException: MessageFns<ConnectionException> = {
   encode(message: ConnectionException, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.type !== 0) {
-      writer.uint32(8).int64(message.type);
+      writer.uint32(8).int32(message.type);
     }
     if (message.message !== 0) {
-      writer.uint32(16).int64(message.message);
+      writer.uint32(16).int32(message.message);
     }
     return writer;
   },
@@ -80,7 +80,7 @@ export const ConnectionException: MessageFns<ConnectionException> = {
             break;
           }
 
-          message.type = longToNumber(reader.int64());
+          message.type = reader.int32();
           continue;
         }
         case 2: {
@@ -88,7 +88,7 @@ export const ConnectionException: MessageFns<ConnectionException> = {
             break;
           }
 
-          message.message = longToNumber(reader.int64());
+          message.message = reader.int32();
           continue;
         }
       }
@@ -159,7 +159,7 @@ export const ConnectionEvent: MessageFns<ConnectionEvent> = {
       writer.uint32(40).int64(message.finishedAt);
     }
     if (message.threadName !== 0) {
-      writer.uint32(48).int64(message.threadName);
+      writer.uint32(48).int32(message.threadName);
     }
     if (message.transactionIsolation !== undefined) {
       writer.uint32(56).int32(message.transactionIsolation);
@@ -219,7 +219,7 @@ export const ConnectionEvent: MessageFns<ConnectionEvent> = {
             break;
           }
 
-          message.threadName = longToNumber(reader.int64());
+          message.threadName = reader.int32();
           continue;
         }
         case 7: {
@@ -558,7 +558,7 @@ function createBaseConnectionMap_ConnectionsEntry(): ConnectionMap_ConnectionsEn
 export const ConnectionMap_ConnectionsEntry: MessageFns<ConnectionMap_ConnectionsEntry> = {
   encode(message: ConnectionMap_ConnectionsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.key !== 0) {
-      writer.uint32(8).int64(message.key);
+      writer.uint32(8).int32(message.key);
     }
     if (message.value !== undefined) {
       ConnectionList.encode(message.value, writer.uint32(18).fork()).join();
@@ -578,7 +578,7 @@ export const ConnectionMap_ConnectionsEntry: MessageFns<ConnectionMap_Connection
             break;
           }
 
-          message.key = longToNumber(reader.int64());
+          message.key = reader.int32();
           continue;
         }
         case 2: {
@@ -720,7 +720,7 @@ function createBaseConnectionsReport_ContextsEntry(): ConnectionsReport_Contexts
 export const ConnectionsReport_ContextsEntry: MessageFns<ConnectionsReport_ContextsEntry> = {
   encode(message: ConnectionsReport_ContextsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.key !== 0) {
-      writer.uint32(8).int64(message.key);
+      writer.uint32(8).int32(message.key);
     }
     if (message.value !== undefined) {
       ConnectionMap.encode(message.value, writer.uint32(18).fork()).join();
@@ -740,7 +740,7 @@ export const ConnectionsReport_ContextsEntry: MessageFns<ConnectionsReport_Conte
             break;
           }
 
-          message.key = longToNumber(reader.int64());
+          message.key = reader.int32();
           continue;
         }
         case 2: {

@@ -10,5 +10,5 @@ import java.util.Map;
  * @since 0.0.2
  */
 @Builder
-public record CallsReport(Map<Long, List<CallTrace>> contexts) {
+public record CallsReport(Map<Integer, List<CallTrace>> contexts) {
 }

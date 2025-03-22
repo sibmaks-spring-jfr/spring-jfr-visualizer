@@ -27,7 +27,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private BeanDefinition() {
-    dependencies_ = emptyLongList();
+    dependencies_ = emptyIntList();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
@@ -44,98 +44,98 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int SCOPE_FIELD_NUMBER = 1;
-  private long scope_ = 0L;
+  private int scope_ = 0;
   /**
-   * <code>int64 scope = 1;</code>
+   * <code>int32 scope = 1;</code>
    * @return The scope.
    */
   @java.lang.Override
-  public long getScope() {
+  public int getScope() {
     return scope_;
   }
 
   public static final int CLASS_NAME_FIELD_NUMBER = 2;
-  private long className_ = 0L;
+  private int className_ = 0;
   /**
-   * <code>int64 class_name = 2;</code>
+   * <code>int32 class_name = 2;</code>
    * @return The className.
    */
   @java.lang.Override
-  public long getClassName() {
+  public int getClassName() {
     return className_;
   }
 
   public static final int NAME_FIELD_NUMBER = 3;
-  private long name_ = 0L;
+  private int name_ = 0;
   /**
-   * <code>int64 name = 3;</code>
+   * <code>int32 name = 3;</code>
    * @return The name.
    */
   @java.lang.Override
-  public long getName() {
+  public int getName() {
     return name_;
   }
 
   public static final int PRIMARY_FIELD_NUMBER = 4;
-  private long primary_ = 0L;
+  private int primary_ = 0;
   /**
-   * <code>int64 primary = 4;</code>
+   * <code>int32 primary = 4;</code>
    * @return The primary.
    */
   @java.lang.Override
-  public long getPrimary() {
+  public int getPrimary() {
     return primary_;
   }
 
   public static final int DEPENDENCIES_FIELD_NUMBER = 5;
   @SuppressWarnings("serial")
-  private com.google.protobuf.Internal.LongList dependencies_ =
-      emptyLongList();
+  private com.google.protobuf.Internal.IntList dependencies_ =
+      emptyIntList();
   /**
-   * <code>repeated int64 dependencies = 5;</code>
+   * <code>repeated int32 dependencies = 5;</code>
    * @return A list containing the dependencies.
    */
   @java.lang.Override
-  public java.util.List<java.lang.Long>
+  public java.util.List<java.lang.Integer>
       getDependenciesList() {
     return dependencies_;
   }
   /**
-   * <code>repeated int64 dependencies = 5;</code>
+   * <code>repeated int32 dependencies = 5;</code>
    * @return The count of dependencies.
    */
   public int getDependenciesCount() {
     return dependencies_.size();
   }
   /**
-   * <code>repeated int64 dependencies = 5;</code>
+   * <code>repeated int32 dependencies = 5;</code>
    * @param index The index of the element to return.
    * @return The dependencies at the given index.
    */
-  public long getDependencies(int index) {
-    return dependencies_.getLong(index);
+  public int getDependencies(int index) {
+    return dependencies_.getInt(index);
   }
   private int dependenciesMemoizedSerializedSize = -1;
 
   public static final int STEREOTYPE_FIELD_NUMBER = 6;
-  private long stereotype_ = 0L;
+  private int stereotype_ = 0;
   /**
-   * <code>int64 stereotype = 6;</code>
+   * <code>int32 stereotype = 6;</code>
    * @return The stereotype.
    */
   @java.lang.Override
-  public long getStereotype() {
+  public int getStereotype() {
     return stereotype_;
   }
 
   public static final int GENERATED_FIELD_NUMBER = 7;
-  private int generated_ = 0;
+  private boolean generated_ = false;
   /**
-   * <code>int32 generated = 7;</code>
+   * <code>bool generated = 7;</code>
    * @return The generated.
    */
   @java.lang.Override
-  public int getGenerated() {
+  public boolean getGenerated() {
     return generated_;
   }
 
@@ -154,30 +154,30 @@ private static final long serialVersionUID = 0L;
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
     getSerializedSize();
-    if (scope_ != 0L) {
-      output.writeInt64(1, scope_);
+    if (scope_ != 0) {
+      output.writeInt32(1, scope_);
     }
-    if (className_ != 0L) {
-      output.writeInt64(2, className_);
+    if (className_ != 0) {
+      output.writeInt32(2, className_);
     }
-    if (name_ != 0L) {
-      output.writeInt64(3, name_);
+    if (name_ != 0) {
+      output.writeInt32(3, name_);
     }
-    if (primary_ != 0L) {
-      output.writeInt64(4, primary_);
+    if (primary_ != 0) {
+      output.writeInt32(4, primary_);
     }
     if (getDependenciesList().size() > 0) {
       output.writeUInt32NoTag(42);
       output.writeUInt32NoTag(dependenciesMemoizedSerializedSize);
     }
     for (int i = 0; i < dependencies_.size(); i++) {
-      output.writeInt64NoTag(dependencies_.getLong(i));
+      output.writeInt32NoTag(dependencies_.getInt(i));
     }
-    if (stereotype_ != 0L) {
-      output.writeInt64(6, stereotype_);
+    if (stereotype_ != 0) {
+      output.writeInt32(6, stereotype_);
     }
-    if (generated_ != 0) {
-      output.writeInt32(7, generated_);
+    if (generated_ != false) {
+      output.writeBool(7, generated_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -188,27 +188,27 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (scope_ != 0L) {
+    if (scope_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, scope_);
+        .computeInt32Size(1, scope_);
     }
-    if (className_ != 0L) {
+    if (className_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(2, className_);
+        .computeInt32Size(2, className_);
     }
-    if (name_ != 0L) {
+    if (name_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(3, name_);
+        .computeInt32Size(3, name_);
     }
-    if (primary_ != 0L) {
+    if (primary_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(4, primary_);
+        .computeInt32Size(4, primary_);
     }
     {
       int dataSize = 0;
       for (int i = 0; i < dependencies_.size(); i++) {
         dataSize += com.google.protobuf.CodedOutputStream
-          .computeInt64SizeNoTag(dependencies_.getLong(i));
+          .computeInt32SizeNoTag(dependencies_.getInt(i));
       }
       size += dataSize;
       if (!getDependenciesList().isEmpty()) {
@@ -218,13 +218,13 @@ private static final long serialVersionUID = 0L;
       }
       dependenciesMemoizedSerializedSize = dataSize;
     }
-    if (stereotype_ != 0L) {
+    if (stereotype_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(6, stereotype_);
+        .computeInt32Size(6, stereotype_);
     }
-    if (generated_ != 0) {
+    if (generated_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(7, generated_);
+        .computeBoolSize(7, generated_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -267,26 +267,22 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + SCOPE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getScope());
+    hash = (53 * hash) + getScope();
     hash = (37 * hash) + CLASS_NAME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getClassName());
+    hash = (53 * hash) + getClassName();
     hash = (37 * hash) + NAME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getName());
+    hash = (53 * hash) + getName();
     hash = (37 * hash) + PRIMARY_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getPrimary());
+    hash = (53 * hash) + getPrimary();
     if (getDependenciesCount() > 0) {
       hash = (37 * hash) + DEPENDENCIES_FIELD_NUMBER;
       hash = (53 * hash) + getDependenciesList().hashCode();
     }
     hash = (37 * hash) + STEREOTYPE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getStereotype());
+    hash = (53 * hash) + getStereotype();
     hash = (37 * hash) + GENERATED_FIELD_NUMBER;
-    hash = (53 * hash) + getGenerated();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getGenerated());
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -418,13 +414,13 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      scope_ = 0L;
-      className_ = 0L;
-      name_ = 0L;
-      primary_ = 0L;
-      dependencies_ = emptyLongList();
-      stereotype_ = 0L;
-      generated_ = 0;
+      scope_ = 0;
+      className_ = 0;
+      name_ = 0;
+      primary_ = 0;
+      dependencies_ = emptyIntList();
+      stereotype_ = 0;
+      generated_ = false;
       return this;
     }
 
@@ -494,16 +490,16 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinition other) {
       if (other == io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinition.getDefaultInstance()) return this;
-      if (other.getScope() != 0L) {
+      if (other.getScope() != 0) {
         setScope(other.getScope());
       }
-      if (other.getClassName() != 0L) {
+      if (other.getClassName() != 0) {
         setClassName(other.getClassName());
       }
-      if (other.getName() != 0L) {
+      if (other.getName() != 0) {
         setName(other.getName());
       }
-      if (other.getPrimary() != 0L) {
+      if (other.getPrimary() != 0) {
         setPrimary(other.getPrimary());
       }
       if (!other.dependencies_.isEmpty()) {
@@ -517,10 +513,10 @@ private static final long serialVersionUID = 0L;
         }
         onChanged();
       }
-      if (other.getStereotype() != 0L) {
+      if (other.getStereotype() != 0) {
         setStereotype(other.getStereotype());
       }
-      if (other.getGenerated() != 0) {
+      if (other.getGenerated() != false) {
         setGenerated(other.getGenerated());
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -550,29 +546,29 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              scope_ = input.readInt64();
+              scope_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              className_ = input.readInt64();
+              className_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
             case 24: {
-              name_ = input.readInt64();
+              name_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
             case 32: {
-              primary_ = input.readInt64();
+              primary_ = input.readInt32();
               bitField0_ |= 0x00000008;
               break;
             } // case 32
             case 40: {
-              long v = input.readInt64();
+              int v = input.readInt32();
               ensureDependenciesIsMutable();
-              dependencies_.addLong(v);
+              dependencies_.addInt(v);
               break;
             } // case 40
             case 42: {
@@ -580,18 +576,18 @@ private static final long serialVersionUID = 0L;
               int limit = input.pushLimit(length);
               ensureDependenciesIsMutable();
               while (input.getBytesUntilLimit() > 0) {
-                dependencies_.addLong(input.readInt64());
+                dependencies_.addInt(input.readInt32());
               }
               input.popLimit(limit);
               break;
             } // case 42
             case 48: {
-              stereotype_ = input.readInt64();
+              stereotype_ = input.readInt32();
               bitField0_ |= 0x00000020;
               break;
             } // case 48
             case 56: {
-              generated_ = input.readInt32();
+              generated_ = input.readBool();
               bitField0_ |= 0x00000040;
               break;
             } // case 56
@@ -612,21 +608,21 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long scope_ ;
+    private int scope_ ;
     /**
-     * <code>int64 scope = 1;</code>
+     * <code>int32 scope = 1;</code>
      * @return The scope.
      */
     @java.lang.Override
-    public long getScope() {
+    public int getScope() {
       return scope_;
     }
     /**
-     * <code>int64 scope = 1;</code>
+     * <code>int32 scope = 1;</code>
      * @param value The scope to set.
      * @return This builder for chaining.
      */
-    public Builder setScope(long value) {
+    public Builder setScope(int value) {
 
       scope_ = value;
       bitField0_ |= 0x00000001;
@@ -634,31 +630,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 scope = 1;</code>
+     * <code>int32 scope = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearScope() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      scope_ = 0L;
+      scope_ = 0;
       onChanged();
       return this;
     }
 
-    private long className_ ;
+    private int className_ ;
     /**
-     * <code>int64 class_name = 2;</code>
+     * <code>int32 class_name = 2;</code>
      * @return The className.
      */
     @java.lang.Override
-    public long getClassName() {
+    public int getClassName() {
       return className_;
     }
     /**
-     * <code>int64 class_name = 2;</code>
+     * <code>int32 class_name = 2;</code>
      * @param value The className to set.
      * @return This builder for chaining.
      */
-    public Builder setClassName(long value) {
+    public Builder setClassName(int value) {
 
       className_ = value;
       bitField0_ |= 0x00000002;
@@ -666,31 +662,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 class_name = 2;</code>
+     * <code>int32 class_name = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearClassName() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      className_ = 0L;
+      className_ = 0;
       onChanged();
       return this;
     }
 
-    private long name_ ;
+    private int name_ ;
     /**
-     * <code>int64 name = 3;</code>
+     * <code>int32 name = 3;</code>
      * @return The name.
      */
     @java.lang.Override
-    public long getName() {
+    public int getName() {
       return name_;
     }
     /**
-     * <code>int64 name = 3;</code>
+     * <code>int32 name = 3;</code>
      * @param value The name to set.
      * @return This builder for chaining.
      */
-    public Builder setName(long value) {
+    public Builder setName(int value) {
 
       name_ = value;
       bitField0_ |= 0x00000004;
@@ -698,31 +694,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 name = 3;</code>
+     * <code>int32 name = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearName() {
       bitField0_ = (bitField0_ & ~0x00000004);
-      name_ = 0L;
+      name_ = 0;
       onChanged();
       return this;
     }
 
-    private long primary_ ;
+    private int primary_ ;
     /**
-     * <code>int64 primary = 4;</code>
+     * <code>int32 primary = 4;</code>
      * @return The primary.
      */
     @java.lang.Override
-    public long getPrimary() {
+    public int getPrimary() {
       return primary_;
     }
     /**
-     * <code>int64 primary = 4;</code>
+     * <code>int32 primary = 4;</code>
      * @param value The primary to set.
      * @return This builder for chaining.
      */
-    public Builder setPrimary(long value) {
+    public Builder setPrimary(int value) {
 
       primary_ = value;
       bitField0_ |= 0x00000008;
@@ -730,17 +726,17 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 primary = 4;</code>
+     * <code>int32 primary = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearPrimary() {
       bitField0_ = (bitField0_ & ~0x00000008);
-      primary_ = 0L;
+      primary_ = 0;
       onChanged();
       return this;
     }
 
-    private com.google.protobuf.Internal.LongList dependencies_ = emptyLongList();
+    private com.google.protobuf.Internal.IntList dependencies_ = emptyIntList();
     private void ensureDependenciesIsMutable() {
       if (!dependencies_.isModifiable()) {
         dependencies_ = makeMutableCopy(dependencies_);
@@ -748,64 +744,64 @@ private static final long serialVersionUID = 0L;
       bitField0_ |= 0x00000010;
     }
     /**
-     * <code>repeated int64 dependencies = 5;</code>
+     * <code>repeated int32 dependencies = 5;</code>
      * @return A list containing the dependencies.
      */
-    public java.util.List<java.lang.Long>
+    public java.util.List<java.lang.Integer>
         getDependenciesList() {
       dependencies_.makeImmutable();
       return dependencies_;
     }
     /**
-     * <code>repeated int64 dependencies = 5;</code>
+     * <code>repeated int32 dependencies = 5;</code>
      * @return The count of dependencies.
      */
     public int getDependenciesCount() {
       return dependencies_.size();
     }
     /**
-     * <code>repeated int64 dependencies = 5;</code>
+     * <code>repeated int32 dependencies = 5;</code>
      * @param index The index of the element to return.
      * @return The dependencies at the given index.
      */
-    public long getDependencies(int index) {
-      return dependencies_.getLong(index);
+    public int getDependencies(int index) {
+      return dependencies_.getInt(index);
     }
     /**
-     * <code>repeated int64 dependencies = 5;</code>
+     * <code>repeated int32 dependencies = 5;</code>
      * @param index The index to set the value at.
      * @param value The dependencies to set.
      * @return This builder for chaining.
      */
     public Builder setDependencies(
-        int index, long value) {
+        int index, int value) {
 
       ensureDependenciesIsMutable();
-      dependencies_.setLong(index, value);
+      dependencies_.setInt(index, value);
       bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
     /**
-     * <code>repeated int64 dependencies = 5;</code>
+     * <code>repeated int32 dependencies = 5;</code>
      * @param value The dependencies to add.
      * @return This builder for chaining.
      */
-    public Builder addDependencies(long value) {
+    public Builder addDependencies(int value) {
 
       ensureDependenciesIsMutable();
-      dependencies_.addLong(value);
+      dependencies_.addInt(value);
       bitField0_ |= 0x00000010;
       onChanged();
       return this;
     }
     /**
-     * <code>repeated int64 dependencies = 5;</code>
+     * <code>repeated int32 dependencies = 5;</code>
      * @param values The dependencies to add.
      * @return This builder for chaining.
      */
     public Builder addAllDependencies(
-        java.lang.Iterable<? extends java.lang.Long> values) {
+        java.lang.Iterable<? extends java.lang.Integer> values) {
       ensureDependenciesIsMutable();
       com.google.protobuf.AbstractMessageLite.Builder.addAll(
           values, dependencies_);
@@ -814,31 +810,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>repeated int64 dependencies = 5;</code>
+     * <code>repeated int32 dependencies = 5;</code>
      * @return This builder for chaining.
      */
     public Builder clearDependencies() {
-      dependencies_ = emptyLongList();
+      dependencies_ = emptyIntList();
       bitField0_ = (bitField0_ & ~0x00000010);
       onChanged();
       return this;
     }
 
-    private long stereotype_ ;
+    private int stereotype_ ;
     /**
-     * <code>int64 stereotype = 6;</code>
+     * <code>int32 stereotype = 6;</code>
      * @return The stereotype.
      */
     @java.lang.Override
-    public long getStereotype() {
+    public int getStereotype() {
       return stereotype_;
     }
     /**
-     * <code>int64 stereotype = 6;</code>
+     * <code>int32 stereotype = 6;</code>
      * @param value The stereotype to set.
      * @return This builder for chaining.
      */
-    public Builder setStereotype(long value) {
+    public Builder setStereotype(int value) {
 
       stereotype_ = value;
       bitField0_ |= 0x00000020;
@@ -846,31 +842,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 stereotype = 6;</code>
+     * <code>int32 stereotype = 6;</code>
      * @return This builder for chaining.
      */
     public Builder clearStereotype() {
       bitField0_ = (bitField0_ & ~0x00000020);
-      stereotype_ = 0L;
+      stereotype_ = 0;
       onChanged();
       return this;
     }
 
-    private int generated_ ;
+    private boolean generated_ ;
     /**
-     * <code>int32 generated = 7;</code>
+     * <code>bool generated = 7;</code>
      * @return The generated.
      */
     @java.lang.Override
-    public int getGenerated() {
+    public boolean getGenerated() {
       return generated_;
     }
     /**
-     * <code>int32 generated = 7;</code>
+     * <code>bool generated = 7;</code>
      * @param value The generated to set.
      * @return This builder for chaining.
      */
-    public Builder setGenerated(int value) {
+    public Builder setGenerated(boolean value) {
 
       generated_ = value;
       bitField0_ |= 0x00000040;
@@ -878,12 +874,12 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int32 generated = 7;</code>
+     * <code>bool generated = 7;</code>
      * @return This builder for chaining.
      */
     public Builder clearGenerated() {
       bitField0_ = (bitField0_ & ~0x00000040);
-      generated_ = 0;
+      generated_ = false;
       onChanged();
       return this;
     }

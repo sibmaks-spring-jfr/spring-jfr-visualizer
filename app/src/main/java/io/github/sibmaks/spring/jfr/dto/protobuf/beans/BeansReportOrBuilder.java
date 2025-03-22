@@ -10,38 +10,38 @@ public interface BeansReportOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   int getBeanDefinitionsCount();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   boolean containsBeanDefinitions(
-      long key);
+      int key);
   /**
    * Use {@link #getBeanDefinitionsMap()} instead.
    */
   @java.lang.Deprecated
-  java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
+  java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
   getBeanDefinitions();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
-  java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
+  java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
   getBeanDefinitionsMap();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList getBeanDefinitionsOrDefault(
-      long key,
+      int key,
       /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue);
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList getBeanDefinitionsOrThrow(
-      long key);
+      int key);
 
   /**
    * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanInitialized beans = 2;</code>

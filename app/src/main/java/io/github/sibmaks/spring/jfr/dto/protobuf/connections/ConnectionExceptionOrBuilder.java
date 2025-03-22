@@ -10,14 +10,14 @@ public interface ConnectionExceptionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 type = 1;</code>
+   * <code>int32 type = 1;</code>
    * @return The type.
    */
-  long getType();
+  int getType();
 
   /**
-   * <code>int64 message = 2;</code>
+   * <code>int32 message = 2;</code>
    * @return The message.
    */
-  long getMessage();
+  int getMessage();
 }

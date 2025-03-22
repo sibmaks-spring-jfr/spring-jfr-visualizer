@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BeansReportCreator {
     private final StringConstantRegistry stringConstantRegistry;
-    private final Map<Long, Map<String, BeanDefinition.BeanDefinitionBuilder>> beanDefinitions = new HashMap<>();
+    private final Map<Integer, Map<String, BeanDefinition.BeanDefinitionBuilder>> beanDefinitions = new HashMap<>();
     private final Map<String, Map<String, Instant>> preConstructed = new HashMap<>();
     private final List<BeanInitialized> initializedBeans = new ArrayList<>();
 
@@ -84,7 +84,7 @@ public class BeansReportCreator {
                                         .name()
                         )
                 )
-                .generated(event.isGenerated() ? 1 : 0);
+                .generated(event.isGenerated());
     }
 
     @EventListener

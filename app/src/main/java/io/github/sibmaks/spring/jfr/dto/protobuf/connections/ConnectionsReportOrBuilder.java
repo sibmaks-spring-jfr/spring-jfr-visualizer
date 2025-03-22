@@ -10,36 +10,36 @@ public interface ConnectionsReportOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
    */
   int getContextsCount();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
    */
   boolean containsContexts(
-      long key);
+      int key);
   /**
    * Use {@link #getContextsMap()} instead.
    */
   @java.lang.Deprecated
-  java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap>
+  java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap>
   getContexts();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
    */
-  java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap>
+  java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap>
   getContextsMap();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
    */
   /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap getContextsOrDefault(
-      long key,
+      int key,
       /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap defaultValue);
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap&gt; contexts = 1;</code>
    */
   io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionMap getContextsOrThrow(
-      long key);
+      int key);
 }

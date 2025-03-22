@@ -56,35 +56,35 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int INVOCATION_ID_FIELD_NUMBER = 1;
-  private long invocationId_ = 0L;
+  private int invocationId_ = 0;
   /**
-   * <code>int64 invocation_id = 1;</code>
+   * <code>int32 invocation_id = 1;</code>
    * @return The invocationId.
    */
   @java.lang.Override
-  public long getInvocationId() {
+  public int getInvocationId() {
     return invocationId_;
   }
 
   public static final int SUCCESS_FIELD_NUMBER = 2;
-  private int success_ = 0;
+  private boolean success_ = false;
   /**
-   * <code>int32 success = 2;</code>
+   * <code>bool success = 2;</code>
    * @return The success.
    */
   @java.lang.Override
-  public int getSuccess() {
+  public boolean getSuccess() {
     return success_;
   }
 
   public static final int TYPE_FIELD_NUMBER = 3;
-  private long type_ = 0L;
+  private int type_ = 0;
   /**
-   * <code>int64 type = 3;</code>
+   * <code>int32 type = 3;</code>
    * @return The type.
    */
   @java.lang.Override
-  public long getType() {
+  public int getType() {
     return type_;
   }
 
@@ -111,54 +111,54 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int THREAD_NAME_FIELD_NUMBER = 6;
-  private long threadName_ = 0L;
+  private int threadName_ = 0;
   /**
-   * <code>int64 thread_name = 6;</code>
+   * <code>int32 thread_name = 6;</code>
    * @return The threadName.
    */
   @java.lang.Override
-  public long getThreadName() {
+  public int getThreadName() {
     return threadName_;
   }
 
   public static final int CLASS_NAME_FIELD_NUMBER = 7;
-  private long className_ = 0L;
+  private int className_ = 0;
   /**
-   * <code>int64 class_name = 7;</code>
+   * <code>int32 class_name = 7;</code>
    * @return The className.
    */
   @java.lang.Override
-  public long getClassName() {
+  public int getClassName() {
     return className_;
   }
 
   public static final int METHOD_NAME_FIELD_NUMBER = 8;
-  private long methodName_ = 0L;
+  private int methodName_ = 0;
   /**
-   * <code>int64 method_name = 8;</code>
+   * <code>int32 method_name = 8;</code>
    * @return The methodName.
    */
   @java.lang.Override
-  public long getMethodName() {
+  public int getMethodName() {
     return methodName_;
   }
 
   public static final int DETAILS_FIELD_NUMBER = 9;
   private static final class DetailsDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
-        java.lang.Long, java.lang.Long> defaultEntry =
+        java.lang.Integer, java.lang.Integer> defaultEntry =
             com.google.protobuf.MapEntry
-            .<java.lang.Long, java.lang.Long>newDefaultInstance(
+            .<java.lang.Integer, java.lang.Integer>newDefaultInstance(
                 io.github.sibmaks.spring.jfr.dto.protobuf.calls.Calls.internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_calls_CallTrace_DetailsEntry_descriptor, 
-                com.google.protobuf.WireFormat.FieldType.INT64,
-                0L,
-                com.google.protobuf.WireFormat.FieldType.INT64,
-                0L);
+                com.google.protobuf.WireFormat.FieldType.INT32,
+                0,
+                com.google.protobuf.WireFormat.FieldType.INT32,
+                0);
   }
   @SuppressWarnings("serial")
   private com.google.protobuf.MapField<
-      java.lang.Long, java.lang.Long> details_;
-  private com.google.protobuf.MapField<java.lang.Long, java.lang.Long>
+      java.lang.Integer, java.lang.Integer> details_;
+  private com.google.protobuf.MapField<java.lang.Integer, java.lang.Integer>
   internalGetDetails() {
     if (details_ == null) {
       return com.google.protobuf.MapField.emptyMapField(
@@ -170,11 +170,11 @@ private static final long serialVersionUID = 0L;
     return internalGetDetails().getMap().size();
   }
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
   @java.lang.Override
   public boolean containsDetails(
-      long key) {
+      int key) {
 
     return internalGetDetails().getMap().containsKey(key);
   }
@@ -183,36 +183,36 @@ private static final long serialVersionUID = 0L;
    */
   @java.lang.Override
   @java.lang.Deprecated
-  public java.util.Map<java.lang.Long, java.lang.Long> getDetails() {
+  public java.util.Map<java.lang.Integer, java.lang.Integer> getDetails() {
     return getDetailsMap();
   }
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
   @java.lang.Override
-  public java.util.Map<java.lang.Long, java.lang.Long> getDetailsMap() {
+  public java.util.Map<java.lang.Integer, java.lang.Integer> getDetailsMap() {
     return internalGetDetails().getMap();
   }
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
   @java.lang.Override
-  public long getDetailsOrDefault(
-      long key,
-      long defaultValue) {
+  public int getDetailsOrDefault(
+      int key,
+      int defaultValue) {
 
-    java.util.Map<java.lang.Long, java.lang.Long> map =
+    java.util.Map<java.lang.Integer, java.lang.Integer> map =
         internalGetDetails().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
   @java.lang.Override
-  public long getDetailsOrThrow(
-      long key) {
+  public int getDetailsOrThrow(
+      int key) {
 
-    java.util.Map<java.lang.Long, java.lang.Long> map =
+    java.util.Map<java.lang.Integer, java.lang.Integer> map =
         internalGetDetails().getMap();
     if (!map.containsKey(key)) {
       throw new java.lang.IllegalArgumentException();
@@ -275,14 +275,14 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (invocationId_ != 0L) {
-      output.writeInt64(1, invocationId_);
+    if (invocationId_ != 0) {
+      output.writeInt32(1, invocationId_);
     }
-    if (success_ != 0) {
-      output.writeInt32(2, success_);
+    if (success_ != false) {
+      output.writeBool(2, success_);
     }
-    if (type_ != 0L) {
-      output.writeInt64(3, type_);
+    if (type_ != 0) {
+      output.writeInt32(3, type_);
     }
     if (startTime_ != 0L) {
       output.writeInt64(4, startTime_);
@@ -290,17 +290,17 @@ private static final long serialVersionUID = 0L;
     if (endTime_ != 0L) {
       output.writeInt64(5, endTime_);
     }
-    if (threadName_ != 0L) {
-      output.writeInt64(6, threadName_);
+    if (threadName_ != 0) {
+      output.writeInt32(6, threadName_);
     }
-    if (className_ != 0L) {
-      output.writeInt64(7, className_);
+    if (className_ != 0) {
+      output.writeInt32(7, className_);
     }
-    if (methodName_ != 0L) {
-      output.writeInt64(8, methodName_);
+    if (methodName_ != 0) {
+      output.writeInt32(8, methodName_);
     }
     com.google.protobuf.GeneratedMessage
-      .serializeLongMapTo(
+      .serializeIntegerMapTo(
         output,
         internalGetDetails(),
         DetailsDefaultEntryHolder.defaultEntry,
@@ -317,17 +317,17 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (invocationId_ != 0L) {
+    if (invocationId_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, invocationId_);
+        .computeInt32Size(1, invocationId_);
     }
-    if (success_ != 0) {
+    if (success_ != false) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt32Size(2, success_);
+        .computeBoolSize(2, success_);
     }
-    if (type_ != 0L) {
+    if (type_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(3, type_);
+        .computeInt32Size(3, type_);
     }
     if (startTime_ != 0L) {
       size += com.google.protobuf.CodedOutputStream
@@ -337,21 +337,21 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(5, endTime_);
     }
-    if (threadName_ != 0L) {
+    if (threadName_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(6, threadName_);
+        .computeInt32Size(6, threadName_);
     }
-    if (className_ != 0L) {
+    if (className_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(7, className_);
+        .computeInt32Size(7, className_);
     }
-    if (methodName_ != 0L) {
+    if (methodName_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(8, methodName_);
+        .computeInt32Size(8, methodName_);
     }
-    for (java.util.Map.Entry<java.lang.Long, java.lang.Long> entry
+    for (java.util.Map.Entry<java.lang.Integer, java.lang.Integer> entry
          : internalGetDetails().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.Long, java.lang.Long>
+      com.google.protobuf.MapEntry<java.lang.Integer, java.lang.Integer>
       details__ = DetailsDefaultEntryHolder.defaultEntry.newBuilderForType()
           .setKey(entry.getKey())
           .setValue(entry.getValue())
@@ -410,13 +410,12 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + INVOCATION_ID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getInvocationId());
+    hash = (53 * hash) + getInvocationId();
     hash = (37 * hash) + SUCCESS_FIELD_NUMBER;
-    hash = (53 * hash) + getSuccess();
+    hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+        getSuccess());
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getType());
+    hash = (53 * hash) + getType();
     hash = (37 * hash) + START_TIME_FIELD_NUMBER;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getStartTime());
@@ -424,14 +423,11 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getEndTime());
     hash = (37 * hash) + THREAD_NAME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getThreadName());
+    hash = (53 * hash) + getThreadName();
     hash = (37 * hash) + CLASS_NAME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getClassName());
+    hash = (53 * hash) + getClassName();
     hash = (37 * hash) + METHOD_NAME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getMethodName());
+    hash = (53 * hash) + getMethodName();
     if (!internalGetDetails().getMap().isEmpty()) {
       hash = (37 * hash) + DETAILS_FIELD_NUMBER;
       hash = (53 * hash) + internalGetDetails().hashCode();
@@ -593,14 +589,14 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      invocationId_ = 0L;
-      success_ = 0;
-      type_ = 0L;
+      invocationId_ = 0;
+      success_ = false;
+      type_ = 0;
       startTime_ = 0L;
       endTime_ = 0L;
-      threadName_ = 0L;
-      className_ = 0L;
-      methodName_ = 0L;
+      threadName_ = 0;
+      className_ = 0;
+      methodName_ = 0;
       internalGetMutableDetails().clear();
       if (childrenBuilder_ == null) {
         children_ = java.util.Collections.emptyList();
@@ -697,13 +693,13 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTrace other) {
       if (other == io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTrace.getDefaultInstance()) return this;
-      if (other.getInvocationId() != 0L) {
+      if (other.getInvocationId() != 0) {
         setInvocationId(other.getInvocationId());
       }
-      if (other.getSuccess() != 0) {
+      if (other.getSuccess() != false) {
         setSuccess(other.getSuccess());
       }
-      if (other.getType() != 0L) {
+      if (other.getType() != 0) {
         setType(other.getType());
       }
       if (other.getStartTime() != 0L) {
@@ -712,13 +708,13 @@ private static final long serialVersionUID = 0L;
       if (other.getEndTime() != 0L) {
         setEndTime(other.getEndTime());
       }
-      if (other.getThreadName() != 0L) {
+      if (other.getThreadName() != 0) {
         setThreadName(other.getThreadName());
       }
-      if (other.getClassName() != 0L) {
+      if (other.getClassName() != 0) {
         setClassName(other.getClassName());
       }
-      if (other.getMethodName() != 0L) {
+      if (other.getMethodName() != 0) {
         setMethodName(other.getMethodName());
       }
       internalGetMutableDetails().mergeFrom(
@@ -777,17 +773,17 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              invocationId_ = input.readInt64();
+              invocationId_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              success_ = input.readInt32();
+              success_ = input.readBool();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
             case 24: {
-              type_ = input.readInt64();
+              type_ = input.readInt32();
               bitField0_ |= 0x00000004;
               break;
             } // case 24
@@ -802,22 +798,22 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 40
             case 48: {
-              threadName_ = input.readInt64();
+              threadName_ = input.readInt32();
               bitField0_ |= 0x00000020;
               break;
             } // case 48
             case 56: {
-              className_ = input.readInt64();
+              className_ = input.readInt32();
               bitField0_ |= 0x00000040;
               break;
             } // case 56
             case 64: {
-              methodName_ = input.readInt64();
+              methodName_ = input.readInt32();
               bitField0_ |= 0x00000080;
               break;
             } // case 64
             case 74: {
-              com.google.protobuf.MapEntry<java.lang.Long, java.lang.Long>
+              com.google.protobuf.MapEntry<java.lang.Integer, java.lang.Integer>
               details__ = input.readMessage(
                   DetailsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
               internalGetMutableDetails().getMutableMap().put(
@@ -855,21 +851,21 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long invocationId_ ;
+    private int invocationId_ ;
     /**
-     * <code>int64 invocation_id = 1;</code>
+     * <code>int32 invocation_id = 1;</code>
      * @return The invocationId.
      */
     @java.lang.Override
-    public long getInvocationId() {
+    public int getInvocationId() {
       return invocationId_;
     }
     /**
-     * <code>int64 invocation_id = 1;</code>
+     * <code>int32 invocation_id = 1;</code>
      * @param value The invocationId to set.
      * @return This builder for chaining.
      */
-    public Builder setInvocationId(long value) {
+    public Builder setInvocationId(int value) {
 
       invocationId_ = value;
       bitField0_ |= 0x00000001;
@@ -877,31 +873,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 invocation_id = 1;</code>
+     * <code>int32 invocation_id = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearInvocationId() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      invocationId_ = 0L;
+      invocationId_ = 0;
       onChanged();
       return this;
     }
 
-    private int success_ ;
+    private boolean success_ ;
     /**
-     * <code>int32 success = 2;</code>
+     * <code>bool success = 2;</code>
      * @return The success.
      */
     @java.lang.Override
-    public int getSuccess() {
+    public boolean getSuccess() {
       return success_;
     }
     /**
-     * <code>int32 success = 2;</code>
+     * <code>bool success = 2;</code>
      * @param value The success to set.
      * @return This builder for chaining.
      */
-    public Builder setSuccess(int value) {
+    public Builder setSuccess(boolean value) {
 
       success_ = value;
       bitField0_ |= 0x00000002;
@@ -909,31 +905,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int32 success = 2;</code>
+     * <code>bool success = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearSuccess() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      success_ = 0;
+      success_ = false;
       onChanged();
       return this;
     }
 
-    private long type_ ;
+    private int type_ ;
     /**
-     * <code>int64 type = 3;</code>
+     * <code>int32 type = 3;</code>
      * @return The type.
      */
     @java.lang.Override
-    public long getType() {
+    public int getType() {
       return type_;
     }
     /**
-     * <code>int64 type = 3;</code>
+     * <code>int32 type = 3;</code>
      * @param value The type to set.
      * @return This builder for chaining.
      */
-    public Builder setType(long value) {
+    public Builder setType(int value) {
 
       type_ = value;
       bitField0_ |= 0x00000004;
@@ -941,12 +937,12 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 type = 3;</code>
+     * <code>int32 type = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearType() {
       bitField0_ = (bitField0_ & ~0x00000004);
-      type_ = 0L;
+      type_ = 0;
       onChanged();
       return this;
     }
@@ -1015,21 +1011,21 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long threadName_ ;
+    private int threadName_ ;
     /**
-     * <code>int64 thread_name = 6;</code>
+     * <code>int32 thread_name = 6;</code>
      * @return The threadName.
      */
     @java.lang.Override
-    public long getThreadName() {
+    public int getThreadName() {
       return threadName_;
     }
     /**
-     * <code>int64 thread_name = 6;</code>
+     * <code>int32 thread_name = 6;</code>
      * @param value The threadName to set.
      * @return This builder for chaining.
      */
-    public Builder setThreadName(long value) {
+    public Builder setThreadName(int value) {
 
       threadName_ = value;
       bitField0_ |= 0x00000020;
@@ -1037,31 +1033,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 thread_name = 6;</code>
+     * <code>int32 thread_name = 6;</code>
      * @return This builder for chaining.
      */
     public Builder clearThreadName() {
       bitField0_ = (bitField0_ & ~0x00000020);
-      threadName_ = 0L;
+      threadName_ = 0;
       onChanged();
       return this;
     }
 
-    private long className_ ;
+    private int className_ ;
     /**
-     * <code>int64 class_name = 7;</code>
+     * <code>int32 class_name = 7;</code>
      * @return The className.
      */
     @java.lang.Override
-    public long getClassName() {
+    public int getClassName() {
       return className_;
     }
     /**
-     * <code>int64 class_name = 7;</code>
+     * <code>int32 class_name = 7;</code>
      * @param value The className to set.
      * @return This builder for chaining.
      */
-    public Builder setClassName(long value) {
+    public Builder setClassName(int value) {
 
       className_ = value;
       bitField0_ |= 0x00000040;
@@ -1069,31 +1065,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 class_name = 7;</code>
+     * <code>int32 class_name = 7;</code>
      * @return This builder for chaining.
      */
     public Builder clearClassName() {
       bitField0_ = (bitField0_ & ~0x00000040);
-      className_ = 0L;
+      className_ = 0;
       onChanged();
       return this;
     }
 
-    private long methodName_ ;
+    private int methodName_ ;
     /**
-     * <code>int64 method_name = 8;</code>
+     * <code>int32 method_name = 8;</code>
      * @return The methodName.
      */
     @java.lang.Override
-    public long getMethodName() {
+    public int getMethodName() {
       return methodName_;
     }
     /**
-     * <code>int64 method_name = 8;</code>
+     * <code>int32 method_name = 8;</code>
      * @param value The methodName to set.
      * @return This builder for chaining.
      */
-    public Builder setMethodName(long value) {
+    public Builder setMethodName(int value) {
 
       methodName_ = value;
       bitField0_ |= 0x00000080;
@@ -1101,19 +1097,19 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 method_name = 8;</code>
+     * <code>int32 method_name = 8;</code>
      * @return This builder for chaining.
      */
     public Builder clearMethodName() {
       bitField0_ = (bitField0_ & ~0x00000080);
-      methodName_ = 0L;
+      methodName_ = 0;
       onChanged();
       return this;
     }
 
     private com.google.protobuf.MapField<
-        java.lang.Long, java.lang.Long> details_;
-    private com.google.protobuf.MapField<java.lang.Long, java.lang.Long>
+        java.lang.Integer, java.lang.Integer> details_;
+    private com.google.protobuf.MapField<java.lang.Integer, java.lang.Integer>
         internalGetDetails() {
       if (details_ == null) {
         return com.google.protobuf.MapField.emptyMapField(
@@ -1121,7 +1117,7 @@ private static final long serialVersionUID = 0L;
       }
       return details_;
     }
-    private com.google.protobuf.MapField<java.lang.Long, java.lang.Long>
+    private com.google.protobuf.MapField<java.lang.Integer, java.lang.Integer>
         internalGetMutableDetails() {
       if (details_ == null) {
         details_ = com.google.protobuf.MapField.newMapField(
@@ -1138,11 +1134,11 @@ private static final long serialVersionUID = 0L;
       return internalGetDetails().getMap().size();
     }
     /**
-     * <code>map&lt;int64, int64&gt; details = 9;</code>
+     * <code>map&lt;int32, int32&gt; details = 9;</code>
      */
     @java.lang.Override
     public boolean containsDetails(
-        long key) {
+        int key) {
 
       return internalGetDetails().getMap().containsKey(key);
     }
@@ -1151,36 +1147,36 @@ private static final long serialVersionUID = 0L;
      */
     @java.lang.Override
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, java.lang.Long> getDetails() {
+    public java.util.Map<java.lang.Integer, java.lang.Integer> getDetails() {
       return getDetailsMap();
     }
     /**
-     * <code>map&lt;int64, int64&gt; details = 9;</code>
+     * <code>map&lt;int32, int32&gt; details = 9;</code>
      */
     @java.lang.Override
-    public java.util.Map<java.lang.Long, java.lang.Long> getDetailsMap() {
+    public java.util.Map<java.lang.Integer, java.lang.Integer> getDetailsMap() {
       return internalGetDetails().getMap();
     }
     /**
-     * <code>map&lt;int64, int64&gt; details = 9;</code>
+     * <code>map&lt;int32, int32&gt; details = 9;</code>
      */
     @java.lang.Override
-    public long getDetailsOrDefault(
-        long key,
-        long defaultValue) {
+    public int getDetailsOrDefault(
+        int key,
+        int defaultValue) {
 
-      java.util.Map<java.lang.Long, java.lang.Long> map =
+      java.util.Map<java.lang.Integer, java.lang.Integer> map =
           internalGetDetails().getMap();
       return map.containsKey(key) ? map.get(key) : defaultValue;
     }
     /**
-     * <code>map&lt;int64, int64&gt; details = 9;</code>
+     * <code>map&lt;int32, int32&gt; details = 9;</code>
      */
     @java.lang.Override
-    public long getDetailsOrThrow(
-        long key) {
+    public int getDetailsOrThrow(
+        int key) {
 
-      java.util.Map<java.lang.Long, java.lang.Long> map =
+      java.util.Map<java.lang.Integer, java.lang.Integer> map =
           internalGetDetails().getMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
@@ -1194,10 +1190,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>map&lt;int64, int64&gt; details = 9;</code>
+     * <code>map&lt;int32, int32&gt; details = 9;</code>
      */
     public Builder removeDetails(
-        long key) {
+        int key) {
 
       internalGetMutableDetails().getMutableMap()
           .remove(key);
@@ -1207,17 +1203,17 @@ private static final long serialVersionUID = 0L;
      * Use alternate mutation accessors instead.
      */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, java.lang.Long>
+    public java.util.Map<java.lang.Integer, java.lang.Integer>
         getMutableDetails() {
       bitField0_ |= 0x00000100;
       return internalGetMutableDetails().getMutableMap();
     }
     /**
-     * <code>map&lt;int64, int64&gt; details = 9;</code>
+     * <code>map&lt;int32, int32&gt; details = 9;</code>
      */
     public Builder putDetails(
-        long key,
-        long value) {
+        int key,
+        int value) {
 
 
       internalGetMutableDetails().getMutableMap()
@@ -1226,10 +1222,10 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>map&lt;int64, int64&gt; details = 9;</code>
+     * <code>map&lt;int32, int32&gt; details = 9;</code>
      */
     public Builder putAllDetails(
-        java.util.Map<java.lang.Long, java.lang.Long> values) {
+        java.util.Map<java.lang.Integer, java.lang.Integer> values) {
       internalGetMutableDetails().getMutableMap()
           .putAll(values);
       bitField0_ |= 0x00000100;

@@ -58,19 +58,19 @@ private static final long serialVersionUID = 0L;
   public static final int BEAN_DEFINITIONS_FIELD_NUMBER = 1;
   private static final class BeanDefinitionsDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
-        java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> defaultEntry =
+        java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> defaultEntry =
             com.google.protobuf.MapEntry
-            .<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>newDefaultInstance(
+            .<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>newDefaultInstance(
                 io.github.sibmaks.spring.jfr.dto.protobuf.beans.Beans.internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_beans_BeansReport_BeanDefinitionsEntry_descriptor, 
-                com.google.protobuf.WireFormat.FieldType.INT64,
-                0L,
+                com.google.protobuf.WireFormat.FieldType.INT32,
+                0,
                 com.google.protobuf.WireFormat.FieldType.MESSAGE,
                 io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.getDefaultInstance());
   }
   @SuppressWarnings("serial")
   private com.google.protobuf.MapField<
-      java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> beanDefinitions_;
-  private com.google.protobuf.MapField<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
+      java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> beanDefinitions_;
+  private com.google.protobuf.MapField<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
   internalGetBeanDefinitions() {
     if (beanDefinitions_ == null) {
       return com.google.protobuf.MapField.emptyMapField(
@@ -82,11 +82,11 @@ private static final long serialVersionUID = 0L;
     return internalGetBeanDefinitions().getMap().size();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   @java.lang.Override
   public boolean containsBeanDefinitions(
-      long key) {
+      int key) {
 
     return internalGetBeanDefinitions().getMap().containsKey(key);
   }
@@ -95,38 +95,38 @@ private static final long serialVersionUID = 0L;
    */
   @java.lang.Override
   @java.lang.Deprecated
-  public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitions() {
+  public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitions() {
     return getBeanDefinitionsMap();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   @java.lang.Override
-  public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitionsMap() {
+  public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitionsMap() {
     return internalGetBeanDefinitions().getMap();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   @java.lang.Override
   public /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList getBeanDefinitionsOrDefault(
-      long key,
+      int key,
       /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue) {
 
-    java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> map =
+    java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> map =
         internalGetBeanDefinitions().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
    */
   @java.lang.Override
   public io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList getBeanDefinitionsOrThrow(
-      long key) {
+      int key) {
 
-    java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> map =
+    java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> map =
         internalGetBeanDefinitions().getMap();
     if (!map.containsKey(key)) {
       throw new java.lang.IllegalArgumentException();
@@ -190,7 +190,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
     com.google.protobuf.GeneratedMessage
-      .serializeLongMapTo(
+      .serializeIntegerMapTo(
         output,
         internalGetBeanDefinitions(),
         BeanDefinitionsDefaultEntryHolder.defaultEntry,
@@ -207,9 +207,9 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
     if (size != -1) return size;
 
     size = 0;
-    for (java.util.Map.Entry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> entry
+    for (java.util.Map.Entry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> entry
          : internalGetBeanDefinitions().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
+      com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
       beanDefinitions__ = BeanDefinitionsDefaultEntryHolder.defaultEntry.newBuilderForType()
           .setKey(entry.getKey())
           .setValue(entry.getValue())
@@ -539,7 +539,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
               done = true;
               break;
             case 10: {
-              com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
+              com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
               beanDefinitions__ = input.readMessage(
                   BeanDefinitionsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
               internalGetMutableBeanDefinitions().ensureBuilderMap().put(
@@ -577,7 +577,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
     }
     private int bitField0_;
 
-    private static final class BeanDefinitionsConverter implements com.google.protobuf.MapFieldBuilder.Converter<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> {
+    private static final class BeanDefinitionsConverter implements com.google.protobuf.MapFieldBuilder.Converter<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> {
       @java.lang.Override
       public io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList build(io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder val) {
         if (val instanceof io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList) { return (io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList) val; }
@@ -585,22 +585,22 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
       }
 
       @java.lang.Override
-      public com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> defaultEntry() {
+      public com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> defaultEntry() {
         return BeanDefinitionsDefaultEntryHolder.defaultEntry;
       }
     };
     private static final BeanDefinitionsConverter beanDefinitionsConverter = new BeanDefinitionsConverter();
 
     private com.google.protobuf.MapFieldBuilder<
-        java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.Builder> beanDefinitions_;
-    private com.google.protobuf.MapFieldBuilder<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.Builder>
+        java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.Builder> beanDefinitions_;
+    private com.google.protobuf.MapFieldBuilder<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.Builder>
         internalGetBeanDefinitions() {
       if (beanDefinitions_ == null) {
         return new com.google.protobuf.MapFieldBuilder<>(beanDefinitionsConverter);
       }
       return beanDefinitions_;
     }
-    private com.google.protobuf.MapFieldBuilder<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.Builder>
+    private com.google.protobuf.MapFieldBuilder<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.Builder>
         internalGetMutableBeanDefinitions() {
       if (beanDefinitions_ == null) {
         beanDefinitions_ = new com.google.protobuf.MapFieldBuilder<>(beanDefinitionsConverter);
@@ -613,11 +613,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
       return internalGetBeanDefinitions().ensureBuilderMap().size();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     @java.lang.Override
     public boolean containsBeanDefinitions(
-        long key) {
+        int key) {
 
       return internalGetBeanDefinitions().ensureBuilderMap().containsKey(key);
     }
@@ -626,37 +626,37 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
      */
     @java.lang.Override
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitions() {
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitions() {
       return getBeanDefinitionsMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     @java.lang.Override
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitionsMap() {
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> getBeanDefinitionsMap() {
       return internalGetBeanDefinitions().getImmutableMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     @java.lang.Override
     public /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList getBeanDefinitionsOrDefault(
-        long key,
+        int key,
         /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue) {
 
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder> map = internalGetMutableBeanDefinitions().ensureBuilderMap();
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder> map = internalGetMutableBeanDefinitions().ensureBuilderMap();
       return map.containsKey(key) ? beanDefinitionsConverter.build(map.get(key)) : defaultValue;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     @java.lang.Override
     public io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList getBeanDefinitionsOrThrow(
-        long key) {
+        int key) {
 
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder> map = internalGetMutableBeanDefinitions().ensureBuilderMap();
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder> map = internalGetMutableBeanDefinitions().ensureBuilderMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
       }
@@ -668,10 +668,10 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     public Builder removeBeanDefinitions(
-        long key) {
+        int key) {
 
       internalGetMutableBeanDefinitions().ensureBuilderMap()
           .remove(key);
@@ -681,16 +681,16 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
      * Use alternate mutation accessors instead.
      */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList>
         getMutableBeanDefinitions() {
       bitField0_ |= 0x00000001;
       return internalGetMutableBeanDefinitions().ensureMessageMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     public Builder putBeanDefinitions(
-        long key,
+        int key,
         io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList value) {
 
       if (value == null) { throw new NullPointerException("map value"); }
@@ -700,11 +700,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     public Builder putAllBeanDefinitions(
-        java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> values) {
-      for (java.util.Map.Entry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> e : values.entrySet()) {
+        java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> values) {
+      for (java.util.Map.Entry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList> e : values.entrySet()) {
         if (e.getKey() == null || e.getValue() == null) {
           throw new NullPointerException();
         }
@@ -715,11 +715,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList defaultValue)
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList&gt; bean_definitions = 1;</code>
      */
     public io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.Builder putBeanDefinitionsBuilderIfAbsent(
-        long key) {
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder> builderMap = internalGetMutableBeanDefinitions().ensureBuilderMap();
+        int key) {
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder> builderMap = internalGetMutableBeanDefinitions().ensureBuilderMap();
       io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionListOrBuilder entry = builderMap.get(key);
       if (entry == null) {
         entry = io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList.newBuilder();

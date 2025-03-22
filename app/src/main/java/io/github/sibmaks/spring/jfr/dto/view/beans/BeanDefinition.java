@@ -17,61 +17,61 @@ import java.util.SortedSet;
 @Getter
 @AllArgsConstructor
 public class BeanDefinition {
-    private final long scope;
-    private final long className;
-    private final long name;
-    private final long primary;
-    private final SortedSet<Long> dependencies;
-    private final long stereotype;
-    private final int generated;
+    private final int scope;
+    private final int className;
+    private final int name;
+    private final int primary;
+    private final SortedSet<Integer> dependencies;
+    private final int stereotype;
+    private final boolean generated;
 
     public static BeanDefinitionBuilder builder() {
         return new BeanDefinitionBuilder();
     }
 
     public static class BeanDefinitionBuilder {
-        private long scope;
-        private long className;
-        private long name;
-        private long primary;
-        private SortedSet<Long> dependencies;
-        private long stereotype;
-        private int generated;
+        private int scope;
+        private int className;
+        private int name;
+        private int primary;
+        private SortedSet<Integer> dependencies;
+        private int stereotype;
+        private boolean generated;
 
         BeanDefinitionBuilder() {
         }
 
-        public BeanDefinitionBuilder scope(long scope) {
+        public BeanDefinitionBuilder scope(int scope) {
             this.scope = scope;
             return this;
         }
 
-        public BeanDefinitionBuilder className(long className) {
+        public BeanDefinitionBuilder className(int className) {
             this.className = className;
             return this;
         }
 
-        public BeanDefinitionBuilder name(long name) {
+        public BeanDefinitionBuilder name(int name) {
             this.name = name;
             return this;
         }
 
-        public BeanDefinitionBuilder primary(long primary) {
+        public BeanDefinitionBuilder primary(int primary) {
             this.primary = primary;
             return this;
         }
 
-        public BeanDefinitionBuilder dependencies(SortedSet<Long> dependencies) {
+        public BeanDefinitionBuilder dependencies(SortedSet<Integer> dependencies) {
             this.dependencies = dependencies;
             return this;
         }
 
-        public BeanDefinitionBuilder stereotype(long stereotype) {
+        public BeanDefinitionBuilder stereotype(int stereotype) {
             this.stereotype = stereotype;
             return this;
         }
 
-        public BeanDefinitionBuilder generated(int generated) {
+        public BeanDefinitionBuilder generated(boolean generated) {
             this.generated = generated;
             return this;
         }
@@ -90,7 +90,7 @@ public class BeanDefinition {
                 primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
             }
             if (stereotype != -1) {
-                long newStereotype = Optional.ofNullable(fact.getStereotype())
+                int newStereotype = Optional.ofNullable(fact.getStereotype())
                         .map(stringConstantRegistry::getOrRegister)
                         .orElse(stereotype);
                 if (stereotype != newStereotype && newStereotype != stringConstantRegistry.getOrRegister("UNKNOWN")) {
@@ -106,7 +106,7 @@ public class BeanDefinition {
             return this;
         }
 
-        public BeanDefinitionBuilder patch(long dependency) {
+        public BeanDefinitionBuilder patch(int dependency) {
             dependencies.add(dependency);
             return this;
         }

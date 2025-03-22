@@ -57,19 +57,19 @@ private static final long serialVersionUID = 0L;
   public static final int CONNECTIONS_FIELD_NUMBER = 1;
   private static final class ConnectionsDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
-        java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> defaultEntry =
+        java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> defaultEntry =
             com.google.protobuf.MapEntry
-            .<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>newDefaultInstance(
+            .<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>newDefaultInstance(
                 io.github.sibmaks.spring.jfr.dto.protobuf.connections.Connections.internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_connections_ConnectionMap_ConnectionsEntry_descriptor, 
-                com.google.protobuf.WireFormat.FieldType.INT64,
-                0L,
+                com.google.protobuf.WireFormat.FieldType.INT32,
+                0,
                 com.google.protobuf.WireFormat.FieldType.MESSAGE,
                 io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.getDefaultInstance());
   }
   @SuppressWarnings("serial")
   private com.google.protobuf.MapField<
-      java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> connections_;
-  private com.google.protobuf.MapField<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
+      java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> connections_;
+  private com.google.protobuf.MapField<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
   internalGetConnections() {
     if (connections_ == null) {
       return com.google.protobuf.MapField.emptyMapField(
@@ -81,11 +81,11 @@ private static final long serialVersionUID = 0L;
     return internalGetConnections().getMap().size();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
    */
   @java.lang.Override
   public boolean containsConnections(
-      long key) {
+      int key) {
 
     return internalGetConnections().getMap().containsKey(key);
   }
@@ -94,38 +94,38 @@ private static final long serialVersionUID = 0L;
    */
   @java.lang.Override
   @java.lang.Deprecated
-  public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnections() {
+  public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnections() {
     return getConnectionsMap();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
    */
   @java.lang.Override
-  public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnectionsMap() {
+  public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnectionsMap() {
     return internalGetConnections().getMap();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
    */
   @java.lang.Override
   public /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList getConnectionsOrDefault(
-      long key,
+      int key,
       /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValue) {
 
-    java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> map =
+    java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> map =
         internalGetConnections().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
    */
   @java.lang.Override
   public io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList getConnectionsOrThrow(
-      long key) {
+      int key) {
 
-    java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> map =
+    java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> map =
         internalGetConnections().getMap();
     if (!map.containsKey(key)) {
       throw new java.lang.IllegalArgumentException();
@@ -148,7 +148,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
     com.google.protobuf.GeneratedMessage
-      .serializeLongMapTo(
+      .serializeIntegerMapTo(
         output,
         internalGetConnections(),
         ConnectionsDefaultEntryHolder.defaultEntry,
@@ -162,9 +162,9 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
     if (size != -1) return size;
 
     size = 0;
-    for (java.util.Map.Entry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> entry
+    for (java.util.Map.Entry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> entry
          : internalGetConnections().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
+      com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
       connections__ = ConnectionsDefaultEntryHolder.defaultEntry.newBuilderForType()
           .setKey(entry.getKey())
           .setValue(entry.getValue())
@@ -438,7 +438,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
               done = true;
               break;
             case 10: {
-              com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
+              com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
               connections__ = input.readMessage(
                   ConnectionsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
               internalGetMutableConnections().ensureBuilderMap().put(
@@ -463,7 +463,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
     }
     private int bitField0_;
 
-    private static final class ConnectionsConverter implements com.google.protobuf.MapFieldBuilder.Converter<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> {
+    private static final class ConnectionsConverter implements com.google.protobuf.MapFieldBuilder.Converter<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> {
       @java.lang.Override
       public io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList build(io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder val) {
         if (val instanceof io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList) { return (io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList) val; }
@@ -471,22 +471,22 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
       }
 
       @java.lang.Override
-      public com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> defaultEntry() {
+      public com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> defaultEntry() {
         return ConnectionsDefaultEntryHolder.defaultEntry;
       }
     };
     private static final ConnectionsConverter connectionsConverter = new ConnectionsConverter();
 
     private com.google.protobuf.MapFieldBuilder<
-        java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.Builder> connections_;
-    private com.google.protobuf.MapFieldBuilder<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.Builder>
+        java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.Builder> connections_;
+    private com.google.protobuf.MapFieldBuilder<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.Builder>
         internalGetConnections() {
       if (connections_ == null) {
         return new com.google.protobuf.MapFieldBuilder<>(connectionsConverter);
       }
       return connections_;
     }
-    private com.google.protobuf.MapFieldBuilder<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.Builder>
+    private com.google.protobuf.MapFieldBuilder<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.Builder>
         internalGetMutableConnections() {
       if (connections_ == null) {
         connections_ = new com.google.protobuf.MapFieldBuilder<>(connectionsConverter);
@@ -499,11 +499,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
       return internalGetConnections().ensureBuilderMap().size();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     @java.lang.Override
     public boolean containsConnections(
-        long key) {
+        int key) {
 
       return internalGetConnections().ensureBuilderMap().containsKey(key);
     }
@@ -512,37 +512,37 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
      */
     @java.lang.Override
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnections() {
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnections() {
       return getConnectionsMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     @java.lang.Override
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnectionsMap() {
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> getConnectionsMap() {
       return internalGetConnections().getImmutableMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     @java.lang.Override
     public /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList getConnectionsOrDefault(
-        long key,
+        int key,
         /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValue) {
 
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder> map = internalGetMutableConnections().ensureBuilderMap();
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder> map = internalGetMutableConnections().ensureBuilderMap();
       return map.containsKey(key) ? connectionsConverter.build(map.get(key)) : defaultValue;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     @java.lang.Override
     public io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList getConnectionsOrThrow(
-        long key) {
+        int key) {
 
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder> map = internalGetMutableConnections().ensureBuilderMap();
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder> map = internalGetMutableConnections().ensureBuilderMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
       }
@@ -554,10 +554,10 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     public Builder removeConnections(
-        long key) {
+        int key) {
 
       internalGetMutableConnections().ensureBuilderMap()
           .remove(key);
@@ -567,16 +567,16 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
      * Use alternate mutation accessors instead.
      */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList>
         getMutableConnections() {
       bitField0_ |= 0x00000001;
       return internalGetMutableConnections().ensureMessageMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     public Builder putConnections(
-        long key,
+        int key,
         io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList value) {
 
       if (value == null) { throw new NullPointerException("map value"); }
@@ -586,11 +586,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     public Builder putAllConnections(
-        java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> values) {
-      for (java.util.Map.Entry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> e : values.entrySet()) {
+        java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> values) {
+      for (java.util.Map.Entry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList> e : values.entrySet()) {
         if (e.getKey() == null || e.getValue() == null) {
           throw new NullPointerException();
         }
@@ -601,11 +601,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList defaultValu
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList&gt; connections = 1;</code>
      */
     public io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.Builder putConnectionsBuilderIfAbsent(
-        long key) {
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder> builderMap = internalGetMutableConnections().ensureBuilderMap();
+        int key) {
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder> builderMap = internalGetMutableConnections().ensureBuilderMap();
       io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionListOrBuilder entry = builderMap.get(key);
       if (entry == null) {
         entry = io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionList.newBuilder();

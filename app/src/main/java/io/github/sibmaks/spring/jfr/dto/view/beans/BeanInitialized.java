@@ -12,8 +12,8 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class BeanInitialized {
-    private long contextId;
-    private long beanName;
+    private int contextId;
+    private int beanName;
     private Long preInitializedAt;
     private Long postInitializedAt;
     private double duration;

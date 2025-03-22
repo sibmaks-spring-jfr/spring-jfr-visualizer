@@ -6,8 +6,8 @@ option java_multiple_files = true;
 option java_package = "io.github.sibmaks.spring.jfr.dto.protobuf.connections";
 
 message ConnectionException {
-  int64 type = 1;
-  int64 message = 2;
+  int32 type = 1;
+  int32 message = 2;
 }
 
 message ConnectionEvent {
@@ -16,7 +16,7 @@ message ConnectionEvent {
   ConnectionException exception = 3;
   int64 started_at = 4;
   int64 finished_at = 5;
-  int64 thread_name = 6;
+  int32 thread_name = 6;
   optional int32 transaction_isolation = 7;
 }
 
@@ -32,9 +32,9 @@ message ConnectionList {
 }
 
 message ConnectionMap {
-  map<int64, ConnectionList> connections = 1;
+  map<int32, ConnectionList> connections = 1;
 }
 
 message ConnectionsReport {
-  map<int64, ConnectionMap> contexts = 1;
+  map<int32, ConnectionMap> contexts = 1;
 }

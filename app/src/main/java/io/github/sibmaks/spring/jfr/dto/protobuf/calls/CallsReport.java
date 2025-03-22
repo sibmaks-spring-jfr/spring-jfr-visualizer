@@ -57,19 +57,19 @@ private static final long serialVersionUID = 0L;
   public static final int CONTEXTS_FIELD_NUMBER = 1;
   private static final class ContextsDefaultEntryHolder {
     static final com.google.protobuf.MapEntry<
-        java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> defaultEntry =
+        java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> defaultEntry =
             com.google.protobuf.MapEntry
-            .<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>newDefaultInstance(
+            .<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>newDefaultInstance(
                 io.github.sibmaks.spring.jfr.dto.protobuf.calls.Calls.internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_calls_CallsReport_ContextsEntry_descriptor, 
-                com.google.protobuf.WireFormat.FieldType.INT64,
-                0L,
+                com.google.protobuf.WireFormat.FieldType.INT32,
+                0,
                 com.google.protobuf.WireFormat.FieldType.MESSAGE,
                 io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.getDefaultInstance());
   }
   @SuppressWarnings("serial")
   private com.google.protobuf.MapField<
-      java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> contexts_;
-  private com.google.protobuf.MapField<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
+      java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> contexts_;
+  private com.google.protobuf.MapField<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
   internalGetContexts() {
     if (contexts_ == null) {
       return com.google.protobuf.MapField.emptyMapField(
@@ -81,11 +81,11 @@ private static final long serialVersionUID = 0L;
     return internalGetContexts().getMap().size();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   @java.lang.Override
   public boolean containsContexts(
-      long key) {
+      int key) {
 
     return internalGetContexts().getMap().containsKey(key);
   }
@@ -94,38 +94,38 @@ private static final long serialVersionUID = 0L;
    */
   @java.lang.Override
   @java.lang.Deprecated
-  public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContexts() {
+  public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContexts() {
     return getContextsMap();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   @java.lang.Override
-  public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContextsMap() {
+  public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContextsMap() {
     return internalGetContexts().getMap();
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   @java.lang.Override
   public /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList getContextsOrDefault(
-      long key,
+      int key,
       /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
 
-    java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> map =
+    java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> map =
         internalGetContexts().getMap();
     return map.containsKey(key) ? map.get(key) : defaultValue;
   }
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   @java.lang.Override
   public io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList getContextsOrThrow(
-      long key) {
+      int key) {
 
-    java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> map =
+    java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> map =
         internalGetContexts().getMap();
     if (!map.containsKey(key)) {
       throw new java.lang.IllegalArgumentException();
@@ -148,7 +148,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
     com.google.protobuf.GeneratedMessage
-      .serializeLongMapTo(
+      .serializeIntegerMapTo(
         output,
         internalGetContexts(),
         ContextsDefaultEntryHolder.defaultEntry,
@@ -162,9 +162,9 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
     if (size != -1) return size;
 
     size = 0;
-    for (java.util.Map.Entry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> entry
+    for (java.util.Map.Entry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> entry
          : internalGetContexts().getMap().entrySet()) {
-      com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
+      com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
       contexts__ = ContextsDefaultEntryHolder.defaultEntry.newBuilderForType()
           .setKey(entry.getKey())
           .setValue(entry.getValue())
@@ -438,7 +438,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
               done = true;
               break;
             case 10: {
-              com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
+              com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
               contexts__ = input.readMessage(
                   ContextsDefaultEntryHolder.defaultEntry.getParserForType(), extensionRegistry);
               internalGetMutableContexts().ensureBuilderMap().put(
@@ -463,7 +463,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
     }
     private int bitField0_;
 
-    private static final class ContextsConverter implements com.google.protobuf.MapFieldBuilder.Converter<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> {
+    private static final class ContextsConverter implements com.google.protobuf.MapFieldBuilder.Converter<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> {
       @java.lang.Override
       public io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList build(io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder val) {
         if (val instanceof io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList) { return (io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList) val; }
@@ -471,22 +471,22 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
       }
 
       @java.lang.Override
-      public com.google.protobuf.MapEntry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> defaultEntry() {
+      public com.google.protobuf.MapEntry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> defaultEntry() {
         return ContextsDefaultEntryHolder.defaultEntry;
       }
     };
     private static final ContextsConverter contextsConverter = new ContextsConverter();
 
     private com.google.protobuf.MapFieldBuilder<
-        java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.Builder> contexts_;
-    private com.google.protobuf.MapFieldBuilder<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.Builder>
+        java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.Builder> contexts_;
+    private com.google.protobuf.MapFieldBuilder<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.Builder>
         internalGetContexts() {
       if (contexts_ == null) {
         return new com.google.protobuf.MapFieldBuilder<>(contextsConverter);
       }
       return contexts_;
     }
-    private com.google.protobuf.MapFieldBuilder<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.Builder>
+    private com.google.protobuf.MapFieldBuilder<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.Builder>
         internalGetMutableContexts() {
       if (contexts_ == null) {
         contexts_ = new com.google.protobuf.MapFieldBuilder<>(contextsConverter);
@@ -499,11 +499,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
       return internalGetContexts().ensureBuilderMap().size();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     @java.lang.Override
     public boolean containsContexts(
-        long key) {
+        int key) {
 
       return internalGetContexts().ensureBuilderMap().containsKey(key);
     }
@@ -512,37 +512,37 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
      */
     @java.lang.Override
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContexts() {
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContexts() {
       return getContextsMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     @java.lang.Override
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContextsMap() {
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> getContextsMap() {
       return internalGetContexts().getImmutableMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     @java.lang.Override
     public /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList getContextsOrDefault(
-        long key,
+        int key,
         /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
 
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder> map = internalGetMutableContexts().ensureBuilderMap();
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder> map = internalGetMutableContexts().ensureBuilderMap();
       return map.containsKey(key) ? contextsConverter.build(map.get(key)) : defaultValue;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     @java.lang.Override
     public io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList getContextsOrThrow(
-        long key) {
+        int key) {
 
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder> map = internalGetMutableContexts().ensureBuilderMap();
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder> map = internalGetMutableContexts().ensureBuilderMap();
       if (!map.containsKey(key)) {
         throw new java.lang.IllegalArgumentException();
       }
@@ -554,10 +554,10 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     public Builder removeContexts(
-        long key) {
+        int key) {
 
       internalGetMutableContexts().ensureBuilderMap()
           .remove(key);
@@ -567,16 +567,16 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
      * Use alternate mutation accessors instead.
      */
     @java.lang.Deprecated
-    public java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
+    public java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
         getMutableContexts() {
       bitField0_ |= 0x00000001;
       return internalGetMutableContexts().ensureMessageMap();
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     public Builder putContexts(
-        long key,
+        int key,
         io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList value) {
 
       if (value == null) { throw new NullPointerException("map value"); }
@@ -586,11 +586,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     public Builder putAllContexts(
-        java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> values) {
-      for (java.util.Map.Entry<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> e : values.entrySet()) {
+        java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> values) {
+      for (java.util.Map.Entry<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList> e : values.entrySet()) {
         if (e.getKey() == null || e.getValue() == null) {
           throw new NullPointerException();
         }
@@ -601,11 +601,11 @@ io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue) {
       return this;
     }
     /**
-     * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+     * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
      */
     public io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.Builder putContextsBuilderIfAbsent(
-        long key) {
-      java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder> builderMap = internalGetMutableContexts().ensureBuilderMap();
+        int key) {
+      java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder> builderMap = internalGetMutableContexts().ensureBuilderMap();
       io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceListOrBuilder entry = builderMap.get(key);
       if (entry == null) {
         entry = io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList.newBuilder();

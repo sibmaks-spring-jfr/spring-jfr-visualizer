@@ -13,7 +13,7 @@ public record ConnectionEvent(
         ConnectionException exception,
         long startedAt,
         long finishedAt,
-        long threadName,
+        int threadName,
         Integer transactionIsolation
 ) {
 

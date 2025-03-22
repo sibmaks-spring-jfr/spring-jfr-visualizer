@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author sibmaks
@@ -14,14 +14,14 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @Service
 public class StringConstantRegistry {
-    private final AtomicLong counter = new AtomicLong(0);
-    private final Map<String, Long> constants;
+    private final AtomicInteger counter = new AtomicInteger(0);
+    private final Map<String, Integer> constants;
 
     public StringConstantRegistry() {
         constants = new ConcurrentHashMap<>();
     }
 
-    public long getOrRegister(String constantName) {
+    public int getOrRegister(String constantName) {
         if (constantName == null) {
             return -1;
         }

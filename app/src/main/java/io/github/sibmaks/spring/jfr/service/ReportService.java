@@ -104,7 +104,7 @@ public class ReportService {
                 .build();
     }
 
-    private static Map<Long, BeanDefinitionList> map(Map<Long, List<BeanDefinition>> definitions) {
+    private static Map<Integer, BeanDefinitionList> map(Map<Integer, List<BeanDefinition>> definitions) {
         if (definitions == null) {
             return Collections.emptyMap();
         }
@@ -138,7 +138,7 @@ public class ReportService {
                                 .toList()
                 )
                 .setStereotype(it.getStereotype())
-                .setGenerated(it.getGenerated())
+                .setGenerated(it.isGenerated())
                 .build();
     }
 
@@ -175,7 +175,7 @@ public class ReportService {
                 .build();
     }
 
-    private static Map<Long, CallTraceList> mapCallsContext(Map<Long, List<CallTrace>> contexts) {
+    private static Map<Integer, CallTraceList> mapCallsContext(Map<Integer, List<CallTrace>> contexts) {
         if (contexts == null) {
             return Collections.emptyMap();
         }
@@ -240,7 +240,7 @@ public class ReportService {
                 .build();
     }
 
-    private static ConnectionMap mapContextConnections(Map<Long, List<Connection>> value) {
+    private static ConnectionMap mapContextConnections(Map<Integer, List<Connection>> value) {
         return ConnectionMap.newBuilder()
                 .putAllConnections(
                         Optional.ofNullable(value)

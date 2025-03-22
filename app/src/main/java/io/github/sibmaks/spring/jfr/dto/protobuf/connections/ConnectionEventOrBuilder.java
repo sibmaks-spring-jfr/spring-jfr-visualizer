@@ -49,10 +49,10 @@ public interface ConnectionEventOrBuilder extends
   long getFinishedAt();
 
   /**
-   * <code>int64 thread_name = 6;</code>
+   * <code>int32 thread_name = 6;</code>
    * @return The threadName.
    */
-  long getThreadName();
+  int getThreadName();
 
   /**
    * <code>optional int32 transaction_isolation = 7;</code>

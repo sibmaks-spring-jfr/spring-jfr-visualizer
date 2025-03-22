@@ -43,24 +43,24 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int TYPE_FIELD_NUMBER = 1;
-  private long type_ = 0L;
+  private int type_ = 0;
   /**
-   * <code>int64 type = 1;</code>
+   * <code>int32 type = 1;</code>
    * @return The type.
    */
   @java.lang.Override
-  public long getType() {
+  public int getType() {
     return type_;
   }
 
   public static final int MESSAGE_FIELD_NUMBER = 2;
-  private long message_ = 0L;
+  private int message_ = 0;
   /**
-   * <code>int64 message = 2;</code>
+   * <code>int32 message = 2;</code>
    * @return The message.
    */
   @java.lang.Override
-  public long getMessage() {
+  public int getMessage() {
     return message_;
   }
 
@@ -78,11 +78,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (type_ != 0L) {
-      output.writeInt64(1, type_);
+    if (type_ != 0) {
+      output.writeInt32(1, type_);
     }
-    if (message_ != 0L) {
-      output.writeInt64(2, message_);
+    if (message_ != 0) {
+      output.writeInt32(2, message_);
     }
     getUnknownFields().writeTo(output);
   }
@@ -93,13 +93,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (type_ != 0L) {
+    if (type_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, type_);
+        .computeInt32Size(1, type_);
     }
-    if (message_ != 0L) {
+    if (message_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(2, message_);
+        .computeInt32Size(2, message_);
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -132,11 +132,9 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + TYPE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getType());
+    hash = (53 * hash) + getType();
     hash = (37 * hash) + MESSAGE_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getMessage());
+    hash = (53 * hash) + getMessage();
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -268,8 +266,8 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      type_ = 0L;
-      message_ = 0L;
+      type_ = 0;
+      message_ = 0;
       return this;
     }
 
@@ -323,10 +321,10 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionException other) {
       if (other == io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionException.getDefaultInstance()) return this;
-      if (other.getType() != 0L) {
+      if (other.getType() != 0) {
         setType(other.getType());
       }
-      if (other.getMessage() != 0L) {
+      if (other.getMessage() != 0) {
         setMessage(other.getMessage());
       }
       this.mergeUnknownFields(other.getUnknownFields());
@@ -356,12 +354,12 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              type_ = input.readInt64();
+              type_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              message_ = input.readInt64();
+              message_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
@@ -382,21 +380,21 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long type_ ;
+    private int type_ ;
     /**
-     * <code>int64 type = 1;</code>
+     * <code>int32 type = 1;</code>
      * @return The type.
      */
     @java.lang.Override
-    public long getType() {
+    public int getType() {
       return type_;
     }
     /**
-     * <code>int64 type = 1;</code>
+     * <code>int32 type = 1;</code>
      * @param value The type to set.
      * @return This builder for chaining.
      */
-    public Builder setType(long value) {
+    public Builder setType(int value) {
 
       type_ = value;
       bitField0_ |= 0x00000001;
@@ -404,31 +402,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 type = 1;</code>
+     * <code>int32 type = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearType() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      type_ = 0L;
+      type_ = 0;
       onChanged();
       return this;
     }
 
-    private long message_ ;
+    private int message_ ;
     /**
-     * <code>int64 message = 2;</code>
+     * <code>int32 message = 2;</code>
      * @return The message.
      */
     @java.lang.Override
-    public long getMessage() {
+    public int getMessage() {
       return message_;
     }
     /**
-     * <code>int64 message = 2;</code>
+     * <code>int32 message = 2;</code>
      * @param value The message to set.
      * @return This builder for chaining.
      */
-    public Builder setMessage(long value) {
+    public Builder setMessage(int value) {
 
       message_ = value;
       bitField0_ |= 0x00000002;
@@ -436,12 +434,12 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 message = 2;</code>
+     * <code>int32 message = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearMessage() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      message_ = 0L;
+      message_ = 0;
       onChanged();
       return this;
     }

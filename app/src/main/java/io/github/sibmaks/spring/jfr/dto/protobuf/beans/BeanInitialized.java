@@ -44,24 +44,24 @@ private static final long serialVersionUID = 0L;
 
   private int bitField0_;
   public static final int CONTEXT_ID_FIELD_NUMBER = 1;
-  private long contextId_ = 0L;
+  private int contextId_ = 0;
   /**
-   * <code>int64 context_id = 1;</code>
+   * <code>int32 context_id = 1;</code>
    * @return The contextId.
    */
   @java.lang.Override
-  public long getContextId() {
+  public int getContextId() {
     return contextId_;
   }
 
   public static final int BEAN_NAME_FIELD_NUMBER = 2;
-  private long beanName_ = 0L;
+  private int beanName_ = 0;
   /**
-   * <code>int64 bean_name = 2;</code>
+   * <code>int32 bean_name = 2;</code>
    * @return The beanName.
    */
   @java.lang.Override
-  public long getBeanName() {
+  public int getBeanName() {
     return beanName_;
   }
 
@@ -128,11 +128,11 @@ private static final long serialVersionUID = 0L;
   @java.lang.Override
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
-    if (contextId_ != 0L) {
-      output.writeInt64(1, contextId_);
+    if (contextId_ != 0) {
+      output.writeInt32(1, contextId_);
     }
-    if (beanName_ != 0L) {
-      output.writeInt64(2, beanName_);
+    if (beanName_ != 0) {
+      output.writeInt32(2, beanName_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       output.writeInt64(3, preInitializedAt_);
@@ -152,13 +152,13 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    if (contextId_ != 0L) {
+    if (contextId_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(1, contextId_);
+        .computeInt32Size(1, contextId_);
     }
-    if (beanName_ != 0L) {
+    if (beanName_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(2, beanName_);
+        .computeInt32Size(2, beanName_);
     }
     if (((bitField0_ & 0x00000001) != 0)) {
       size += com.google.protobuf.CodedOutputStream
@@ -216,11 +216,9 @@ private static final long serialVersionUID = 0L;
     int hash = 41;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + CONTEXT_ID_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getContextId());
+    hash = (53 * hash) + getContextId();
     hash = (37 * hash) + BEAN_NAME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getBeanName());
+    hash = (53 * hash) + getBeanName();
     if (hasPreInitializedAt()) {
       hash = (37 * hash) + PRE_INITIALIZED_AT_FIELD_NUMBER;
       hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
@@ -365,8 +363,8 @@ private static final long serialVersionUID = 0L;
     public Builder clear() {
       super.clear();
       bitField0_ = 0;
-      contextId_ = 0L;
-      beanName_ = 0L;
+      contextId_ = 0;
+      beanName_ = 0;
       preInitializedAt_ = 0L;
       postInitializedAt_ = 0L;
       duration_ = 0D;
@@ -436,10 +434,10 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanInitialized other) {
       if (other == io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanInitialized.getDefaultInstance()) return this;
-      if (other.getContextId() != 0L) {
+      if (other.getContextId() != 0) {
         setContextId(other.getContextId());
       }
-      if (other.getBeanName() != 0L) {
+      if (other.getBeanName() != 0) {
         setBeanName(other.getBeanName());
       }
       if (other.hasPreInitializedAt()) {
@@ -478,12 +476,12 @@ private static final long serialVersionUID = 0L;
               done = true;
               break;
             case 8: {
-              contextId_ = input.readInt64();
+              contextId_ = input.readInt32();
               bitField0_ |= 0x00000001;
               break;
             } // case 8
             case 16: {
-              beanName_ = input.readInt64();
+              beanName_ = input.readInt32();
               bitField0_ |= 0x00000002;
               break;
             } // case 16
@@ -519,21 +517,21 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private long contextId_ ;
+    private int contextId_ ;
     /**
-     * <code>int64 context_id = 1;</code>
+     * <code>int32 context_id = 1;</code>
      * @return The contextId.
      */
     @java.lang.Override
-    public long getContextId() {
+    public int getContextId() {
       return contextId_;
     }
     /**
-     * <code>int64 context_id = 1;</code>
+     * <code>int32 context_id = 1;</code>
      * @param value The contextId to set.
      * @return This builder for chaining.
      */
-    public Builder setContextId(long value) {
+    public Builder setContextId(int value) {
 
       contextId_ = value;
       bitField0_ |= 0x00000001;
@@ -541,31 +539,31 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 context_id = 1;</code>
+     * <code>int32 context_id = 1;</code>
      * @return This builder for chaining.
      */
     public Builder clearContextId() {
       bitField0_ = (bitField0_ & ~0x00000001);
-      contextId_ = 0L;
+      contextId_ = 0;
       onChanged();
       return this;
     }
 
-    private long beanName_ ;
+    private int beanName_ ;
     /**
-     * <code>int64 bean_name = 2;</code>
+     * <code>int32 bean_name = 2;</code>
      * @return The beanName.
      */
     @java.lang.Override
-    public long getBeanName() {
+    public int getBeanName() {
       return beanName_;
     }
     /**
-     * <code>int64 bean_name = 2;</code>
+     * <code>int32 bean_name = 2;</code>
      * @param value The beanName to set.
      * @return This builder for chaining.
      */
-    public Builder setBeanName(long value) {
+    public Builder setBeanName(int value) {
 
       beanName_ = value;
       bitField0_ |= 0x00000002;
@@ -573,12 +571,12 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 bean_name = 2;</code>
+     * <code>int32 bean_name = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearBeanName() {
       bitField0_ = (bitField0_ & ~0x00000002);
-      beanName_ = 0L;
+      beanName_ = 0;
       onChanged();
       return this;
     }

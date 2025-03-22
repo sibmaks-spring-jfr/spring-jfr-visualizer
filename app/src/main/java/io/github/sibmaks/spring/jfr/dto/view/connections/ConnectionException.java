@@ -7,5 +7,5 @@ import lombok.Builder;
  * @since 0.0.2
  */
 @Builder
-public record ConnectionException(long type, long message) {
+public record ConnectionException(int type, int message) {
 }

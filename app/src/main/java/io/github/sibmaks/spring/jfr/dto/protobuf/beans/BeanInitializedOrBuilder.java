@@ -10,16 +10,16 @@ public interface BeanInitializedOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 context_id = 1;</code>
+   * <code>int32 context_id = 1;</code>
    * @return The contextId.
    */
-  long getContextId();
+  int getContextId();
 
   /**
-   * <code>int64 bean_name = 2;</code>
+   * <code>int32 bean_name = 2;</code>
    * @return The beanName.
    */
-  long getBeanName();
+  int getBeanName();
 
   /**
    * <code>optional int64 pre_initialized_at = 3;</code>

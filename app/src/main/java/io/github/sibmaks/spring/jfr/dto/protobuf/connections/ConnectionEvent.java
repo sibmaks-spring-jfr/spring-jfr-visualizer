@@ -114,13 +114,13 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int THREAD_NAME_FIELD_NUMBER = 6;
-  private long threadName_ = 0L;
+  private int threadName_ = 0;
   /**
-   * <code>int64 thread_name = 6;</code>
+   * <code>int32 thread_name = 6;</code>
    * @return The threadName.
    */
   @java.lang.Override
-  public long getThreadName() {
+  public int getThreadName() {
     return threadName_;
   }
 
@@ -172,8 +172,8 @@ private static final long serialVersionUID = 0L;
     if (finishedAt_ != 0L) {
       output.writeInt64(5, finishedAt_);
     }
-    if (threadName_ != 0L) {
-      output.writeInt64(6, threadName_);
+    if (threadName_ != 0) {
+      output.writeInt32(6, threadName_);
     }
     if (((bitField0_ & 0x00000002) != 0)) {
       output.writeInt32(7, transactionIsolation_);
@@ -207,9 +207,9 @@ private static final long serialVersionUID = 0L;
       size += com.google.protobuf.CodedOutputStream
         .computeInt64Size(5, finishedAt_);
     }
-    if (threadName_ != 0L) {
+    if (threadName_ != 0) {
       size += com.google.protobuf.CodedOutputStream
-        .computeInt64Size(6, threadName_);
+        .computeInt32Size(6, threadName_);
     }
     if (((bitField0_ & 0x00000002) != 0)) {
       size += com.google.protobuf.CodedOutputStream
@@ -278,8 +278,7 @@ private static final long serialVersionUID = 0L;
     hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
         getFinishedAt());
     hash = (37 * hash) + THREAD_NAME_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        getThreadName());
+    hash = (53 * hash) + getThreadName();
     if (hasTransactionIsolation()) {
       hash = (37 * hash) + TRANSACTION_ISOLATION_FIELD_NUMBER;
       hash = (53 * hash) + getTransactionIsolation();
@@ -430,7 +429,7 @@ private static final long serialVersionUID = 0L;
       }
       startedAt_ = 0L;
       finishedAt_ = 0L;
-      threadName_ = 0L;
+      threadName_ = 0;
       transactionIsolation_ = 0;
       return this;
     }
@@ -521,7 +520,7 @@ private static final long serialVersionUID = 0L;
       if (other.getFinishedAt() != 0L) {
         setFinishedAt(other.getFinishedAt());
       }
-      if (other.getThreadName() != 0L) {
+      if (other.getThreadName() != 0) {
         setThreadName(other.getThreadName());
       }
       if (other.hasTransactionIsolation()) {
@@ -581,7 +580,7 @@ private static final long serialVersionUID = 0L;
               break;
             } // case 40
             case 48: {
-              threadName_ = input.readInt64();
+              threadName_ = input.readInt32();
               bitField0_ |= 0x00000020;
               break;
             } // case 48
@@ -856,21 +855,21 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
-    private long threadName_ ;
+    private int threadName_ ;
     /**
-     * <code>int64 thread_name = 6;</code>
+     * <code>int32 thread_name = 6;</code>
      * @return The threadName.
      */
     @java.lang.Override
-    public long getThreadName() {
+    public int getThreadName() {
       return threadName_;
     }
     /**
-     * <code>int64 thread_name = 6;</code>
+     * <code>int32 thread_name = 6;</code>
      * @param value The threadName to set.
      * @return This builder for chaining.
      */
-    public Builder setThreadName(long value) {
+    public Builder setThreadName(int value) {
 
       threadName_ = value;
       bitField0_ |= 0x00000020;
@@ -878,12 +877,12 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>int64 thread_name = 6;</code>
+     * <code>int32 thread_name = 6;</code>
      * @return This builder for chaining.
      */
     public Builder clearThreadName() {
       bitField0_ = (bitField0_ & ~0x00000020);
-      threadName_ = 0L;
+      threadName_ = 0;
       onChanged();
       return this;
     }

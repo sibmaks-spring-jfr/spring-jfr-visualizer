@@ -10,22 +10,22 @@ public interface CallTraceOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 invocation_id = 1;</code>
+   * <code>int32 invocation_id = 1;</code>
    * @return The invocationId.
    */
-  long getInvocationId();
+  int getInvocationId();
 
   /**
-   * <code>int32 success = 2;</code>
+   * <code>bool success = 2;</code>
    * @return The success.
    */
-  int getSuccess();
+  boolean getSuccess();
 
   /**
-   * <code>int64 type = 3;</code>
+   * <code>int32 type = 3;</code>
    * @return The type.
    */
-  long getType();
+  int getType();
 
   /**
    * <code>int64 start_time = 4;</code>
@@ -40,54 +40,54 @@ public interface CallTraceOrBuilder extends
   long getEndTime();
 
   /**
-   * <code>int64 thread_name = 6;</code>
+   * <code>int32 thread_name = 6;</code>
    * @return The threadName.
    */
-  long getThreadName();
+  int getThreadName();
 
   /**
-   * <code>int64 class_name = 7;</code>
+   * <code>int32 class_name = 7;</code>
    * @return The className.
    */
-  long getClassName();
+  int getClassName();
 
   /**
-   * <code>int64 method_name = 8;</code>
+   * <code>int32 method_name = 8;</code>
    * @return The methodName.
    */
-  long getMethodName();
+  int getMethodName();
 
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
   int getDetailsCount();
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
   boolean containsDetails(
-      long key);
+      int key);
   /**
    * Use {@link #getDetailsMap()} instead.
    */
   @java.lang.Deprecated
-  java.util.Map<java.lang.Long, java.lang.Long>
+  java.util.Map<java.lang.Integer, java.lang.Integer>
   getDetails();
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
-  java.util.Map<java.lang.Long, java.lang.Long>
+  java.util.Map<java.lang.Integer, java.lang.Integer>
   getDetailsMap();
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
-  long getDetailsOrDefault(
-      long key,
-      long defaultValue);
+  int getDetailsOrDefault(
+      int key,
+      int defaultValue);
   /**
-   * <code>map&lt;int64, int64&gt; details = 9;</code>
+   * <code>map&lt;int32, int32&gt; details = 9;</code>
    */
-  long getDetailsOrThrow(
-      long key);
+  int getDetailsOrThrow(
+      int key);
 
   /**
    * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTrace children = 10;</code>

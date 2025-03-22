@@ -12,18 +12,18 @@ import java.util.Map;
  */
 public record CallTrace(
         @JsonIgnore
-        long contextId,
+        int contextId,
         @JsonIgnore
-        Long correlationId,
-        long invocationId,
-        int success,
-        long type,
+        Integer correlationId,
+        int invocationId,
+        boolean success,
+        int type,
         long startTime,
         long endTime,
-        long threadName,
-        long className,
-        long methodName,
-        Map<Long, Long> details,
+        int threadName,
+        int className,
+        int methodName,
+        Map<Integer, Integer> details,
         List<CallTrace> children
 ) {
     public static CallTraceBuilder builder() {
@@ -31,43 +31,43 @@ public record CallTrace(
     }
 
     public static class CallTraceBuilder {
-        private long contextId;
-        private Long correlationId;
-        private long invocationId;
-        private int success;
-        private long type;
+        private int contextId;
+        private Integer correlationId;
+        private int invocationId;
+        private boolean success;
+        private int type;
         private long startTime;
         private long endTime;
-        private long threadName;
-        private long className;
-        private long methodName;
-        private Map<Long, Long> details;
+        private int threadName;
+        private int className;
+        private int methodName;
+        private Map<Integer, Integer> details;
         private List<CallTrace.CallTraceBuilder> children;
 
         CallTraceBuilder() {
         }
 
-        public CallTraceBuilder contextId(long contextId) {
+        public CallTraceBuilder contextId(int contextId) {
             this.contextId = contextId;
             return this;
         }
 
-        public CallTraceBuilder correlationId(Long correlationId) {
+        public CallTraceBuilder correlationId(Integer correlationId) {
             this.correlationId = correlationId;
             return this;
         }
 
-        public CallTraceBuilder invocationId(long invocationId) {
+        public CallTraceBuilder invocationId(int invocationId) {
             this.invocationId = invocationId;
             return this;
         }
 
-        public CallTraceBuilder success(int success) {
+        public CallTraceBuilder success(boolean success) {
             this.success = success;
             return this;
         }
 
-        public CallTraceBuilder type(long type) {
+        public CallTraceBuilder type(int type) {
             this.type = type;
             return this;
         }
@@ -82,27 +82,27 @@ public record CallTrace(
             return this;
         }
 
-        public CallTraceBuilder threadName(long threadName) {
+        public CallTraceBuilder threadName(int threadName) {
             this.threadName = threadName;
             return this;
         }
 
-        public CallTraceBuilder className(long className) {
+        public CallTraceBuilder className(int className) {
             this.className = className;
             return this;
         }
 
-        public CallTraceBuilder methodName(long methodName) {
+        public CallTraceBuilder methodName(int methodName) {
             this.methodName = methodName;
             return this;
         }
 
-        public CallTraceBuilder details(Map<Long, Long> details) {
+        public CallTraceBuilder details(Map<Integer, Integer> details) {
             this.details = details;
             return this;
         }
 
-        public CallTraceBuilder addDetails(Map<Long, Long> details) {
+        public CallTraceBuilder addDetails(Map<Integer, Integer> details) {
             if (this.details == null) {
                 this.details = new LinkedHashMap<>();
             }

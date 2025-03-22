@@ -10,5 +10,5 @@ import java.util.Map;
  * @since 0.0.2
  */
 @Builder
-public record BeansReport(Map<Long, List<BeanDefinition>> beanDefinitions, List<BeanInitialized> beans) {
+public record BeansReport(Map<Integer, List<BeanDefinition>> beanDefinitions, List<BeanInitialized> beans) {
 }

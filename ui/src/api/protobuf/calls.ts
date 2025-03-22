@@ -11,7 +11,7 @@ export const protobufPackage = "io.github.sibmaks.spring.jfr.dto.protobuf.calls"
 
 export interface CallTrace {
   invocationId: number;
-  success: number;
+  success: boolean;
   type: number;
   startTime: number;
   endTime: number;
@@ -43,7 +43,7 @@ export interface CallsReport_ContextsEntry {
 function createBaseCallTrace(): CallTrace {
   return {
     invocationId: 0,
-    success: 0,
+    success: false,
     type: 0,
     startTime: 0,
     endTime: 0,
@@ -58,13 +58,13 @@ function createBaseCallTrace(): CallTrace {
 export const CallTrace: MessageFns<CallTrace> = {
   encode(message: CallTrace, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.invocationId !== 0) {
-      writer.uint32(8).int64(message.invocationId);
+      writer.uint32(8).int32(message.invocationId);
     }
-    if (message.success !== 0) {
-      writer.uint32(16).int32(message.success);
+    if (message.success !== false) {
+      writer.uint32(16).bool(message.success);
     }
     if (message.type !== 0) {
-      writer.uint32(24).int64(message.type);
+      writer.uint32(24).int32(message.type);
     }
     if (message.startTime !== 0) {
       writer.uint32(32).int64(message.startTime);
@@ -73,13 +73,13 @@ export const CallTrace: MessageFns<CallTrace> = {
       writer.uint32(40).int64(message.endTime);
     }
     if (message.threadName !== 0) {
-      writer.uint32(48).int64(message.threadName);
+      writer.uint32(48).int32(message.threadName);
     }
     if (message.className !== 0) {
-      writer.uint32(56).int64(message.className);
+      writer.uint32(56).int32(message.className);
     }
     if (message.methodName !== 0) {
-      writer.uint32(64).int64(message.methodName);
+      writer.uint32(64).int32(message.methodName);
     }
     Object.entries(message.details).forEach(([key, value]) => {
       CallTrace_DetailsEntry.encode({ key: key as any, value }, writer.uint32(74).fork()).join();
@@ -102,7 +102,7 @@ export const CallTrace: MessageFns<CallTrace> = {
             break;
           }
 
-          message.invocationId = longToNumber(reader.int64());
+          message.invocationId = reader.int32();
           continue;
         }
         case 2: {
@@ -110,7 +110,7 @@ export const CallTrace: MessageFns<CallTrace> = {
             break;
           }
 
-          message.success = reader.int32();
+          message.success = reader.bool();
           continue;
         }
         case 3: {
@@ -118,7 +118,7 @@ export const CallTrace: MessageFns<CallTrace> = {
             break;
           }
 
-          message.type = longToNumber(reader.int64());
+          message.type = reader.int32();
           continue;
         }
         case 4: {
@@ -142,7 +142,7 @@ export const CallTrace: MessageFns<CallTrace> = {
             break;
           }
 
-          message.threadName = longToNumber(reader.int64());
+          message.threadName = reader.int32();
           continue;
         }
         case 7: {
@@ -150,7 +150,7 @@ export const CallTrace: MessageFns<CallTrace> = {
             break;
           }
 
-          message.className = longToNumber(reader.int64());
+          message.className = reader.int32();
           continue;
         }
         case 8: {
@@ -158,7 +158,7 @@ export const CallTrace: MessageFns<CallTrace> = {
             break;
           }
 
-          message.methodName = longToNumber(reader.int64());
+          message.methodName = reader.int32();
           continue;
         }
         case 9: {
@@ -192,7 +192,7 @@ export const CallTrace: MessageFns<CallTrace> = {
   fromJSON(object: any): CallTrace {
     return {
       invocationId: isSet(object.invocationId) ? globalThis.Number(object.invocationId) : 0,
-      success: isSet(object.success) ? globalThis.Number(object.success) : 0,
+      success: isSet(object.success) ? globalThis.Boolean(object.success) : false,
       type: isSet(object.type) ? globalThis.Number(object.type) : 0,
       startTime: isSet(object.startTime) ? globalThis.Number(object.startTime) : 0,
       endTime: isSet(object.endTime) ? globalThis.Number(object.endTime) : 0,
@@ -216,8 +216,8 @@ export const CallTrace: MessageFns<CallTrace> = {
     if (message.invocationId !== 0) {
       obj.invocationId = Math.round(message.invocationId);
     }
-    if (message.success !== 0) {
-      obj.success = Math.round(message.success);
+    if (message.success !== false) {
+      obj.success = message.success;
     }
     if (message.type !== 0) {
       obj.type = Math.round(message.type);
@@ -258,7 +258,7 @@ export const CallTrace: MessageFns<CallTrace> = {
   fromPartial<I extends Exact<DeepPartial<CallTrace>, I>>(object: I): CallTrace {
     const message = createBaseCallTrace();
     message.invocationId = object.invocationId ?? 0;
-    message.success = object.success ?? 0;
+    message.success = object.success ?? false;
     message.type = object.type ?? 0;
     message.startTime = object.startTime ?? 0;
     message.endTime = object.endTime ?? 0;
@@ -283,10 +283,10 @@ function createBaseCallTrace_DetailsEntry(): CallTrace_DetailsEntry {
 export const CallTrace_DetailsEntry: MessageFns<CallTrace_DetailsEntry> = {
   encode(message: CallTrace_DetailsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.key !== 0) {
-      writer.uint32(8).int64(message.key);
+      writer.uint32(8).int32(message.key);
     }
     if (message.value !== 0) {
-      writer.uint32(16).int64(message.value);
+      writer.uint32(16).int32(message.value);
     }
     return writer;
   },
@@ -303,7 +303,7 @@ export const CallTrace_DetailsEntry: MessageFns<CallTrace_DetailsEntry> = {
             break;
           }
 
-          message.key = longToNumber(reader.int64());
+          message.key = reader.int32();
           continue;
         }
         case 2: {
@@ -311,7 +311,7 @@ export const CallTrace_DetailsEntry: MessageFns<CallTrace_DetailsEntry> = {
             break;
           }
 
-          message.value = longToNumber(reader.int64());
+          message.value = reader.int32();
           continue;
         }
       }
@@ -503,7 +503,7 @@ function createBaseCallsReport_ContextsEntry(): CallsReport_ContextsEntry {
 export const CallsReport_ContextsEntry: MessageFns<CallsReport_ContextsEntry> = {
   encode(message: CallsReport_ContextsEntry, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.key !== 0) {
-      writer.uint32(8).int64(message.key);
+      writer.uint32(8).int32(message.key);
     }
     if (message.value !== undefined) {
       CallTraceList.encode(message.value, writer.uint32(18).fork()).join();
@@ -523,7 +523,7 @@ export const CallsReport_ContextsEntry: MessageFns<CallsReport_ContextsEntry> = 
             break;
           }
 
-          message.key = longToNumber(reader.int64());
+          message.key = reader.int32();
           continue;
         }
         case 2: {

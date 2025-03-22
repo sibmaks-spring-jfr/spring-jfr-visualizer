@@ -61,22 +61,22 @@ public final class Calls {
     java.lang.String[] descriptorData = {
       "\n\013calls.proto\022/io.github.sibmaks.spring." +
       "jfr.dto.protobuf.calls\"\375\002\n\tCallTrace\022\025\n\r" +
-      "invocation_id\030\001 \001(\003\022\017\n\007success\030\002 \001(\005\022\014\n\004" +
-      "type\030\003 \001(\003\022\022\n\nstart_time\030\004 \001(\003\022\020\n\010end_ti" +
-      "me\030\005 \001(\003\022\023\n\013thread_name\030\006 \001(\003\022\022\n\nclass_n" +
-      "ame\030\007 \001(\003\022\023\n\013method_name\030\010 \001(\003\022X\n\007detail" +
+      "invocation_id\030\001 \001(\005\022\017\n\007success\030\002 \001(\010\022\014\n\004" +
+      "type\030\003 \001(\005\022\022\n\nstart_time\030\004 \001(\003\022\020\n\010end_ti" +
+      "me\030\005 \001(\003\022\023\n\013thread_name\030\006 \001(\005\022\022\n\nclass_n" +
+      "ame\030\007 \001(\005\022\023\n\013method_name\030\010 \001(\005\022X\n\007detail" +
       "s\030\t \003(\0132G.io.github.sibmaks.spring.jfr.d" +
       "to.protobuf.calls.CallTrace.DetailsEntry" +
       "\022L\n\010children\030\n \003(\0132:.io.github.sibmaks.s" +
       "pring.jfr.dto.protobuf.calls.CallTrace\032." +
-      "\n\014DetailsEntry\022\013\n\003key\030\001 \001(\003\022\r\n\005value\030\002 \001" +
-      "(\003:\0028\001\"`\n\rCallTraceList\022O\n\013call_traces\030\001" +
+      "\n\014DetailsEntry\022\013\n\003key\030\001 \001(\005\022\r\n\005value\030\002 \001" +
+      "(\005:\0028\001\"`\n\rCallTraceList\022O\n\013call_traces\030\001" +
       " \003(\0132:.io.github.sibmaks.spring.jfr.dto." +
       "protobuf.calls.CallTrace\"\334\001\n\013CallsReport" +
       "\022\\\n\010contexts\030\001 \003(\0132J.io.github.sibmaks.s" +
       "pring.jfr.dto.protobuf.calls.CallsReport" +
       ".ContextsEntry\032o\n\rContextsEntry\022\013\n\003key\030\001" +
-      " \001(\003\022M\n\005value\030\002 \001(\0132>.io.github.sibmaks." +
+      " \001(\005\022M\n\005value\030\002 \001(\0132>.io.github.sibmaks." +
       "spring.jfr.dto.protobuf.calls.CallTraceL" +
       "ist:\0028\001B3\n/io.github.sibmaks.spring.jfr." +
       "dto.protobuf.callsP\001b\006proto3"

@@ -76,13 +76,13 @@ public final class Connections {
     java.lang.String[] descriptorData = {
       "\n\021connections.proto\0225io.github.sibmaks.s" +
       "pring.jfr.dto.protobuf.connections\"4\n\023Co" +
-      "nnectionException\022\014\n\004type\030\001 \001(\003\022\017\n\007messa" +
-      "ge\030\002 \001(\003\"\213\002\n\017ConnectionEvent\022\r\n\005index\030\001 " +
+      "nnectionException\022\014\n\004type\030\001 \001(\005\022\017\n\007messa" +
+      "ge\030\002 \001(\005\"\213\002\n\017ConnectionEvent\022\r\n\005index\030\001 " +
       "\001(\003\022\016\n\006action\030\002 \001(\003\022]\n\texception\030\003 \001(\0132J" +
       ".io.github.sibmaks.spring.jfr.dto.protob" +
       "uf.connections.ConnectionException\022\022\n\nst" +
       "arted_at\030\004 \001(\003\022\023\n\013finished_at\030\005 \001(\003\022\023\n\013t" +
-      "hread_name\030\006 \001(\003\022\"\n\025transaction_isolatio" +
+      "hread_name\030\006 \001(\005\022\"\n\025transaction_isolatio" +
       "n\030\007 \001(\005H\000\210\001\001B\030\n\026_transaction_isolation\"\232" +
       "\001\n\nConnection\022V\n\006events\030\001 \003(\0132F.io.githu" +
       "b.sibmaks.spring.jfr.dto.protobuf.connec" +
@@ -94,13 +94,13 @@ public final class Connections {
       "j\n\013connections\030\001 \003(\0132U.io.github.sibmaks" +
       ".spring.jfr.dto.protobuf.connections.Con" +
       "nectionMap.ConnectionsEntry\032y\n\020Connectio" +
-      "nsEntry\022\013\n\003key\030\001 \001(\003\022T\n\005value\030\002 \001(\0132E.io" +
+      "nsEntry\022\013\n\003key\030\001 \001(\005\022T\n\005value\030\002 \001(\0132E.io" +
       ".github.sibmaks.spring.jfr.dto.protobuf." +
       "connections.ConnectionList:\0028\001\"\364\001\n\021Conne" +
       "ctionsReport\022h\n\010contexts\030\001 \003(\0132V.io.gith" +
       "ub.sibmaks.spring.jfr.dto.protobuf.conne" +
       "ctions.ConnectionsReport.ContextsEntry\032u" +
-      "\n\rContextsEntry\022\013\n\003key\030\001 \001(\003\022S\n\005value\030\002 " +
+      "\n\rContextsEntry\022\013\n\003key\030\001 \001(\005\022S\n\005value\030\002 " +
       "\001(\0132D.io.github.sibmaks.spring.jfr.dto.p" +
       "rotobuf.connections.ConnectionMap:\0028\001B9\n" +
       "5io.github.sibmaks.spring.jfr.dto.protob" +

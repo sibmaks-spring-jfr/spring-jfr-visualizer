@@ -10,5 +10,5 @@ import java.util.Map;
  * @since 0.0.2
  */
 @Builder
-public record ConnectionsReport(Map<Long, Map<Long, List<Connection>>> contexts) {
+public record ConnectionsReport(Map<Integer, Map<Integer, List<Connection>>> contexts) {
 }

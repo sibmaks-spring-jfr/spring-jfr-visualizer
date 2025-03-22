@@ -31,9 +31,9 @@ import static io.github.sibmaks.spring.jfr.utils.JavaFlightRecorderUtils.getThre
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class CallsReportCreator {
     private final StringConstantRegistry stringConstantRegistry;
-    private final Map<Long, List<CallTrace.CallTraceBuilder>> contextToParentCalls = new HashMap<>();
-    private final Map<Long, CallTrace.CallTraceBuilder> allCalls = new HashMap<>();
-    private final Map<Long, List<Long>> children = new HashMap<>();
+    private final Map<Integer, List<CallTrace.CallTraceBuilder>> contextToParentCalls = new HashMap<>();
+    private final Map<Integer, CallTrace.CallTraceBuilder> allCalls = new HashMap<>();
+    private final Map<Integer, List<Integer>> children = new HashMap<>();
 
     public CallsReport create() {
         var contextsTrace = contextToParentCalls.entrySet()
@@ -56,7 +56,7 @@ public class CallsReportCreator {
         var invocationId = event.getInvocationId();
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
 
-        var details = new LinkedHashMap<Long, Long>();
+        var details = new LinkedHashMap<Integer, Integer>();
         addDetail(details, "HTTP Method", event.getHttpMethod());
         addDetail(details, "HTTP URL", event.getUrl());
         addDetail(details, "Rest", String.valueOf(event.isRest()));
@@ -161,10 +161,10 @@ public class CallsReportCreator {
     }
 
     private void saveChildTrace(
-            long invocationId,
+            int invocationId,
             CallTrace.CallTraceBuilder childTrace,
-            long correlationId,
-            long contextId
+            int correlationId,
+            int contextId
     ) {
         allCalls.put(invocationId, childTrace);
 
@@ -200,7 +200,7 @@ public class CallsReportCreator {
         var endTime = event.getEndTime();
 
         callTrace
-                .success(1)
+                .success(true)
                 .endTime(endTime.toEpochMilli());
     }
 
@@ -214,19 +214,19 @@ public class CallsReportCreator {
             return;
         }
 
-        var details = new LinkedHashMap<Long, Long>();
+        var details = new LinkedHashMap<Integer, Integer>();
         addDetail(details, "Exception Class", event.getExceptionClass());
         addDetail(details, "Exception Message", event.getExceptionMessage());
 
         var endTime = event.getEndTime();
 
         callTrace
-                .success(0)
+                .success(false)
                 .endTime(endTime.toEpochMilli())
                 .addDetails(details);
     }
 
-    private void addDetail(LinkedHashMap<Long, Long> details, String title, String message) {
+    private void addDetail(Map<Integer, Integer> details, String title, String message) {
         details.put(stringConstantRegistry.getOrRegister(title), stringConstantRegistry.getOrRegister(message));
     }
 

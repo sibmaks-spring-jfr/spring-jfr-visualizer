@@ -10,36 +10,36 @@ public interface CallsReportOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   int getContextsCount();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   boolean containsContexts(
-      long key);
+      int key);
   /**
    * Use {@link #getContextsMap()} instead.
    */
   @java.lang.Deprecated
-  java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
+  java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
   getContexts();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
-  java.util.Map<java.lang.Long, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
+  java.util.Map<java.lang.Integer, io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList>
   getContextsMap();
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList getContextsOrDefault(
-      long key,
+      int key,
       /* nullable */
 io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList defaultValue);
   /**
-   * <code>map&lt;int64, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
+   * <code>map&lt;int32, .io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList&gt; contexts = 1;</code>
    */
   io.github.sibmaks.spring.jfr.dto.protobuf.calls.CallTraceList getContextsOrThrow(
-      long key);
+      int key);
 }

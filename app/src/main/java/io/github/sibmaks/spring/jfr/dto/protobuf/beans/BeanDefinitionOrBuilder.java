@@ -10,55 +10,55 @@ public interface BeanDefinitionOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>int64 scope = 1;</code>
+   * <code>int32 scope = 1;</code>
    * @return The scope.
    */
-  long getScope();
+  int getScope();
 
   /**
-   * <code>int64 class_name = 2;</code>
+   * <code>int32 class_name = 2;</code>
    * @return The className.
    */
-  long getClassName();
+  int getClassName();
 
   /**
-   * <code>int64 name = 3;</code>
+   * <code>int32 name = 3;</code>
    * @return The name.
    */
-  long getName();
+  int getName();
 
   /**
-   * <code>int64 primary = 4;</code>
+   * <code>int32 primary = 4;</code>
    * @return The primary.
    */
-  long getPrimary();
+  int getPrimary();
 
   /**
-   * <code>repeated int64 dependencies = 5;</code>
+   * <code>repeated int32 dependencies = 5;</code>
    * @return A list containing the dependencies.
    */
-  java.util.List<java.lang.Long> getDependenciesList();
+  java.util.List<java.lang.Integer> getDependenciesList();
   /**
-   * <code>repeated int64 dependencies = 5;</code>
+   * <code>repeated int32 dependencies = 5;</code>
    * @return The count of dependencies.
    */
   int getDependenciesCount();
   /**
-   * <code>repeated int64 dependencies = 5;</code>
+   * <code>repeated int32 dependencies = 5;</code>
    * @param index The index of the element to return.
    * @return The dependencies at the given index.
    */
-  long getDependencies(int index);
+  int getDependencies(int index);
 
   /**
-   * <code>int64 stereotype = 6;</code>
+   * <code>int32 stereotype = 6;</code>
    * @return The stereotype.
    */
-  long getStereotype();
+  int getStereotype();
 
   /**
-   * <code>int32 generated = 7;</code>
+   * <code>bool generated = 7;</code>
    * @return The generated.
    */
-  int getGenerated();
+  boolean getGenerated();
 }
