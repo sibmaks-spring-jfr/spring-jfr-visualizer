@@ -1,78 +1,130 @@
 package io.github.sibmaks.spring.jfr.dto.view.beans;
 
-import io.github.sibmaks.spring.jfr.event.api.bean.BeanDefinitionRegisteredFact;
 import io.github.sibmaks.spring.jfr.event.api.bean.MergedBeanDefinitionRegisteredFact;
-import io.github.sibmaks.spring.jfr.event.api.bean.Stereotype;
 import io.github.sibmaks.spring.jfr.event.core.converter.DependencyConverter;
 import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.SortedSet;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * @author sibmaks
  * @since 0.0.1
  */
 @Getter
+@AllArgsConstructor
 public class BeanDefinition {
-    private long scope;
-    private long className;
-    private long name;
-    private long primary;
+    private final long scope;
+    private final long className;
+    private final long name;
+    private final long primary;
     private final SortedSet<Long> dependencies;
-    private long stereotype;
+    private final long stereotype;
     private final int generated;
 
-    public BeanDefinition(StringConstantRegistry stringConstantRegistry, BeanDefinitionRegisteredFact fact) {
-        this.scope = stringConstantRegistry.getOrRegister(fact.getScope());
-        this.className = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
-        this.name = stringConstantRegistry.getOrRegister(fact.getBeanName());
-        this.primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
-        this.dependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
-                .map(stringConstantRegistry::getOrRegister)
-                .collect(Collectors.toCollection(TreeSet::new));
-        this.stereotype = stringConstantRegistry.getOrRegister(
-                Optional.ofNullable(fact.getStereotype())
-                        .map(Stereotype::valueOf)
-                        .orElse(Stereotype.UNKNOWN)
-                        .name()
-        );
-        this.generated = fact.isGenerated() ? 1 : 0;
+    public static BeanDefinitionBuilder builder() {
+        return new BeanDefinitionBuilder();
     }
 
-    public void patch(StringConstantRegistry stringConstantRegistry, MergedBeanDefinitionRegisteredFact fact) {
-        if (scope != -1) {
-            scope = stringConstantRegistry.getOrRegister(fact.getScope());
+    public static class BeanDefinitionBuilder {
+        private long scope;
+        private long className;
+        private long name;
+        private long primary;
+        private SortedSet<Long> dependencies;
+        private long stereotype;
+        private int generated;
+
+        BeanDefinitionBuilder() {
         }
-        if (className != -1) {
-            className = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
+
+        public BeanDefinitionBuilder scope(long scope) {
+            this.scope = scope;
+            return this;
         }
-        if (name != -1) {
-            name = stringConstantRegistry.getOrRegister(fact.getBeanName());
+
+        public BeanDefinitionBuilder className(long className) {
+            this.className = className;
+            return this;
         }
-        if (primary != -1) {
-            primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
+
+        public BeanDefinitionBuilder name(long name) {
+            this.name = name;
+            return this;
         }
-        if (stereotype != -1) {
-            long newStereotype = Optional.ofNullable(fact.getStereotype())
-                    .map(stringConstantRegistry::getOrRegister)
-                    .orElse(stereotype);
-            if (stereotype != newStereotype && newStereotype != stringConstantRegistry.getOrRegister("UNKNOWN")) {
-                stereotype = newStereotype;
+
+        public BeanDefinitionBuilder primary(long primary) {
+            this.primary = primary;
+            return this;
+        }
+
+        public BeanDefinitionBuilder dependencies(SortedSet<Long> dependencies) {
+            this.dependencies = dependencies;
+            return this;
+        }
+
+        public BeanDefinitionBuilder stereotype(long stereotype) {
+            this.stereotype = stereotype;
+            return this;
+        }
+
+        public BeanDefinitionBuilder generated(int generated) {
+            this.generated = generated;
+            return this;
+        }
+
+        public BeanDefinitionBuilder patch(StringConstantRegistry stringConstantRegistry, MergedBeanDefinitionRegisteredFact fact) {
+            if (scope != -1) {
+                scope = stringConstantRegistry.getOrRegister(fact.getScope());
             }
+            if (className != -1) {
+                className = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
+            }
+            if (name != -1) {
+                name = stringConstantRegistry.getOrRegister(fact.getBeanName());
+            }
+            if (primary != -1) {
+                primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
+            }
+            if (stereotype != -1) {
+                long newStereotype = Optional.ofNullable(fact.getStereotype())
+                        .map(stringConstantRegistry::getOrRegister)
+                        .orElse(stereotype);
+                if (stereotype != newStereotype && newStereotype != stringConstantRegistry.getOrRegister("UNKNOWN")) {
+                    stereotype = newStereotype;
+                }
+            }
+
+            var mergedDependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
+                    .map(stringConstantRegistry::getOrRegister)
+                    .toList();
+            dependencies.addAll(mergedDependencies);
+
+            return this;
         }
 
-        var mergedDependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
-                .map(stringConstantRegistry::getOrRegister)
-                .toList();
-        dependencies.addAll(mergedDependencies);
-    }
+        public BeanDefinitionBuilder patch(long dependency) {
+            dependencies.add(dependency);
+            return this;
+        }
 
-    public void patch(long dependency) {
-        dependencies.add(dependency);
+        public BeanDefinition build() {
+            return new BeanDefinition(
+                    this.scope,
+                    this.className,
+                    this.name,
+                    this.primary,
+                    this.dependencies,
+                    this.stereotype,
+                    this.generated
+            );
+        }
+
+        public String toString() {
+            return "BeanDefinition.BeanDefinitionBuilder(scope=" + this.scope + ", className=" + this.className + ", name=" + this.name + ", primary=" + this.primary + ", dependencies=" + this.dependencies + ", stereotype=" + this.stereotype + ", generated=" + this.generated + ")";
+        }
     }
 }

@@ -72,13 +72,11 @@ public class ReportService {
         }
     }
 
-    private static String serialize(io.github.sibmaks.spring.jfr.dto.protobuf.common.RootReport rootReport) {
+    private static byte[] toByteArray(io.github.sibmaks.spring.jfr.dto.protobuf.common.RootReport rootReport) {
         try (var byteOutputStream = new ByteArrayOutputStream()) {
             rootReport.writeTo(byteOutputStream);
             byteOutputStream.flush();
-            var rawBytes = byteOutputStream.toByteArray();
-            var encoder = Base64.getEncoder();
-            return encoder.encodeToString(rawBytes);
+            return byteOutputStream.toByteArray();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -153,13 +151,22 @@ public class ReportService {
     }
 
     private static BeanInitialized map(io.github.sibmaks.spring.jfr.dto.view.beans.BeanInitialized it) {
-        return BeanInitialized.newBuilder()
+        var builder = BeanInitialized.newBuilder()
                 .setContextId(it.getContextId())
                 .setBeanName(it.getBeanName())
-                .setPreInitializedAt(it.getPreInitializedAt())
-                .setPostInitializedAt(it.getPostInitializedAt())
-                .setDuration(it.getDuration())
-                .build();
+                .setDuration(it.getDuration());
+
+        var preInitializedAt = it.getPreInitializedAt();
+        if(preInitializedAt != null) {
+            builder.setPreInitializedAt(preInitializedAt);
+        }
+
+        var postInitializedAt = it.getPostInitializedAt();
+        if(postInitializedAt != null) {
+            builder.setPostInitializedAt(postInitializedAt);
+        }
+
+        return builder.build();
     }
 
     private static CallsReport map(io.github.sibmaks.spring.jfr.dto.view.calls.CallsReport calls) {
@@ -329,11 +336,20 @@ public class ReportService {
         }
 
         var protobufReport = map(rootReport);
-        var serialized = serialize(protobufReport);
+        var serialized = toByteArray(protobufReport);
 
         try (var fileWriter = new FileWriter(reportFile);
              var writer = new BufferedWriter(fileWriter)) {
-            writer.write(String.format("window.rootReport = '%s';", serialized));
+            var encoder = Base64.getEncoder();
+            var r = encoder.encodeToString(serialized);
+            writer.write(String.format("window.rootReport = '%s';", r));
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
+
+        try (var fileOutputStream = new FileOutputStream(reportFile + ".bin");
+             var writer = new BufferedOutputStream(fileOutputStream)) {
+            writer.write(serialized);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }
