@@ -1,5 +1,6 @@
 package io.github.sibmaks.spring.jfr.service;
 
+import com.google.protobuf.AbstractMessageLite;
 import io.github.sibmaks.spring.jfr.Application;
 import io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanDefinitionList;
 import io.github.sibmaks.spring.jfr.dto.protobuf.beans.BeanInitialized;
@@ -21,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * @author sibmaks
@@ -72,14 +74,14 @@ public class ReportService {
         }
     }
 
-    private static byte[] toByteArray(io.github.sibmaks.spring.jfr.dto.protobuf.common.RootReport rootReport) {
-        try (var byteOutputStream = new ByteArrayOutputStream()) {
-            rootReport.writeTo(byteOutputStream);
-            byteOutputStream.flush();
-            return byteOutputStream.toByteArray();
+    private static byte[] toByteArray(AbstractMessageLite<?, ?> rootReport) {
+        var byteOutputStream = new ByteArrayOutputStream();
+        try (var gzip = new GZIPOutputStream(byteOutputStream)) {
+            rootReport.writeTo(gzip);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        return byteOutputStream.toByteArray();
     }
 
     private static io.github.sibmaks.spring.jfr.dto.protobuf.common.RootReport map(RootReport rootReport) {
@@ -157,12 +159,12 @@ public class ReportService {
                 .setDuration(it.getDuration());
 
         var preInitializedAt = it.getPreInitializedAt();
-        if(preInitializedAt != null) {
+        if (preInitializedAt != null) {
             builder.setPreInitializedAt(preInitializedAt);
         }
 
         var postInitializedAt = it.getPostInitializedAt();
-        if(postInitializedAt != null) {
+        if (postInitializedAt != null) {
             builder.setPostInitializedAt(postInitializedAt);
         }
 
@@ -341,15 +343,8 @@ public class ReportService {
         try (var fileWriter = new FileWriter(reportFile);
              var writer = new BufferedWriter(fileWriter)) {
             var encoder = Base64.getEncoder();
-            var r = encoder.encodeToString(serialized);
-            writer.write(String.format("window.rootReport = '%s';", r));
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        }
-
-        try (var fileOutputStream = new FileOutputStream(reportFile + ".bin");
-             var writer = new BufferedOutputStream(fileOutputStream)) {
-            writer.write(serialized);
+            var encoded = encoder.encodeToString(serialized);
+            writer.write(String.format("window.rootReport = '%s';", encoded));
         } catch (IOException e) {
             log.error(e.getMessage(), e);
         }

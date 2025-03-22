@@ -1,6 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { Base64 } from '@sibdevtools/frontend-common';
 import { RootReport } from '../api/protobuf/common';
+import pako from 'pako';
 
 type RootReportContextType = {
   rootReport: RootReport;
@@ -35,14 +36,17 @@ export const RootReportProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   useEffect(() => {
     try {
       // @ts-ignore
-      const rootReport = window.rootReport ?? '';
-      const decodedBase64 = Base64.Decoder.text2array(rootReport);
-      const decoded = RootReport.decode(decodedBase64);
-      setRootReport(decoded);
+      const raw = (window.rootReport ?? '') as string;
+      const decoded = Base64.Decoder.text2buffer(raw);
+      const decompressed = pako.ungzip(decoded);
+      const rootReport = RootReport.decode(decompressed);
+      setRootReport(rootReport);
     } catch (error) {
-      console.error('Failed to load:', error);
+      console.error('Failed to load', error);
     } finally {
       setIsLoading(false);
+      // @ts-ignore
+      window.rootReport = null;
     }
   }, []);
 
