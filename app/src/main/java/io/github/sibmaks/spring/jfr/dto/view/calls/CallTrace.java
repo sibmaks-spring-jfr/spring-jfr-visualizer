@@ -21,7 +21,7 @@ public record CallTrace(
         long type,
         long startTime,
         long endTime,
-        Long threadName,
+        long threadName,
         long className,
         long methodName,
         Map<Long, Long> details,
