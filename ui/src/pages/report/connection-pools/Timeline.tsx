@@ -168,9 +168,6 @@ const Timeline: React.FC<TimelineProps> = ({
             <Accordion.Item key={connection.id} eventKey={connection.id}>
               <Accordion.Header>
                 <Container fluid={true}>
-                  <Row>
-                    <h5>Connection {connection.id}</h5>
-                  </Row>
                   <Row
                     style={{
                       overflowX: 'auto',
@@ -260,7 +257,7 @@ const Timeline: React.FC<TimelineProps> = ({
                           Creation Thread
                         </Col>
                         <Col xxl={2}>
-                          {creationThread}
+                          {common.stringConstants[creationThread]}
                         </Col>
                       </>
                     )}
@@ -270,7 +267,7 @@ const Timeline: React.FC<TimelineProps> = ({
                           Closing Thread
                         </Col>
                         <Col xxl={2}>
-                          {closingThread}
+                          {common.stringConstants[closingThread]}
                         </Col>
                       </>
                     )}
