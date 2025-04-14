@@ -2,6 +2,7 @@ package io.github.sibmaks.spring.jfr.service;
 
 import io.github.sibmaks.spring.jfr.dto.view.common.CommonDto;
 import io.github.sibmaks.spring.jfr.dto.view.common.RootReport;
+import io.github.sibmaks.spring.jfr.event.reading.api.RecordedData;
 import io.github.sibmaks.spring.jfr.event.reading.core.recorded.RecordedEventFactory;
 import io.github.sibmaks.spring.jfr.report.BeansReportCreator;
 import io.github.sibmaks.spring.jfr.report.calls.CallsReportCreator;
@@ -42,6 +43,7 @@ public class RootReportReader {
                 if (event == null) {
                     continue;
                 }
+                System.out.printf("[%s] Publish event: %s%n", ((RecordedData) event).getStartTime(), event);
                 applicationEventPublisher.publishEvent(event);
             }
         } catch (IOException e) {

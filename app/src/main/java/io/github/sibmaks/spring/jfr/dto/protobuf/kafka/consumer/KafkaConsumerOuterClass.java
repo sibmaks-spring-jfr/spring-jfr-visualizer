@@ -36,6 +36,11 @@ public final class KafkaConsumerOuterClass {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumerStats_fieldAccessorTable;
   static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumerPartitionEvent_descriptor;
+  static final 
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumerPartitionEvent_fieldAccessorTable;
+  static final com.google.protobuf.Descriptors.Descriptor
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_descriptor;
   static final 
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -80,33 +85,42 @@ public final class KafkaConsumerOuterClass {
       " \001(\003\022\023\n\013last_commit\030\002 \001(\003\"e\n\022KafkaConsum" +
       "erStats\022\017\n\007commits\030\001 \001(\005\022\020\n\010commited\030\002 \001" +
       "(\005\022\024\n\014commitFailed\030\003 \001(\005\022\026\n\016last_commit_" +
-      "at\030\004 \001(\003\"\312\003\n\rKafkaConsumer\022\030\n\020consumer_f" +
-      "actory\030\001 \001(\005\022\023\n\013consumer_id\030\002 \001(\005\022\031\n\021boo" +
-      "tstrap_servers\030\003 \001(\005\022\026\n\016consumer_group\030\004" +
-      " \001(\005\022\016\n\006topics\030\005 \003(\005\022k\n\npartitions\030\006 \003(\013" +
-      "2W.io.github.sibmaks.spring.jfr.dto.prot" +
-      "obuf.kafka.consumer.KafkaConsumer.Partit" +
-      "ionsEntry\022[\n\005stats\030\007 \001(\0132L.io.github.sib" +
-      "maks.spring.jfr.dto.protobuf.kafka.consu" +
-      "mer.KafkaConsumerStats\032}\n\017PartitionsEntr" +
-      "y\022\013\n\003key\030\001 \001(\005\022Y\n\005value\030\002 \001(\0132J.io.githu" +
-      "b.sibmaks.spring.jfr.dto.protobuf.kafka." +
-      "consumer.PartitionOffsets:\0028\001\"\375\001\n\021KafkaC" +
-      "onsumersMap\022m\n\tconsumers\030\001 \003(\0132Z.io.gith" +
-      "ub.sibmaks.spring.jfr.dto.protobuf.kafka" +
-      ".consumer.KafkaConsumersMap.ConsumersEnt" +
-      "ry\032y\n\016ConsumersEntry\022\013\n\003key\030\001 \001(\005\022V\n\005val" +
-      "ue\030\002 \001(\0132G.io.github.sibmaks.spring.jfr." +
-      "dto.protobuf.kafka.consumer.KafkaConsume" +
-      "r:\0028\001\"\204\002\n\024KafkaConsumersReport\022n\n\010contex" +
-      "ts\030\001 \003(\0132\\.io.github.sibmaks.spring.jfr." +
-      "dto.protobuf.kafka.consumer.KafkaConsume" +
-      "rsReport.ContextsEntry\032|\n\rContextsEntry\022" +
-      "\013\n\003key\030\001 \001(\005\022Z\n\005value\030\002 \001(\0132K.io.github." +
-      "sibmaks.spring.jfr.dto.protobuf.kafka.co" +
-      "nsumer.KafkaConsumersMap:\0028\001B<\n8io.githu" +
-      "b.sibmaks.spring.jfr.dto.protobuf.kafka." +
-      "consumerP\001b\006proto3"
+      "at\030\004 \001(\003\"\253\001\n\033KafkaConsumerPartitionEvent" +
+      "\022l\n\teventType\030\001 \001(\0162Y.io.github.sibmaks." +
+      "spring.jfr.dto.protobuf.kafka.consumer.K" +
+      "afkaConsumerPartitionEventType\022\022\n\npartit" +
+      "ions\030\002 \003(\005\022\n\n\002at\030\003 \001(\003\"\273\004\n\rKafkaConsumer" +
+      "\022\030\n\020consumer_factory\030\001 \001(\005\022\023\n\013consumer_i" +
+      "d\030\002 \001(\005\022\031\n\021bootstrap_servers\030\003 \001(\005\022\026\n\016co" +
+      "nsumer_group\030\004 \001(\005\022\016\n\006topics\030\005 \003(\005\022k\n\npa" +
+      "rtitions\030\006 \003(\0132W.io.github.sibmaks.sprin" +
+      "g.jfr.dto.protobuf.kafka.consumer.KafkaC" +
+      "onsumer.PartitionsEntry\022[\n\005stats\030\007 \001(\0132L" +
+      ".io.github.sibmaks.spring.jfr.dto.protob" +
+      "uf.kafka.consumer.KafkaConsumerStats\022o\n\020" +
+      "partitionsEvents\030\010 \003(\0132U.io.github.sibma" +
+      "ks.spring.jfr.dto.protobuf.kafka.consume" +
+      "r.KafkaConsumerPartitionEvent\032}\n\017Partiti" +
+      "onsEntry\022\013\n\003key\030\001 \001(\005\022Y\n\005value\030\002 \001(\0132J.i" +
+      "o.github.sibmaks.spring.jfr.dto.protobuf" +
+      ".kafka.consumer.PartitionOffsets:\0028\001\"\375\001\n" +
+      "\021KafkaConsumersMap\022m\n\tconsumers\030\001 \003(\0132Z." +
+      "io.github.sibmaks.spring.jfr.dto.protobu" +
+      "f.kafka.consumer.KafkaConsumersMap.Consu" +
+      "mersEntry\032y\n\016ConsumersEntry\022\013\n\003key\030\001 \001(\005" +
+      "\022V\n\005value\030\002 \001(\0132G.io.github.sibmaks.spri" +
+      "ng.jfr.dto.protobuf.kafka.consumer.Kafka" +
+      "Consumer:\0028\001\"\204\002\n\024KafkaConsumersReport\022n\n" +
+      "\010contexts\030\001 \003(\0132\\.io.github.sibmaks.spri" +
+      "ng.jfr.dto.protobuf.kafka.consumer.Kafka" +
+      "ConsumersReport.ContextsEntry\032|\n\rContext" +
+      "sEntry\022\013\n\003key\030\001 \001(\005\022Z\n\005value\030\002 \001(\0132K.io." +
+      "github.sibmaks.spring.jfr.dto.protobuf.k" +
+      "afka.consumer.KafkaConsumersMap:\0028\001*F\n\037K" +
+      "afkaConsumerPartitionEventType\022\013\n\007REVOKE" +
+      "D\020\000\022\014\n\010ASSIGNED\020\001\022\010\n\004LOST\020\002B<\n8io.github" +
+      ".sibmaks.spring.jfr.dto.protobuf.kafka.c" +
+      "onsumerP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -124,12 +138,18 @@ public final class KafkaConsumerOuterClass {
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumerStats_descriptor,
         new java.lang.String[] { "Commits", "Commited", "CommitFailed", "LastCommitAt", });
-    internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_descriptor =
+    internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumerPartitionEvent_descriptor =
       getDescriptor().getMessageTypes().get(2);
+    internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumerPartitionEvent_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+        internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumerPartitionEvent_descriptor,
+        new java.lang.String[] { "EventType", "Partitions", "At", });
+    internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_descriptor =
+      getDescriptor().getMessageTypes().get(3);
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_descriptor,
-        new java.lang.String[] { "ConsumerFactory", "ConsumerId", "BootstrapServers", "ConsumerGroup", "Topics", "Partitions", "Stats", });
+        new java.lang.String[] { "ConsumerFactory", "ConsumerId", "BootstrapServers", "ConsumerGroup", "Topics", "Partitions", "Stats", "PartitionsEvents", });
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_PartitionsEntry_descriptor =
       internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_descriptor.getNestedTypes().get(0);
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_PartitionsEntry_fieldAccessorTable = new
@@ -137,7 +157,7 @@ public final class KafkaConsumerOuterClass {
         internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumer_PartitionsEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumersMap_descriptor =
-      getDescriptor().getMessageTypes().get(3);
+      getDescriptor().getMessageTypes().get(4);
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumersMap_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumersMap_descriptor,
@@ -149,7 +169,7 @@ public final class KafkaConsumerOuterClass {
         internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumersMap_ConsumersEntry_descriptor,
         new java.lang.String[] { "Key", "Value", });
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumersReport_descriptor =
-      getDescriptor().getMessageTypes().get(4);
+      getDescriptor().getMessageTypes().get(5);
     internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumersReport_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessage.FieldAccessorTable(
         internal_static_io_github_sibmaks_spring_jfr_dto_protobuf_kafka_consumer_KafkaConsumersReport_descriptor,

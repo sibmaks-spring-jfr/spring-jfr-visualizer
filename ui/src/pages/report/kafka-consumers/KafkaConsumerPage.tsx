@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Badge, Card, Col, Container, ProgressBar, Row, Table } from 'react-bootstrap';
+import { Badge, Card, Col, Container, ListGroup, ProgressBar, Row, Table } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Loader } from '@sibdevtools/frontend-common';
 import { RootReportContext } from '../../../context/RootReportProvider';
-import { KafkaConsumer } from '../../../api/protobuf/kafka.consumer';
+import { KafkaConsumer, KafkaConsumerPartitionEventType } from '../../../api/protobuf/kafka.consumer';
 import { toISOString } from '../../../utils/datetime';
 
 const KafkaConsumerPage = () => {
@@ -135,6 +135,44 @@ const KafkaConsumerPage = () => {
                       at: {toISOString(kafkaConsumer.stats?.lastCommitAt)}</small>
                   )
                   }
+                </Card.Body>
+              </Card>
+            </Col>
+          </Row>
+          <Row className={'mb-4'}>
+            <Col xs={12}>
+              <Card className={'shadow-sm'}>
+                <Card.Header className={'bg-warning'}>
+                  <h5>Partitions Event</h5>
+                </Card.Header>
+                <Card.Body>
+                  <ListGroup variant={'flush'}>
+                    {kafkaConsumer.partitionsEvents.map((it, index) => {
+                      let caption = 'Added new partitions';
+                      switch (it.eventType) {
+                        case KafkaConsumerPartitionEventType.LOST: {
+                          caption = 'Partitions Lost';
+                          break;
+                        }
+                        case KafkaConsumerPartitionEventType.REVOKED: {
+                          caption = 'Partitions Revoked';
+                          break;
+                        }
+                      }
+
+                      return (
+                        <ListGroup.Item key={`partition-event-${index}`} className=" d-flex justify-content-between align-items-center">
+                          {toISOString(it.at)} - {caption}
+                          <span className="badge bg-primary">{
+                            it.partitions.map(
+                              partition => stringConstants[partition]
+                            ).join(', ')
+                          }
+                        </span>
+                        </ListGroup.Item>
+                      );
+                    })}
+                  </ListGroup>
                 </Card.Body>
               </Card>
             </Col>

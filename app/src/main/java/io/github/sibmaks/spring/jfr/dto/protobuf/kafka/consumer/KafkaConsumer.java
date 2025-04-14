@@ -28,6 +28,7 @@ private static final long serialVersionUID = 0L;
   }
   private KafkaConsumer() {
     topics_ = emptyIntList();
+    partitionsEvents_ = java.util.Collections.emptyList();
   }
 
   public static final com.google.protobuf.Descriptors.Descriptor
@@ -235,6 +236,47 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
     return stats_ == null ? io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerStats.getDefaultInstance() : stats_;
   }
 
+  public static final int PARTITIONSEVENTS_FIELD_NUMBER = 8;
+  @SuppressWarnings("serial")
+  private java.util.List<io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent> partitionsEvents_;
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  @java.lang.Override
+  public java.util.List<io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent> getPartitionsEventsList() {
+    return partitionsEvents_;
+  }
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  @java.lang.Override
+  public java.util.List<? extends io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder> 
+      getPartitionsEventsOrBuilderList() {
+    return partitionsEvents_;
+  }
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  @java.lang.Override
+  public int getPartitionsEventsCount() {
+    return partitionsEvents_.size();
+  }
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  @java.lang.Override
+  public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent getPartitionsEvents(int index) {
+    return partitionsEvents_.get(index);
+  }
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  @java.lang.Override
+  public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder getPartitionsEventsOrBuilder(
+      int index) {
+    return partitionsEvents_.get(index);
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -277,6 +319,9 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
         6);
     if (((bitField0_ & 0x00000001) != 0)) {
       output.writeMessage(7, getStats());
+    }
+    for (int i = 0; i < partitionsEvents_.size(); i++) {
+      output.writeMessage(8, partitionsEvents_.get(i));
     }
     getUnknownFields().writeTo(output);
   }
@@ -331,6 +376,10 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(7, getStats());
     }
+    for (int i = 0; i < partitionsEvents_.size(); i++) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(8, partitionsEvents_.get(i));
+    }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
     return size;
@@ -363,6 +412,8 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
       if (!getStats()
           .equals(other.getStats())) return false;
     }
+    if (!getPartitionsEventsList()
+        .equals(other.getPartitionsEventsList())) return false;
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -393,6 +444,10 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
     if (hasStats()) {
       hash = (37 * hash) + STATS_FIELD_NUMBER;
       hash = (53 * hash) + getStats().hashCode();
+    }
+    if (getPartitionsEventsCount() > 0) {
+      hash = (37 * hash) + PARTITIONSEVENTS_FIELD_NUMBER;
+      hash = (53 * hash) + getPartitionsEventsList().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -547,6 +602,7 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
       if (com.google.protobuf.GeneratedMessage
               .alwaysUseFieldBuilders) {
         getStatsFieldBuilder();
+        getPartitionsEventsFieldBuilder();
       }
     }
     @java.lang.Override
@@ -564,6 +620,13 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
         statsBuilder_.dispose();
         statsBuilder_ = null;
       }
+      if (partitionsEventsBuilder_ == null) {
+        partitionsEvents_ = java.util.Collections.emptyList();
+      } else {
+        partitionsEvents_ = null;
+        partitionsEventsBuilder_.clear();
+      }
+      bitField0_ = (bitField0_ & ~0x00000080);
       return this;
     }
 
@@ -590,9 +653,22 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
     @java.lang.Override
     public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumer buildPartial() {
       io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumer result = new io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumer(this);
+      buildPartialRepeatedFields(result);
       if (bitField0_ != 0) { buildPartial0(result); }
       onBuilt();
       return result;
+    }
+
+    private void buildPartialRepeatedFields(io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumer result) {
+      if (partitionsEventsBuilder_ == null) {
+        if (((bitField0_ & 0x00000080) != 0)) {
+          partitionsEvents_ = java.util.Collections.unmodifiableList(partitionsEvents_);
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.partitionsEvents_ = partitionsEvents_;
+      } else {
+        result.partitionsEvents_ = partitionsEventsBuilder_.build();
+      }
     }
 
     private void buildPartial0(io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumer result) {
@@ -666,6 +742,32 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
       bitField0_ |= 0x00000020;
       if (other.hasStats()) {
         mergeStats(other.getStats());
+      }
+      if (partitionsEventsBuilder_ == null) {
+        if (!other.partitionsEvents_.isEmpty()) {
+          if (partitionsEvents_.isEmpty()) {
+            partitionsEvents_ = other.partitionsEvents_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensurePartitionsEventsIsMutable();
+            partitionsEvents_.addAll(other.partitionsEvents_);
+          }
+          onChanged();
+        }
+      } else {
+        if (!other.partitionsEvents_.isEmpty()) {
+          if (partitionsEventsBuilder_.isEmpty()) {
+            partitionsEventsBuilder_.dispose();
+            partitionsEventsBuilder_ = null;
+            partitionsEvents_ = other.partitionsEvents_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+            partitionsEventsBuilder_ = 
+              com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                 getPartitionsEventsFieldBuilder() : null;
+          } else {
+            partitionsEventsBuilder_.addAllMessages(other.partitionsEvents_);
+          }
+        }
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -745,6 +847,19 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
               bitField0_ |= 0x00000040;
               break;
             } // case 58
+            case 66: {
+              io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent m =
+                  input.readMessage(
+                      io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.parser(),
+                      extensionRegistry);
+              if (partitionsEventsBuilder_ == null) {
+                ensurePartitionsEventsIsMutable();
+                partitionsEvents_.add(m);
+              } else {
+                partitionsEventsBuilder_.addMessage(m);
+              }
+              break;
+            } // case 66
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1248,6 +1363,246 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
         stats_ = null;
       }
       return statsBuilder_;
+    }
+
+    private java.util.List<io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent> partitionsEvents_ =
+      java.util.Collections.emptyList();
+    private void ensurePartitionsEventsIsMutable() {
+      if (!((bitField0_ & 0x00000080) != 0)) {
+        partitionsEvents_ = new java.util.ArrayList<io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent>(partitionsEvents_);
+        bitField0_ |= 0x00000080;
+       }
+    }
+
+    private com.google.protobuf.RepeatedFieldBuilder<
+        io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder> partitionsEventsBuilder_;
+
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public java.util.List<io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent> getPartitionsEventsList() {
+      if (partitionsEventsBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(partitionsEvents_);
+      } else {
+        return partitionsEventsBuilder_.getMessageList();
+      }
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public int getPartitionsEventsCount() {
+      if (partitionsEventsBuilder_ == null) {
+        return partitionsEvents_.size();
+      } else {
+        return partitionsEventsBuilder_.getCount();
+      }
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent getPartitionsEvents(int index) {
+      if (partitionsEventsBuilder_ == null) {
+        return partitionsEvents_.get(index);
+      } else {
+        return partitionsEventsBuilder_.getMessage(index);
+      }
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder setPartitionsEvents(
+        int index, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent value) {
+      if (partitionsEventsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensurePartitionsEventsIsMutable();
+        partitionsEvents_.set(index, value);
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.setMessage(index, value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder setPartitionsEvents(
+        int index, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder builderForValue) {
+      if (partitionsEventsBuilder_ == null) {
+        ensurePartitionsEventsIsMutable();
+        partitionsEvents_.set(index, builderForValue.build());
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.setMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder addPartitionsEvents(io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent value) {
+      if (partitionsEventsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensurePartitionsEventsIsMutable();
+        partitionsEvents_.add(value);
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.addMessage(value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder addPartitionsEvents(
+        int index, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent value) {
+      if (partitionsEventsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensurePartitionsEventsIsMutable();
+        partitionsEvents_.add(index, value);
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.addMessage(index, value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder addPartitionsEvents(
+        io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder builderForValue) {
+      if (partitionsEventsBuilder_ == null) {
+        ensurePartitionsEventsIsMutable();
+        partitionsEvents_.add(builderForValue.build());
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.addMessage(builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder addPartitionsEvents(
+        int index, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder builderForValue) {
+      if (partitionsEventsBuilder_ == null) {
+        ensurePartitionsEventsIsMutable();
+        partitionsEvents_.add(index, builderForValue.build());
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.addMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder addAllPartitionsEvents(
+        java.lang.Iterable<? extends io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent> values) {
+      if (partitionsEventsBuilder_ == null) {
+        ensurePartitionsEventsIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, partitionsEvents_);
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.addAllMessages(values);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder clearPartitionsEvents() {
+      if (partitionsEventsBuilder_ == null) {
+        partitionsEvents_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.clear();
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public Builder removePartitionsEvents(int index) {
+      if (partitionsEventsBuilder_ == null) {
+        ensurePartitionsEventsIsMutable();
+        partitionsEvents_.remove(index);
+        onChanged();
+      } else {
+        partitionsEventsBuilder_.remove(index);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder getPartitionsEventsBuilder(
+        int index) {
+      return getPartitionsEventsFieldBuilder().getBuilder(index);
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder getPartitionsEventsOrBuilder(
+        int index) {
+      if (partitionsEventsBuilder_ == null) {
+        return partitionsEvents_.get(index);  } else {
+        return partitionsEventsBuilder_.getMessageOrBuilder(index);
+      }
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public java.util.List<? extends io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder> 
+         getPartitionsEventsOrBuilderList() {
+      if (partitionsEventsBuilder_ != null) {
+        return partitionsEventsBuilder_.getMessageOrBuilderList();
+      } else {
+        return java.util.Collections.unmodifiableList(partitionsEvents_);
+      }
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder addPartitionsEventsBuilder() {
+      return getPartitionsEventsFieldBuilder().addBuilder(
+          io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder addPartitionsEventsBuilder(
+        int index) {
+      return getPartitionsEventsFieldBuilder().addBuilder(
+          index, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+     */
+    public java.util.List<io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder> 
+         getPartitionsEventsBuilderList() {
+      return getPartitionsEventsFieldBuilder().getBuilderList();
+    }
+    private com.google.protobuf.RepeatedFieldBuilder<
+        io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder> 
+        getPartitionsEventsFieldBuilder() {
+      if (partitionsEventsBuilder_ == null) {
+        partitionsEventsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+            io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent.Builder, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder>(
+                partitionsEvents_,
+                ((bitField0_ & 0x00000080) != 0),
+                getParentForChildren(),
+                isClean());
+        partitionsEvents_ = null;
+      }
+      return partitionsEventsBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumer)

@@ -98,4 +98,28 @@ io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.PartitionOffsets defaul
    * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerStats stats = 7;</code>
    */
   io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerStatsOrBuilder getStatsOrBuilder();
+
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  java.util.List<io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent> 
+      getPartitionsEventsList();
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent getPartitionsEvents(int index);
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  int getPartitionsEventsCount();
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  java.util.List<? extends io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder> 
+      getPartitionsEventsOrBuilderList();
+  /**
+   * <code>repeated .io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEvent partitionsEvents = 8;</code>
+   */
+  io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumerPartitionEventOrBuilder getPartitionsEventsOrBuilder(
+      int index);
 }

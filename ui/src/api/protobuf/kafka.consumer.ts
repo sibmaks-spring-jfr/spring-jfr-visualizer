@@ -9,6 +9,45 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 
 export const protobufPackage = "io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer";
 
+export enum KafkaConsumerPartitionEventType {
+  REVOKED = 0,
+  ASSIGNED = 1,
+  LOST = 2,
+  UNRECOGNIZED = -1,
+}
+
+export function kafkaConsumerPartitionEventTypeFromJSON(object: any): KafkaConsumerPartitionEventType {
+  switch (object) {
+    case 0:
+    case "REVOKED":
+      return KafkaConsumerPartitionEventType.REVOKED;
+    case 1:
+    case "ASSIGNED":
+      return KafkaConsumerPartitionEventType.ASSIGNED;
+    case 2:
+    case "LOST":
+      return KafkaConsumerPartitionEventType.LOST;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return KafkaConsumerPartitionEventType.UNRECOGNIZED;
+  }
+}
+
+export function kafkaConsumerPartitionEventTypeToJSON(object: KafkaConsumerPartitionEventType): string {
+  switch (object) {
+    case KafkaConsumerPartitionEventType.REVOKED:
+      return "REVOKED";
+    case KafkaConsumerPartitionEventType.ASSIGNED:
+      return "ASSIGNED";
+    case KafkaConsumerPartitionEventType.LOST:
+      return "LOST";
+    case KafkaConsumerPartitionEventType.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface PartitionOffsets {
   currentOffset: number;
   lastCommit: number;
@@ -21,6 +60,12 @@ export interface KafkaConsumerStats {
   lastCommitAt: number;
 }
 
+export interface KafkaConsumerPartitionEvent {
+  eventType: KafkaConsumerPartitionEventType;
+  partitions: number[];
+  at: number;
+}
+
 export interface KafkaConsumer {
   consumerFactory: number;
   consumerId: number;
@@ -29,6 +74,7 @@ export interface KafkaConsumer {
   topics: number[];
   partitions: { [key: number]: PartitionOffsets };
   stats: KafkaConsumerStats | undefined;
+  partitionsEvents: KafkaConsumerPartitionEvent[];
 }
 
 export interface KafkaConsumer_PartitionsEntry {
@@ -238,6 +284,112 @@ export const KafkaConsumerStats: MessageFns<KafkaConsumerStats> = {
   },
 };
 
+function createBaseKafkaConsumerPartitionEvent(): KafkaConsumerPartitionEvent {
+  return { eventType: 0, partitions: [], at: 0 };
+}
+
+export const KafkaConsumerPartitionEvent: MessageFns<KafkaConsumerPartitionEvent> = {
+  encode(message: KafkaConsumerPartitionEvent, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.eventType !== 0) {
+      writer.uint32(8).int32(message.eventType);
+    }
+    writer.uint32(18).fork();
+    for (const v of message.partitions) {
+      writer.int32(v);
+    }
+    writer.join();
+    if (message.at !== 0) {
+      writer.uint32(24).int64(message.at);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): KafkaConsumerPartitionEvent {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseKafkaConsumerPartitionEvent();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.eventType = reader.int32() as any;
+          continue;
+        }
+        case 2: {
+          if (tag === 16) {
+            message.partitions.push(reader.int32());
+
+            continue;
+          }
+
+          if (tag === 18) {
+            const end2 = reader.uint32() + reader.pos;
+            while (reader.pos < end2) {
+              message.partitions.push(reader.int32());
+            }
+
+            continue;
+          }
+
+          break;
+        }
+        case 3: {
+          if (tag !== 24) {
+            break;
+          }
+
+          message.at = longToNumber(reader.int64());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): KafkaConsumerPartitionEvent {
+    return {
+      eventType: isSet(object.eventType) ? kafkaConsumerPartitionEventTypeFromJSON(object.eventType) : 0,
+      partitions: globalThis.Array.isArray(object?.partitions)
+        ? object.partitions.map((e: any) => globalThis.Number(e))
+        : [],
+      at: isSet(object.at) ? globalThis.Number(object.at) : 0,
+    };
+  },
+
+  toJSON(message: KafkaConsumerPartitionEvent): unknown {
+    const obj: any = {};
+    if (message.eventType !== 0) {
+      obj.eventType = kafkaConsumerPartitionEventTypeToJSON(message.eventType);
+    }
+    if (message.partitions?.length) {
+      obj.partitions = message.partitions.map((e) => Math.round(e));
+    }
+    if (message.at !== 0) {
+      obj.at = Math.round(message.at);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<KafkaConsumerPartitionEvent>, I>>(base?: I): KafkaConsumerPartitionEvent {
+    return KafkaConsumerPartitionEvent.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<KafkaConsumerPartitionEvent>, I>>(object: I): KafkaConsumerPartitionEvent {
+    const message = createBaseKafkaConsumerPartitionEvent();
+    message.eventType = object.eventType ?? 0;
+    message.partitions = object.partitions?.map((e) => e) || [];
+    message.at = object.at ?? 0;
+    return message;
+  },
+};
+
 function createBaseKafkaConsumer(): KafkaConsumer {
   return {
     consumerFactory: 0,
@@ -247,6 +399,7 @@ function createBaseKafkaConsumer(): KafkaConsumer {
     topics: [],
     partitions: {},
     stats: undefined,
+    partitionsEvents: [],
   };
 }
 
@@ -274,6 +427,9 @@ export const KafkaConsumer: MessageFns<KafkaConsumer> = {
     });
     if (message.stats !== undefined) {
       KafkaConsumerStats.encode(message.stats, writer.uint32(58).fork()).join();
+    }
+    for (const v of message.partitionsEvents) {
+      KafkaConsumerPartitionEvent.encode(v!, writer.uint32(66).fork()).join();
     }
     return writer;
   },
@@ -354,6 +510,14 @@ export const KafkaConsumer: MessageFns<KafkaConsumer> = {
           message.stats = KafkaConsumerStats.decode(reader, reader.uint32());
           continue;
         }
+        case 8: {
+          if (tag !== 66) {
+            break;
+          }
+
+          message.partitionsEvents.push(KafkaConsumerPartitionEvent.decode(reader, reader.uint32()));
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -377,6 +541,9 @@ export const KafkaConsumer: MessageFns<KafkaConsumer> = {
         }, {})
         : {},
       stats: isSet(object.stats) ? KafkaConsumerStats.fromJSON(object.stats) : undefined,
+      partitionsEvents: globalThis.Array.isArray(object?.partitionsEvents)
+        ? object.partitionsEvents.map((e: any) => KafkaConsumerPartitionEvent.fromJSON(e))
+        : [],
     };
   },
 
@@ -409,6 +576,9 @@ export const KafkaConsumer: MessageFns<KafkaConsumer> = {
     if (message.stats !== undefined) {
       obj.stats = KafkaConsumerStats.toJSON(message.stats);
     }
+    if (message.partitionsEvents?.length) {
+      obj.partitionsEvents = message.partitionsEvents.map((e) => KafkaConsumerPartitionEvent.toJSON(e));
+    }
     return obj;
   },
 
@@ -434,6 +604,7 @@ export const KafkaConsumer: MessageFns<KafkaConsumer> = {
     message.stats = (object.stats !== undefined && object.stats !== null)
       ? KafkaConsumerStats.fromPartial(object.stats)
       : undefined;
+    message.partitionsEvents = object.partitionsEvents?.map((e) => KafkaConsumerPartitionEvent.fromPartial(e)) || [];
     return message;
   },
 };

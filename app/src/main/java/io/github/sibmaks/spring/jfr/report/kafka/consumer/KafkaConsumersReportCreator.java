@@ -7,15 +7,16 @@ import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.commit.Kafk
 import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.commit.KafkaConsumerCommitRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.commit.KafkaConsumerCommitedRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.KafkaConsumerTopicsSubscribedRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.partition.KafkaConsumerPartitionAssignedRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.partition.KafkaConsumerPartitionLostRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.partition.KafkaConsumerPartitionRevokedRecordedEvent;
 import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -58,7 +59,9 @@ public class KafkaConsumersReportCreator {
                     .map(stringConstantRegistry::getOrRegister)
                     .toList();
 
-            var kafkaConsumer = KafkaConsumer.newBuilder()
+            var kafkaConsumer = consumers.computeIfAbsent(consumerId, it -> KafkaConsumer.newBuilder());
+
+            kafkaConsumer
                     .setConsumerFactory(consumerFactoryId)
                     .setConsumerId(consumerId)
                     .setBootstrapServers(bootstrapServers)
@@ -67,7 +70,6 @@ public class KafkaConsumersReportCreator {
 
             var contextConsumers = contexts.computeIfAbsent(contextId, k -> new HashMap<>());
             contextConsumers.put(consumerId, kafkaConsumer);
-            consumers.put(consumerId, kafkaConsumer);
         } catch (Exception e) {
             log.error("KafkaConsumerCreatedRecordedEvent processing error", e);
         }
@@ -77,11 +79,7 @@ public class KafkaConsumersReportCreator {
     public void onKafkaConsumerTopicsSubscribed(KafkaConsumerTopicsSubscribedRecordedEvent event) {
         try {
             var consumerId = stringConstantRegistry.getOrRegister(event.getConsumerId());
-            var consumerBuilder = consumers.get(consumerId);
-            if (consumerBuilder == null) {
-                log.warn("Consumer with id {} not found", consumerId);
-                return;
-            }
+            var consumerBuilder = consumers.computeIfAbsent(consumerId, it -> KafkaConsumer.newBuilder());
             var topics = new HashSet<>(consumerBuilder.getTopicsList());
             topics.addAll(
                     Arrays.stream(event.getTopicsAsArray())
@@ -154,6 +152,61 @@ public class KafkaConsumersReportCreator {
                     .setCommitFailed(stats.getCommitFailed() + 1);
         } catch (Exception e) {
             log.error("KafkaConsumerCommitFailedRecordedEvent processing error", e);
+        }
+    }
+
+    @EventListener
+    public void onKafkaConsumerPartitionAssigned(KafkaConsumerPartitionAssignedRecordedEvent event) {
+        onPartitionEvent(
+                event.getConsumerId(),
+                KafkaConsumerPartitionEventType.ASSIGNED,
+                event.getPartitionsAsArray(),
+                event.getStartTime()
+        );
+    }
+
+    @EventListener
+    public void onKafkaConsumerPartitionRevoked(KafkaConsumerPartitionRevokedRecordedEvent event) {
+        onPartitionEvent(
+                event.getConsumerId(),
+                KafkaConsumerPartitionEventType.REVOKED,
+                event.getPartitionsAsArray(),
+                event.getStartTime()
+        );
+    }
+
+    @EventListener
+    public void onKafkaConsumerPartitionLost(KafkaConsumerPartitionLostRecordedEvent event) {
+        onPartitionEvent(
+                event.getConsumerId(),
+                KafkaConsumerPartitionEventType.LOST,
+                event.getPartitionsAsArray(),
+                event.getStartTime()
+        );
+    }
+
+    private void onPartitionEvent(
+            String rawConsumerId,
+            KafkaConsumerPartitionEventType type,
+            String[] partitions,
+            Instant startTime
+    ) {
+        try {
+            var consumerId = stringConstantRegistry.getOrRegister(rawConsumerId);
+            var consumer = consumers.computeIfAbsent(consumerId, it -> KafkaConsumer.newBuilder());
+            var partitionEvent = KafkaConsumerPartitionEvent.newBuilder()
+                    .setEventType(type)
+                    .addAllPartitions(
+                            Arrays.stream(partitions)
+                                    .map(stringConstantRegistry::getOrRegister)
+                                    .toList()
+                    )
+                    .setAt(startTime.toEpochMilli())
+                    .build();
+
+            consumer.addPartitionsEvents(partitionEvent);
+        } catch (Exception e) {
+            log.error("Partition event processing error", e);
         }
     }
 
