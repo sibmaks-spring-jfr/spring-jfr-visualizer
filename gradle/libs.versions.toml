@@ -11,6 +11,8 @@ spring-dependency-managment = "1.1.6"
 
 protobuf = "4.30.1"
 
+jackarta-anotation = "3.0.0"
+
 junit-jupiter = "5.10.3"
 
 [libraries]
@@ -22,6 +24,8 @@ spring-jfr-api-recording = { module = "io.github.sibmaks.spring-jfr.api:recordin
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 protobuf = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobuf" }
+
+jackarta-annotation = { group = "jakarta.annotation", name = "jakarta.annotation-api", version.ref = "jackarta-anotation" }
 
 # jackson
 jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }

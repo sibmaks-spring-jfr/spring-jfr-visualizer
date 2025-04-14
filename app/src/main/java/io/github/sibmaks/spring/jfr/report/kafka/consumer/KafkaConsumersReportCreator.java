@@ -1,22 +1,25 @@
 package io.github.sibmaks.spring.jfr.report.kafka.consumer;
 
+import io.github.sibmaks.spring.jfr.bus.SubscribeTo;
 import io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.*;
-import io.github.sibmaks.spring.jfr.event.api.kafka.consumer.commit.KafkaConsumerCommitFact;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.KafkaConsumerCreatedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.commit.KafkaConsumerCommitFailedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.commit.KafkaConsumerCommitRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.commit.KafkaConsumerCommitedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.KafkaConsumerTopicsSubscribedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.partition.KafkaConsumerPartitionAssignedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.partition.KafkaConsumerPartitionLostRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.kafka.consumer.topic.partition.KafkaConsumerPartitionRevokedRecordedEvent;
+import io.github.sibmaks.spring.jfr.dto.protobuf.processing.Event;
+import io.github.sibmaks.spring.jfr.event.core.converter.ArrayConverter;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.KafkaConsumerCreatedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.commit.KafkaConsumerCommitEvent;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.commit.KafkaConsumerCommitFailedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.commit.KafkaConsumerCommitedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.topic.KafkaConsumerTopicsSubscribedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.topic.partition.KafkaConsumerPartitionAssignedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.topic.partition.KafkaConsumerPartitionLostEvent;
+import io.github.sibmaks.spring.jfr.event.recording.kafka.consumer.topic.partition.KafkaConsumerPartitionRevokedEvent;
 import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +33,7 @@ public class KafkaConsumersReportCreator {
     private final Map<Integer, Map<Integer, PartitionOffsets.Builder>> consumerPartitionOffsets;
     private final Map<Integer, KafkaConsumer.Builder> consumers;
     private final Map<Integer, KafkaConsumerStats.Builder> consumersStats;
-    private final Map<String, KafkaConsumerCommitFact> commits;
+    private final Map<String, Event> commits;
     private final StringConstantRegistry stringConstantRegistry;
 
     public KafkaConsumersReportCreator(StringConstantRegistry stringConstantRegistry) {
@@ -42,20 +45,34 @@ public class KafkaConsumersReportCreator {
         this.stringConstantRegistry = stringConstantRegistry;
     }
 
-    @EventListener
-    public void onKafkaConsumerCreated(KafkaConsumerCreatedRecordedEvent event) {
+    private static Map<Map.Entry<String, Integer>, String> getOffsetsAsMap(String offsets) {
+        var offsetsMap = new HashMap<Map.Entry<String, Integer>, String>();
+        var offsetsAsArray = ArrayConverter.convert(offsets);
+        for (int i = 0; i < offsetsAsArray.length; i += 2) {
+            var key = offsetsAsArray[i];
+            var keyOffset = key.lastIndexOf('-');
+            var topic = key.substring(0, keyOffset);
+            var partition = Integer.parseInt(key.substring(keyOffset + 1));
+            var value = offsetsAsArray[i + 1];
+            offsetsMap.put(Map.entry(topic, partition), value);
+        }
+        return offsetsMap;
+    }
+
+    @SubscribeTo(KafkaConsumerCreatedEvent.class)
+    public void onKafkaConsumerCreated(Event event) {
         try {
-            var contextId = stringConstantRegistry.getOrRegister(event.getContextId());
+            var contextId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("contextId"));
 
-            var consumerFactoryId = stringConstantRegistry.getOrRegister(event.getConsumerFactory());
+            var consumerFactoryId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("consumerFactory"));
 
-            var consumerId = stringConstantRegistry.getOrRegister(event.getConsumerId());
+            var consumerId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("consumerId"));
 
-            var consumerGroup = stringConstantRegistry.getOrRegister(event.getConsumerGroup());
+            var consumerGroup = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("consumerGroup"));
 
-            var bootstrapServers = stringConstantRegistry.getOrRegister(event.getBootstrapServers());
+            var bootstrapServers = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("bootstrapServers"));
 
-            var topics = Arrays.stream(event.getTopicsAsArray())
+            var topics = Arrays.stream(ArrayConverter.convert(event.getStringFieldsOrDefault("topics", null)))
                     .map(stringConstantRegistry::getOrRegister)
                     .toList();
 
@@ -75,14 +92,14 @@ public class KafkaConsumersReportCreator {
         }
     }
 
-    @EventListener
-    public void onKafkaConsumerTopicsSubscribed(KafkaConsumerTopicsSubscribedRecordedEvent event) {
+    @SubscribeTo(KafkaConsumerTopicsSubscribedEvent.class)
+    public void onKafkaConsumerTopicsSubscribed(Event event) {
         try {
-            var consumerId = stringConstantRegistry.getOrRegister(event.getConsumerId());
+            var consumerId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("consumerId"));
             var consumerBuilder = consumers.computeIfAbsent(consumerId, it -> KafkaConsumer.newBuilder());
             var topics = new HashSet<>(consumerBuilder.getTopicsList());
             topics.addAll(
-                    Arrays.stream(event.getTopicsAsArray())
+                    Arrays.stream(ArrayConverter.convert(event.getStringFieldsOrThrow("topics")))
                             .map(stringConstantRegistry::getOrRegister)
                             .toList()
             );
@@ -93,14 +110,14 @@ public class KafkaConsumersReportCreator {
         }
     }
 
-    @EventListener
-    public void onKafkaConsumerCommit(KafkaConsumerCommitRecordedEvent event) {
+    @SubscribeTo(KafkaConsumerCommitEvent.class)
+    public void onKafkaConsumerCommit(Event event) {
         try {
             commits.put(
-                    event.getCommitId(),
+                    event.getStringFieldsOrThrow("commitId"),
                     event
             );
-            var consumerId = stringConstantRegistry.getOrRegister(event.getConsumerId());
+            var consumerId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("consumerId"));
             var stats = consumersStats.computeIfAbsent(consumerId, it -> KafkaConsumerStats.newBuilder());
             stats
                     .setCommits(stats.getCommits() + 1);
@@ -109,23 +126,24 @@ public class KafkaConsumersReportCreator {
         }
     }
 
-    @EventListener
-    public void onKafkaConsumerCommited(KafkaConsumerCommitedRecordedEvent event) {
+    @SubscribeTo(KafkaConsumerCommitedEvent.class)
+    public void onKafkaConsumerCommited(Event event) {
         try {
-            var commitFact = commits.remove(event.getCommitId());
+            var rawCommitId = event.getStringFieldsOrThrow("commitId");
+            var commitFact = commits.remove(rawCommitId);
             if (commitFact == null) {
-                log.warn("Commit with id {} not found", event.getCommitId());
+                log.warn("Commit with id {} not found", rawCommitId);
                 return;
             }
-            var consumerId = stringConstantRegistry.getOrRegister(commitFact.getConsumerId());
+            var consumerId = stringConstantRegistry.getOrRegister(commitFact.getStringFieldsOrThrow("consumerId"));
 
             var stats = consumersStats.computeIfAbsent(consumerId, it -> KafkaConsumerStats.newBuilder());
             stats
                     .setCommited(stats.getCommited() + 1)
-                    .setLastCommitAt(Math.max(stats.getLastCommitAt(), event.getEndTime().toEpochMilli()));
+                    .setLastCommitAt(Math.max(stats.getLastCommitAt(), event.getEndTime()));
 
             var partitionBuilders = consumerPartitionOffsets.computeIfAbsent(consumerId, it -> new HashMap<>());
-            var offsetsAsMap = commitFact.getOffsetsAsMap();
+            var offsetsAsMap = getOffsetsAsMap(commitFact.getStringFieldsOrDefault("offsets", null));
             for (var entry : offsetsAsMap.entrySet()) {
                 var key = entry.getKey();
                 var value = Long.parseLong(entry.getValue());
@@ -138,15 +156,16 @@ public class KafkaConsumersReportCreator {
         }
     }
 
-    @EventListener
-    public void onKafkaConsumerCommitFailed(KafkaConsumerCommitFailedRecordedEvent event) {
+    @SubscribeTo(KafkaConsumerCommitFailedEvent.class)
+    public void onKafkaConsumerCommitFailed(Event event) {
         try {
-            var commitFact = commits.remove(event.getCommitId());
+            var rawCommitId = event.getStringFieldsOrThrow("commitId");
+            var commitFact = commits.remove(rawCommitId);
             if (commitFact == null) {
-                log.warn("Commit with id {} not found", event.getCommitId());
+                log.warn("Commit with id {} not found", rawCommitId);
                 return;
             }
-            var consumerId = stringConstantRegistry.getOrRegister(commitFact.getConsumerId());
+            var consumerId = stringConstantRegistry.getOrRegister(commitFact.getStringFieldsOrThrow("consumerId"));
             var stats = consumersStats.computeIfAbsent(consumerId, it -> KafkaConsumerStats.newBuilder());
             stats
                     .setCommitFailed(stats.getCommitFailed() + 1);
@@ -155,42 +174,37 @@ public class KafkaConsumersReportCreator {
         }
     }
 
-    @EventListener
-    public void onKafkaConsumerPartitionAssigned(KafkaConsumerPartitionAssignedRecordedEvent event) {
+    @SubscribeTo(KafkaConsumerPartitionAssignedEvent.class)
+    public void onKafkaConsumerPartitionAssigned(Event event) {
         onPartitionEvent(
-                event.getConsumerId(),
-                KafkaConsumerPartitionEventType.ASSIGNED,
-                event.getPartitionsAsArray(),
-                event.getStartTime()
+                event,
+                KafkaConsumerPartitionEventType.ASSIGNED
         );
     }
 
-    @EventListener
-    public void onKafkaConsumerPartitionRevoked(KafkaConsumerPartitionRevokedRecordedEvent event) {
+    @SubscribeTo(KafkaConsumerPartitionRevokedEvent.class)
+    public void onKafkaConsumerPartitionRevoked(Event event) {
         onPartitionEvent(
-                event.getConsumerId(),
-                KafkaConsumerPartitionEventType.REVOKED,
-                event.getPartitionsAsArray(),
-                event.getStartTime()
+                event,
+                KafkaConsumerPartitionEventType.REVOKED
         );
     }
 
-    @EventListener
-    public void onKafkaConsumerPartitionLost(KafkaConsumerPartitionLostRecordedEvent event) {
+    @SubscribeTo(KafkaConsumerPartitionLostEvent.class)
+    public void onKafkaConsumerPartitionLost(Event event) {
         onPartitionEvent(
-                event.getConsumerId(),
-                KafkaConsumerPartitionEventType.LOST,
-                event.getPartitionsAsArray(),
-                event.getStartTime()
+                event,
+                KafkaConsumerPartitionEventType.LOST
         );
     }
 
     private void onPartitionEvent(
-            String rawConsumerId,
-            KafkaConsumerPartitionEventType type,
-            String[] partitions,
-            Instant startTime
+            Event event,
+            KafkaConsumerPartitionEventType type
     ) {
+        var rawConsumerId = event.getStringFieldsOrThrow("consumerId");
+        var partitions = ArrayConverter.convert(event.getStringFieldsOrDefault("partitions", null));
+        var startTime = event.getStartTime();
         try {
             var consumerId = stringConstantRegistry.getOrRegister(rawConsumerId);
             var consumer = consumers.computeIfAbsent(consumerId, it -> KafkaConsumer.newBuilder());
@@ -201,7 +215,7 @@ public class KafkaConsumersReportCreator {
                                     .map(stringConstantRegistry::getOrRegister)
                                     .toList()
                     )
-                    .setAt(startTime.toEpochMilli())
+                    .setAt(startTime)
                     .build();
 
             consumer.addPartitionsEvents(partitionEvent);

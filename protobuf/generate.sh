@@ -1,7 +1,7 @@
 #!/bin/sh
 
 JAVA_OUTPUT_FOLDER="../app/src/main/java"
-INPUT_FILES="beans.proto calls.proto common.proto connections.proto kafka.consumer.proto"
+INPUT_FILES="beans.proto calls.proto common.proto connections.proto kafka.consumer.proto processing.proto"
 
 protoc --java_out=$JAVA_OUTPUT_FOLDER $INPUT_FILES
 

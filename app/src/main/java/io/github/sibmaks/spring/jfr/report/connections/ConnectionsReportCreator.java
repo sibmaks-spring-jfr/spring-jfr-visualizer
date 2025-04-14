@@ -1,26 +1,26 @@
 package io.github.sibmaks.spring.jfr.report.connections;
 
+import io.github.sibmaks.spring.jfr.bus.SubscribeTo;
+import io.github.sibmaks.spring.jfr.dto.protobuf.processing.Event;
 import io.github.sibmaks.spring.jfr.dto.view.connections.Connection;
 import io.github.sibmaks.spring.jfr.dto.view.connections.ConnectionException;
 import io.github.sibmaks.spring.jfr.dto.view.connections.ConnectionsReport;
-import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.ConnectionRequestedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.ConnectionTransactionLevelSetRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.action.ConnectionActionFailedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.action.ConnectionActionRequestedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.pool.jdbc.connection.action.ConnectionActionSucceedRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.api.pool.jdbc.connection.action.ConnectionAction;
+import io.github.sibmaks.spring.jfr.event.recording.pool.jdbc.connection.ConnectionRequestedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.pool.jdbc.connection.ConnectionTransactionLevelSetEvent;
+import io.github.sibmaks.spring.jfr.event.recording.pool.jdbc.connection.action.ConnectionActionFailedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.pool.jdbc.connection.action.ConnectionActionRequestedEvent;
+import io.github.sibmaks.spring.jfr.event.recording.pool.jdbc.connection.action.ConnectionActionSucceedEvent;
 import io.github.sibmaks.spring.jfr.report.connections.dto.ConnectionDto;
 import io.github.sibmaks.spring.jfr.report.connections.dto.ConnectionEventDto;
 import io.github.sibmaks.spring.jfr.report.connections.dto.ContextDto;
 import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static io.github.sibmaks.spring.jfr.utils.JavaFlightRecorderUtils.getThreadName;
 
 /**
  * @author sibmaks
@@ -39,26 +39,26 @@ public class ConnectionsReportCreator {
         this.stringConstantRegistry = stringConstantRegistry;
     }
 
-    @EventListener
-    public void onConnectionRequested(ConnectionRequestedRecordedEvent event) {
+    @SubscribeTo(ConnectionRequestedEvent.class)
+    public void onConnectionRequested(Event event) {
         try {
-            var contextId = event.getContextId();
+            var contextId = event.getStringFieldsOrThrow("contextId");
             var context = contexts.computeIfAbsent(stringConstantRegistry.getOrRegister(contextId), it -> new ContextDto());
 
-            var poolId = event.getPoolId();
+            var poolId = event.getStringFieldsOrThrow("poolId");
             var pool = context.get(stringConstantRegistry.getOrRegister(poolId));
 
-            var connectionId = event.getConnectionId();
+            var connectionId = event.getStringFieldsOrThrow("connectionId");
             var connection = pool.getOrCreate(connectionId);
             this.connections.putIfAbsent(connectionId, connection);
 
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
-                    .index(event.getActionIndex())
-                    .action(stringConstantRegistry.getOrRegister(event.getConnectionAction().name()))
-                    .startedAt(startTime.toEpochMilli())
+                    .index(0)
+                    .action(stringConstantRegistry.getOrRegister(ConnectionAction.CREATE.name()))
+                    .startedAt(startTime)
                     .finishedAt(-1)
-                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
+                    .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -67,10 +67,10 @@ public class ConnectionsReportCreator {
         }
     }
 
-    @EventListener
-    public void onConnectionActionRequested(ConnectionActionRequestedRecordedEvent event) {
+    @SubscribeTo(ConnectionActionRequestedEvent.class)
+    public void onConnectionActionRequested(Event event) {
         try {
-            var connection = getConnectionDto(event.getConnectionId());
+            var connection = getConnectionDto(event.getStringFieldsOrThrow("connectionId"));
             if (connection == null) {
                 log.error("ConnectionActionRequestedRecordedEvent processing error, connection not found");
                 return;
@@ -78,11 +78,11 @@ public class ConnectionsReportCreator {
 
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
-                    .index(event.getActionIndex())
-                    .action(stringConstantRegistry.getOrRegister(event.getConnectionAction().name()))
-                    .startedAt(startTime.toEpochMilli())
+                    .index(event.getInt64FieldsOrThrow("actionIndex"))
+                    .action(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("action")))
+                    .startedAt(startTime)
                     .finishedAt(-1)
-                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
+                    .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -91,20 +91,20 @@ public class ConnectionsReportCreator {
         }
     }
 
-    @EventListener
-    public void onConnectionActionSucceed(ConnectionActionSucceedRecordedEvent event) {
+    @SubscribeTo(ConnectionActionSucceedEvent.class)
+    public void onConnectionActionSucceed(Event event) {
         try {
-            var connection = getConnectionDto(event.getConnectionId());
-            if (connection == null)  {
+            var connection = getConnectionDto(event.getStringFieldsOrThrow("connectionId"));
+            if (connection == null) {
                 log.error("ConnectionActionSucceedRecordedEvent processing error, connection not found");
                 return;
             }
 
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
-                    .index(event.getActionIndex())
-                    .finishedAt(startTime.toEpochMilli())
-                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
+                    .index(event.getInt64FieldsOrThrow("actionIndex"))
+                    .finishedAt(startTime)
+                    .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -113,26 +113,26 @@ public class ConnectionsReportCreator {
         }
     }
 
-    @EventListener
-    public void onConnectionActionFailed(ConnectionActionFailedRecordedEvent event) {
+    @SubscribeTo(ConnectionActionFailedEvent.class)
+    public void onConnectionActionFailed(Event event) {
         try {
-            var connection = getConnectionDto(event.getConnectionId());
-            if (connection == null)  {
+            var connection = getConnectionDto(event.getStringFieldsOrThrow("connectionId"));
+            if (connection == null) {
                 log.error("ConnectionActionFailedRecordedEvent processing error, connection not found");
                 return;
             }
 
             var connectionException = ConnectionException.builder()
-                    .type(stringConstantRegistry.getOrRegister(event.getExceptionClass()))
-                    .message(stringConstantRegistry.getOrRegister(event.getExceptionMessage()))
+                    .type(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("exceptionClass")))
+                    .message(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("exceptionMessage")))
                     .build();
 
             var startTime = event.getStartTime();
             var connectionEvent = ConnectionEventDto.builder()
-                    .index(event.getActionIndex())
+                    .index(event.getInt64FieldsOrThrow("actionIndex"))
                     .exception(connectionException)
-                    .finishedAt(startTime.toEpochMilli())
-                    .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
+                    .finishedAt(startTime)
+                    .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
                     .transactionIsolation(connection.getTransactionIsolation())
                     .build();
             connection.addEvent(connectionEvent);
@@ -141,16 +141,16 @@ public class ConnectionsReportCreator {
         }
     }
 
-    @EventListener
-    public void onConnectionTransactionLevelSet(ConnectionTransactionLevelSetRecordedEvent event) {
+    @SubscribeTo(ConnectionTransactionLevelSetEvent.class)
+    public void onConnectionTransactionLevelSet(Event event) {
         try {
-            var connection = getConnectionDto(event.getConnectionId());
-            if (connection == null)  {
+            var connection = getConnectionDto(event.getStringFieldsOrThrow("connectionId"));
+            if (connection == null) {
                 log.error("ConnectionTransactionLevelSetRecordedEvent processing error, connection not found");
                 return;
             }
-
-            connection.setTransactionIsolation(event.getTransactionLevel());
+            var transactionLevel = event.getInt32FieldsOrThrow("transactionLevel");
+            connection.setTransactionIsolation(transactionLevel);
         } catch (Exception e) {
             log.error("ConnectionTransactionLevelSetRecordedEvent processing error", e);
         }

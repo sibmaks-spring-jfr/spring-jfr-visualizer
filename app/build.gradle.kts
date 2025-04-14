@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.spring.jfr.api.recording)
 
     implementation(libs.protobuf)
+    implementation(libs.jackarta.annotation)
 
     implementation("org.springframework:spring-context")
     implementation("org.springframework:spring-core")

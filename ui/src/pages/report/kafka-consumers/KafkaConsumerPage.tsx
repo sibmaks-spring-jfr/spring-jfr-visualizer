@@ -119,7 +119,9 @@ const KafkaConsumerPage = () => {
                     <Col xs={6}>
                       <div className="text-center">
                         <div
-                          className="fs-2">{(kafkaConsumer.stats?.commited ?? 0) / (kafkaConsumer.stats?.commits ?? 1)}</div>
+                          className="fs-2">
+                          {(kafkaConsumer.stats?.commited ?? 0) * 100.0 / (kafkaConsumer.stats?.commits ?? 1)} %
+                        </div>
                         <small className="text-muted">Successfully</small>
                       </div>
                     </Col>
@@ -161,7 +163,8 @@ const KafkaConsumerPage = () => {
                       }
 
                       return (
-                        <ListGroup.Item key={`partition-event-${index}`} className=" d-flex justify-content-between align-items-center">
+                        <ListGroup.Item key={`partition-event-${index}`}
+                                        className=" d-flex justify-content-between align-items-center">
                           {toISOString(it.at)} - {caption}
                           <span className="badge bg-primary">{
                             it.partitions.map(

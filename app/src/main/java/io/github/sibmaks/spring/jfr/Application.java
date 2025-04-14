@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -16,21 +18,26 @@ import java.nio.file.Path;
 @ComponentScan(basePackageClasses = Application.class)
 public class Application {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length != 1) {
             log.error("Usage: visualizer.jar <recording-file-path>");
             return;
         }
         var path = Path.of(args[0]);
 
+        var sortedPath = Files.createTempFile("jfr-sorted-", ".proto");
         try (var context = new AnnotationConfigApplicationContext(Application.class)) {
+            ExternalJfrSorter.sort(path, sortedPath, 100_000);
 
             var reader = context.getBean(RootReportReader.class);
 
-            var rootReport = reader.read(path);
+            var rootReport = reader.read(sortedPath);
 
             var reportService = context.getBean(ReportService.class);
             reportService.generateReport(rootReport);
+        } finally {
+            Files.deleteIfExists(sortedPath);
         }
     }
+
 }

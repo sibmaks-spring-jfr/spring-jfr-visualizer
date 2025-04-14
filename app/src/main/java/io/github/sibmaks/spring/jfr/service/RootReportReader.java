@@ -1,21 +1,20 @@
 package io.github.sibmaks.spring.jfr.service;
 
+import io.github.sibmaks.spring.jfr.bus.InMemoryEventBus;
+import io.github.sibmaks.spring.jfr.dto.protobuf.processing.Event;
 import io.github.sibmaks.spring.jfr.dto.view.common.CommonDto;
 import io.github.sibmaks.spring.jfr.dto.view.common.RootReport;
-import io.github.sibmaks.spring.jfr.event.reading.api.RecordedData;
-import io.github.sibmaks.spring.jfr.event.reading.core.recorded.RecordedEventFactory;
 import io.github.sibmaks.spring.jfr.report.BeansReportCreator;
 import io.github.sibmaks.spring.jfr.report.calls.CallsReportCreator;
 import io.github.sibmaks.spring.jfr.report.connections.ConnectionsReportCreator;
 import io.github.sibmaks.spring.jfr.report.kafka.consumer.KafkaConsumersReportCreator;
-import jdk.jfr.consumer.RecordingFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -26,25 +25,18 @@ import java.nio.file.Path;
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class RootReportReader {
-    private final RecordedEventFactory recordedEventFactory;
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final BeansReportCreator beansReportCreator;
     private final CallsReportCreator callsReportCreator;
     private final ConnectionsReportCreator connectionsReportCreator;
     private final KafkaConsumersReportCreator kafkaConsumersReportCreator;
     private final StringConstantRegistry stringConstantRegistry;
+    private final InMemoryEventBus bus;
 
     public RootReport read(Path path) {
-        try (var recordingFile = new RecordingFile(path)) {
-            log.info("Reading events in {}", path);
-            while (recordingFile.hasMoreEvents()) {
-                var recordedEvent = recordingFile.readEvent();
-                var event = recordedEventFactory.convert(recordedEvent);
-                if (event == null) {
-                    continue;
-                }
-                System.out.printf("[%s] Publish event: %s%n", ((RecordedData) event).getStartTime(), event);
-                applicationEventPublisher.publishEvent(event);
+        try (var in = Files.newInputStream(path)) {
+            Event event;
+            while ((event = Event.parseDelimitedFrom(in)) != null) {
+                bus.publish(event.getEventName(), event);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
