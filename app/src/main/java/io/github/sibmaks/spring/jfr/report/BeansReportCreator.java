@@ -5,7 +5,7 @@ import io.github.sibmaks.spring.jfr.dto.view.beans.BeanInitialized;
 import io.github.sibmaks.spring.jfr.dto.view.beans.BeansReport;
 import io.github.sibmaks.spring.jfr.event.api.bean.BeanDefinitionRegisteredFact;
 import io.github.sibmaks.spring.jfr.event.api.bean.Stereotype;
-import io.github.sibmaks.spring.jfr.event.core.converter.DependencyConverter;
+import io.github.sibmaks.spring.jfr.event.core.converter.ArrayConverter;
 import io.github.sibmaks.spring.jfr.event.reading.api.bean.PostProcessAfterInitializationRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.bean.PostProcessBeforeInitializationRecordedEvent;
 import io.github.sibmaks.spring.jfr.event.reading.api.bean.ResolveBeanDependencyRecordedEvent;
@@ -72,7 +72,7 @@ public class BeansReportCreator {
                 .name(stringConstantRegistry.getOrRegister(event.getBeanName()))
                 .primary(stringConstantRegistry.getOrRegister(event.getPrimary()))
                 .dependencies(
-                        Arrays.stream(DependencyConverter.convert(event.getDependencies()))
+                        Arrays.stream(ArrayConverter.convert(event.getDependencies()))
                                 .map(stringConstantRegistry::getOrRegister)
                                 .collect(Collectors.toCollection(TreeSet::new))
                 )

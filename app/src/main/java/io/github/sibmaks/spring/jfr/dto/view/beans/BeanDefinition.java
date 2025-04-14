@@ -1,7 +1,7 @@
 package io.github.sibmaks.spring.jfr.dto.view.beans;
 
 import io.github.sibmaks.spring.jfr.event.api.bean.MergedBeanDefinitionRegisteredFact;
-import io.github.sibmaks.spring.jfr.event.core.converter.DependencyConverter;
+import io.github.sibmaks.spring.jfr.event.core.converter.ArrayConverter;
 import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -98,7 +98,7 @@ public class BeanDefinition {
                 }
             }
 
-            var mergedDependencies = Arrays.stream(DependencyConverter.convert(fact.getDependencies()))
+            var mergedDependencies = Arrays.stream(ArrayConverter.convert(fact.getDependencies()))
                     .map(stringConstantRegistry::getOrRegister)
                     .toList();
             dependencies.addAll(mergedDependencies);

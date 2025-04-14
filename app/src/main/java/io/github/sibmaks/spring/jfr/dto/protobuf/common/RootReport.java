@@ -147,6 +147,32 @@ private static final long serialVersionUID = 0L;
     return connections_ == null ? io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionsReport.getDefaultInstance() : connections_;
   }
 
+  public static final int KAFKACONSUMERS_FIELD_NUMBER = 5;
+  private io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers_;
+  /**
+   * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+   * @return Whether the kafkaConsumers field is set.
+   */
+  @java.lang.Override
+  public boolean hasKafkaConsumers() {
+    return ((bitField0_ & 0x00000010) != 0);
+  }
+  /**
+   * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+   * @return The kafkaConsumers.
+   */
+  @java.lang.Override
+  public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport getKafkaConsumers() {
+    return kafkaConsumers_ == null ? io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.getDefaultInstance() : kafkaConsumers_;
+  }
+  /**
+   * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+   */
+  @java.lang.Override
+  public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReportOrBuilder getKafkaConsumersOrBuilder() {
+    return kafkaConsumers_ == null ? io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.getDefaultInstance() : kafkaConsumers_;
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -173,6 +199,9 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000008) != 0)) {
       output.writeMessage(4, getConnections());
     }
+    if (((bitField0_ & 0x00000010) != 0)) {
+      output.writeMessage(5, getKafkaConsumers());
+    }
     getUnknownFields().writeTo(output);
   }
 
@@ -197,6 +226,10 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000008) != 0)) {
       size += com.google.protobuf.CodedOutputStream
         .computeMessageSize(4, getConnections());
+    }
+    if (((bitField0_ & 0x00000010) != 0)) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(5, getKafkaConsumers());
     }
     size += getUnknownFields().getSerializedSize();
     memoizedSize = size;
@@ -233,6 +266,11 @@ private static final long serialVersionUID = 0L;
       if (!getConnections()
           .equals(other.getConnections())) return false;
     }
+    if (hasKafkaConsumers() != other.hasKafkaConsumers()) return false;
+    if (hasKafkaConsumers()) {
+      if (!getKafkaConsumers()
+          .equals(other.getKafkaConsumers())) return false;
+    }
     if (!getUnknownFields().equals(other.getUnknownFields())) return false;
     return true;
   }
@@ -259,6 +297,10 @@ private static final long serialVersionUID = 0L;
     if (hasConnections()) {
       hash = (37 * hash) + CONNECTIONS_FIELD_NUMBER;
       hash = (53 * hash) + getConnections().hashCode();
+    }
+    if (hasKafkaConsumers()) {
+      hash = (37 * hash) + KAFKACONSUMERS_FIELD_NUMBER;
+      hash = (53 * hash) + getKafkaConsumers().hashCode();
     }
     hash = (29 * hash) + getUnknownFields().hashCode();
     memoizedHashCode = hash;
@@ -394,6 +436,7 @@ private static final long serialVersionUID = 0L;
         getBeansFieldBuilder();
         getCallsFieldBuilder();
         getConnectionsFieldBuilder();
+        getKafkaConsumersFieldBuilder();
       }
     }
     @java.lang.Override
@@ -419,6 +462,11 @@ private static final long serialVersionUID = 0L;
       if (connectionsBuilder_ != null) {
         connectionsBuilder_.dispose();
         connectionsBuilder_ = null;
+      }
+      kafkaConsumers_ = null;
+      if (kafkaConsumersBuilder_ != null) {
+        kafkaConsumersBuilder_.dispose();
+        kafkaConsumersBuilder_ = null;
       }
       return this;
     }
@@ -478,6 +526,12 @@ private static final long serialVersionUID = 0L;
             : connectionsBuilder_.build();
         to_bitField0_ |= 0x00000008;
       }
+      if (((from_bitField0_ & 0x00000010) != 0)) {
+        result.kafkaConsumers_ = kafkaConsumersBuilder_ == null
+            ? kafkaConsumers_
+            : kafkaConsumersBuilder_.build();
+        to_bitField0_ |= 0x00000010;
+      }
       result.bitField0_ |= to_bitField0_;
     }
 
@@ -504,6 +558,9 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasConnections()) {
         mergeConnections(other.getConnections());
+      }
+      if (other.hasKafkaConsumers()) {
+        mergeKafkaConsumers(other.getKafkaConsumers());
       }
       this.mergeUnknownFields(other.getUnknownFields());
       onChanged();
@@ -559,6 +616,13 @@ private static final long serialVersionUID = 0L;
               bitField0_ |= 0x00000008;
               break;
             } // case 34
+            case 42: {
+              input.readMessage(
+                  getKafkaConsumersFieldBuilder().getBuilder(),
+                  extensionRegistry);
+              bitField0_ |= 0x00000010;
+              break;
+            } // case 42
             default: {
               if (!super.parseUnknownField(input, extensionRegistry, tag)) {
                 done = true; // was an endgroup tag
@@ -1058,6 +1122,127 @@ private static final long serialVersionUID = 0L;
         connections_ = null;
       }
       return connectionsBuilder_;
+    }
+
+    private io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers_;
+    private com.google.protobuf.SingleFieldBuilder<
+        io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.Builder, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReportOrBuilder> kafkaConsumersBuilder_;
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     * @return Whether the kafkaConsumers field is set.
+     */
+    public boolean hasKafkaConsumers() {
+      return ((bitField0_ & 0x00000010) != 0);
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     * @return The kafkaConsumers.
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport getKafkaConsumers() {
+      if (kafkaConsumersBuilder_ == null) {
+        return kafkaConsumers_ == null ? io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.getDefaultInstance() : kafkaConsumers_;
+      } else {
+        return kafkaConsumersBuilder_.getMessage();
+      }
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     */
+    public Builder setKafkaConsumers(io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport value) {
+      if (kafkaConsumersBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        kafkaConsumers_ = value;
+      } else {
+        kafkaConsumersBuilder_.setMessage(value);
+      }
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     */
+    public Builder setKafkaConsumers(
+        io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.Builder builderForValue) {
+      if (kafkaConsumersBuilder_ == null) {
+        kafkaConsumers_ = builderForValue.build();
+      } else {
+        kafkaConsumersBuilder_.setMessage(builderForValue.build());
+      }
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     */
+    public Builder mergeKafkaConsumers(io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport value) {
+      if (kafkaConsumersBuilder_ == null) {
+        if (((bitField0_ & 0x00000010) != 0) &&
+          kafkaConsumers_ != null &&
+          kafkaConsumers_ != io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.getDefaultInstance()) {
+          getKafkaConsumersBuilder().mergeFrom(value);
+        } else {
+          kafkaConsumers_ = value;
+        }
+      } else {
+        kafkaConsumersBuilder_.mergeFrom(value);
+      }
+      if (kafkaConsumers_ != null) {
+        bitField0_ |= 0x00000010;
+        onChanged();
+      }
+      return this;
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     */
+    public Builder clearKafkaConsumers() {
+      bitField0_ = (bitField0_ & ~0x00000010);
+      kafkaConsumers_ = null;
+      if (kafkaConsumersBuilder_ != null) {
+        kafkaConsumersBuilder_.dispose();
+        kafkaConsumersBuilder_ = null;
+      }
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.Builder getKafkaConsumersBuilder() {
+      bitField0_ |= 0x00000010;
+      onChanged();
+      return getKafkaConsumersFieldBuilder().getBuilder();
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     */
+    public io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReportOrBuilder getKafkaConsumersOrBuilder() {
+      if (kafkaConsumersBuilder_ != null) {
+        return kafkaConsumersBuilder_.getMessageOrBuilder();
+      } else {
+        return kafkaConsumers_ == null ?
+            io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.getDefaultInstance() : kafkaConsumers_;
+      }
+    }
+    /**
+     * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+     */
+    private com.google.protobuf.SingleFieldBuilder<
+        io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.Builder, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReportOrBuilder> 
+        getKafkaConsumersFieldBuilder() {
+      if (kafkaConsumersBuilder_ == null) {
+        kafkaConsumersBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+            io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport.Builder, io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReportOrBuilder>(
+                getKafkaConsumers(),
+                getParentForChildren(),
+                isClean());
+        kafkaConsumers_ = null;
+      }
+      return kafkaConsumersBuilder_;
     }
 
     // @@protoc_insertion_point(builder_scope:io.github.sibmaks.spring.jfr.dto.protobuf.common.RootReport)

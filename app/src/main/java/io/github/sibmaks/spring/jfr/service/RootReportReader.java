@@ -6,6 +6,7 @@ import io.github.sibmaks.spring.jfr.event.reading.core.recorded.RecordedEventFac
 import io.github.sibmaks.spring.jfr.report.BeansReportCreator;
 import io.github.sibmaks.spring.jfr.report.calls.CallsReportCreator;
 import io.github.sibmaks.spring.jfr.report.connections.ConnectionsReportCreator;
+import io.github.sibmaks.spring.jfr.report.kafka.consumer.KafkaConsumersReportCreator;
 import jdk.jfr.consumer.RecordingFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ public class RootReportReader {
     private final BeansReportCreator beansReportCreator;
     private final CallsReportCreator callsReportCreator;
     private final ConnectionsReportCreator connectionsReportCreator;
+    private final KafkaConsumersReportCreator kafkaConsumersReportCreator;
     private final StringConstantRegistry stringConstantRegistry;
 
     public RootReport read(Path path) {
@@ -49,6 +51,7 @@ public class RootReportReader {
         var beansReport = beansReportCreator.create();
         var callsReport = callsReportCreator.create();
         var connectionsReport = connectionsReportCreator.get();
+        var kafkaConsumersReport = kafkaConsumersReportCreator.get();
 
         var common = CommonDto.builder()
                 .stringConstants(stringConstantRegistry.getConstants())
@@ -59,6 +62,7 @@ public class RootReportReader {
                 .beans(beansReport)
                 .calls(callsReport)
                 .connections(connectionsReport)
+                .kafkaConsumers(kafkaConsumersReport)
                 .build();
     }
 

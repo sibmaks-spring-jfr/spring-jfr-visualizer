@@ -9,6 +9,7 @@ import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
 import { BeansReport } from "./beans";
 import { CallsReport } from "./calls";
 import { ConnectionsReport } from "./connections";
+import { KafkaConsumersReport } from "./kafka.consumer";
 
 export const protobufPackage = "io.github.sibmaks.spring.jfr.dto.protobuf.common";
 
@@ -21,6 +22,7 @@ export interface RootReport {
   beans: BeansReport | undefined;
   calls: CallsReport | undefined;
   connections: ConnectionsReport | undefined;
+  kafkaConsumers: KafkaConsumersReport | undefined;
 }
 
 function createBaseCommonDto(): CommonDto {
@@ -86,7 +88,7 @@ export const CommonDto: MessageFns<CommonDto> = {
 };
 
 function createBaseRootReport(): RootReport {
-  return { common: undefined, beans: undefined, calls: undefined, connections: undefined };
+  return { common: undefined, beans: undefined, calls: undefined, connections: undefined, kafkaConsumers: undefined };
 }
 
 export const RootReport: MessageFns<RootReport> = {
@@ -102,6 +104,9 @@ export const RootReport: MessageFns<RootReport> = {
     }
     if (message.connections !== undefined) {
       ConnectionsReport.encode(message.connections, writer.uint32(34).fork()).join();
+    }
+    if (message.kafkaConsumers !== undefined) {
+      KafkaConsumersReport.encode(message.kafkaConsumers, writer.uint32(42).fork()).join();
     }
     return writer;
   },
@@ -145,6 +150,14 @@ export const RootReport: MessageFns<RootReport> = {
           message.connections = ConnectionsReport.decode(reader, reader.uint32());
           continue;
         }
+        case 5: {
+          if (tag !== 42) {
+            break;
+          }
+
+          message.kafkaConsumers = KafkaConsumersReport.decode(reader, reader.uint32());
+          continue;
+        }
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -160,6 +173,7 @@ export const RootReport: MessageFns<RootReport> = {
       beans: isSet(object.beans) ? BeansReport.fromJSON(object.beans) : undefined,
       calls: isSet(object.calls) ? CallsReport.fromJSON(object.calls) : undefined,
       connections: isSet(object.connections) ? ConnectionsReport.fromJSON(object.connections) : undefined,
+      kafkaConsumers: isSet(object.kafkaConsumers) ? KafkaConsumersReport.fromJSON(object.kafkaConsumers) : undefined,
     };
   },
 
@@ -176,6 +190,9 @@ export const RootReport: MessageFns<RootReport> = {
     }
     if (message.connections !== undefined) {
       obj.connections = ConnectionsReport.toJSON(message.connections);
+    }
+    if (message.kafkaConsumers !== undefined) {
+      obj.kafkaConsumers = KafkaConsumersReport.toJSON(message.kafkaConsumers);
     }
     return obj;
   },
@@ -196,6 +213,9 @@ export const RootReport: MessageFns<RootReport> = {
       : undefined;
     message.connections = (object.connections !== undefined && object.connections !== null)
       ? ConnectionsReport.fromPartial(object.connections)
+      : undefined;
+    message.kafkaConsumers = (object.kafkaConsumers !== undefined && object.kafkaConsumers !== null)
+      ? KafkaConsumersReport.fromPartial(object.kafkaConsumers)
       : undefined;
     return message;
   },

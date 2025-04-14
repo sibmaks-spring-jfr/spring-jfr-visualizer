@@ -22,6 +22,9 @@ const defaultReport: RootReport = {
     beans: [],
     beanDefinitions: {}
   },
+  kafkaConsumers: {
+    contexts: {}
+  },
 };
 
 export const RootReportContext = createContext<RootReportContextType>({

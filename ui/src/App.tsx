@@ -8,6 +8,8 @@ import CallReportPage from './pages/report/call/CallReportPage';
 import { RootReportProvider } from './context/RootReportProvider';
 import ConnectionPoolsReportPage from './pages/report/connection-pools/ConnectionPoolsReportPage';
 import CallsReportPage from './pages/report/call/CallsReportPage';
+import KafkaConsumersPage from './pages/report/kafka-consumers/KafkaConsumersPage';
+import KafkaConsumerPage from './pages/report/kafka-consumers/KafkaConsumerPage';
 
 const App: React.FC = () => {
   return (
@@ -24,6 +26,12 @@ const App: React.FC = () => {
             </Route>
             <Route path="beans" element={<BeansReportPage />} />
             <Route path="connection-pools" element={<ConnectionPoolsReportPage />} />
+            <Route path="kafka-consumers">
+              <Route index element={<KafkaConsumersPage />} />
+              <Route path={':contextId'}>
+                <Route path={':consumerId'} element={<KafkaConsumerPage />} />
+              </Route>
+            </Route>
           </Route>
         </Routes>
       </HashRouter>

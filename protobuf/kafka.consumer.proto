@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer;
+
+option java_multiple_files = true;
+option java_package = "io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer";
+
+message PartitionOffsets {
+  int64 current_offset = 1;
+  int64 last_commit = 2;
+}
+
+message KafkaConsumerStats {
+  int32 commits = 1;
+  int32 commited = 2;
+  int32 commitFailed = 3;
+  int64 last_commit_at = 4;
+}
+
+message KafkaConsumer {
+  int32 consumer_factory = 1;
+  int32 consumer_id = 2;
+  int32 bootstrap_servers = 3;
+  int32 consumer_group = 4;
+  repeated int32 topics = 5;
+  map<int32, PartitionOffsets> partitions = 6;
+  KafkaConsumerStats stats = 7;
+}
+
+message KafkaConsumersMap {
+  map<int32, KafkaConsumer> consumers = 1;
+}
+
+message KafkaConsumersReport {
+  map<int32, KafkaConsumersMap> contexts = 1;
+}

@@ -1,4 +1,4 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
 import React from 'react';
 import { Container, Nav } from 'react-bootstrap';
 
@@ -12,7 +12,7 @@ const ApplicationLayout = () => {
             end
             className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
           >
-            Beans Report
+            Beans
           </NavLink>
         </Nav.Item>
         <Nav.Item>
@@ -20,7 +20,7 @@ const ApplicationLayout = () => {
             to="/calls"
             className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
           >
-            Calls Report
+            Calls
           </NavLink>
         </Nav.Item>
         <Nav.Item>
@@ -28,7 +28,15 @@ const ApplicationLayout = () => {
             to="/connection-pools"
             className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
           >
-            Connection Pools Report
+            Connection Pools
+          </NavLink>
+        </Nav.Item>
+        <Nav.Item>
+          <NavLink
+            to="/kafka-consumers"
+            className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}
+          >
+            Kafka Consumers
           </NavLink>
         </Nav.Item>
       </Nav>

@@ -90,6 +90,7 @@ public class ReportService {
                 .setBeans(map(rootReport.beans()))
                 .setCalls(map(rootReport.calls()))
                 .setConnections(map(rootReport.connections()))
+                .setKafkaConsumers(rootReport.kafkaConsumers())
                 .build();
     }
 

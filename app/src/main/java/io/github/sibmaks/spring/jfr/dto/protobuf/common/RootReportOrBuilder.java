@@ -68,4 +68,19 @@ public interface RootReportOrBuilder extends
    * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionsReport connections = 4;</code>
    */
   io.github.sibmaks.spring.jfr.dto.protobuf.connections.ConnectionsReportOrBuilder getConnectionsOrBuilder();
+
+  /**
+   * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+   * @return Whether the kafkaConsumers field is set.
+   */
+  boolean hasKafkaConsumers();
+  /**
+   * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+   * @return The kafkaConsumers.
+   */
+  io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport getKafkaConsumers();
+  /**
+   * <code>.io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReport kafkaConsumers = 5;</code>
+   */
+  io.github.sibmaks.spring.jfr.dto.protobuf.kafka.consumer.KafkaConsumersReportOrBuilder getKafkaConsumersOrBuilder();
 }

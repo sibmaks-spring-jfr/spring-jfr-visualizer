@@ -10,7 +10,7 @@ build
 # Ignore local jfr files
 *.jfr
 # Ignore created report
-report
+./report
 
 # Ignore UI node modules
 */node_modules/*
