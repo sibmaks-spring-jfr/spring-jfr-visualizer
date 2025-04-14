@@ -1,6 +1,6 @@
 package io.github.sibmaks.spring.jfr.dto.view.beans;
 
-import io.github.sibmaks.spring.jfr.event.api.bean.MergedBeanDefinitionRegisteredFact;
+import io.github.sibmaks.spring.jfr.dto.protobuf.processing.Event;
 import io.github.sibmaks.spring.jfr.event.core.converter.ArrayConverter;
 import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.AllArgsConstructor;
@@ -76,21 +76,24 @@ public class BeanDefinition {
             return this;
         }
 
-        public BeanDefinitionBuilder patch(StringConstantRegistry stringConstantRegistry, MergedBeanDefinitionRegisteredFact fact) {
+        public BeanDefinitionBuilder patch(
+                StringConstantRegistry stringConstantRegistry,
+                Event fact
+        ) {
             if (scope != -1) {
-                scope = stringConstantRegistry.getOrRegister(fact.getScope());
+                scope = stringConstantRegistry.getOrRegister(fact.getStringFieldsOrDefault("scope", null));
             }
             if (className != -1) {
-                className = stringConstantRegistry.getOrRegister(fact.getBeanClassName());
+                className = stringConstantRegistry.getOrRegister(fact.getStringFieldsOrDefault("beanClassName", null));
             }
             if (name != -1) {
-                name = stringConstantRegistry.getOrRegister(fact.getBeanName());
+                name = stringConstantRegistry.getOrRegister(fact.getStringFieldsOrThrow("beanName"));
             }
             if (primary != -1) {
-                primary = stringConstantRegistry.getOrRegister(fact.getPrimary());
+                primary = stringConstantRegistry.getOrRegister(fact.getStringFieldsOrDefault("primary", null));
             }
             if (stereotype != -1) {
-                int newStereotype = Optional.ofNullable(fact.getStereotype())
+                int newStereotype = Optional.ofNullable(fact.getStringFieldsOrDefault("stereotype", null))
                         .map(stringConstantRegistry::getOrRegister)
                         .orElse(stereotype);
                 if (stereotype != newStereotype && newStereotype != stringConstantRegistry.getOrRegister("UNKNOWN")) {
@@ -98,7 +101,7 @@ public class BeanDefinition {
                 }
             }
 
-            var mergedDependencies = Arrays.stream(ArrayConverter.convert(fact.getDependencies()))
+            var mergedDependencies = Arrays.stream(ArrayConverter.convert(fact.getStringFieldsOrDefault("dependencies", null)))
                     .map(stringConstantRegistry::getOrRegister)
                     .toList();
             dependencies.addAll(mergedDependencies);
