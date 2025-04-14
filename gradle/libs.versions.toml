@@ -1,5 +1,5 @@
 [versions]
-spring-jfr-api = "0.0.26"
+spring-jfr-api = "0.0.27"
 
 lombok = "1.18.34"
 jackson = "2.18.0"

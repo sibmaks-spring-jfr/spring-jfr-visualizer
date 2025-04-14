@@ -1,11 +1,12 @@
 import React from 'react';
 import { Accordion, Badge, Col, Container, OverlayTrigger, Row, Tooltip } from 'react-bootstrap';
 import {
+  GravityUiAbbrSql, HugeiconsDatabaseExport,
   MaterialSymbolsLightCloseSmallOutlineRounded,
   MaterialSymbolsLightCommitRounded,
   MaterialSymbolsLightErrorOutlineRounded,
   MaterialSymbolsLightFiberNewOutlineRounded,
-  MaterialSymbolsLightSettingsBackupRestoreRounded
+  MaterialSymbolsLightSettingsBackupRestoreRounded, MdiSqlQuery
 } from '../../../icons';
 import { Connection, ConnectionEvent, ConnectionException } from '../../../api/protobuf/connections';
 import { CommonDto } from '../../../api/protobuf/common';
@@ -42,7 +43,7 @@ const Timeline: React.FC<TimelineProps> = ({
   };
   const getExceptionTooltip = (id: string, exception: ConnectionException) => {
     return (
-      <Tooltip id={`event-${id}-exception-tooltip`}>{exception.type}: {exception.message}</Tooltip>
+      <Tooltip id={`event-${id}-exception-tooltip`}>{common.stringConstants[exception.type]}: {common.stringConstants[exception.message]}</Tooltip>
     );
   };
   const getLineTooltip = (id: string, duration: number) => {
@@ -74,6 +75,78 @@ const Timeline: React.FC<TimelineProps> = ({
           >
             <div>
               <MaterialSymbolsLightCommitRounded color="green" />
+            </div>
+          </OverlayTrigger>
+        );
+      case 'EXECUTE':
+        return (
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 50, hide: 250 }}
+            overlay={getIconTooltip(connectionId, 'Execute', event.transactionIsolation)}
+          >
+            <div>
+              <GravityUiAbbrSql color="green" />
+            </div>
+          </OverlayTrigger>
+        );
+      case 'EXECUTE_QUERY':
+        return (
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 50, hide: 250 }}
+            overlay={getIconTooltip(connectionId, 'Execute Query', event.transactionIsolation)}
+          >
+            <div>
+              <MdiSqlQuery color="green" />
+            </div>
+          </OverlayTrigger>
+        );
+      case 'EXECUTE_UPDATE':
+        return (
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 50, hide: 250 }}
+            overlay={getIconTooltip(connectionId, 'Execute Update', event.transactionIsolation)}
+          >
+            <div>
+              <HugeiconsDatabaseExport color="green" />
+            </div>
+          </OverlayTrigger>
+        );
+      case 'EXECUTE_BATCH':
+        return (
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 50, hide: 250 }}
+            overlay={getIconTooltip(connectionId, 'Execute Batch', event.transactionIsolation)}
+          >
+            <div>
+              <GravityUiAbbrSql color="green" />
+            </div>
+          </OverlayTrigger>
+        );
+      case 'EXECUTE_LARGE_UPDATE':
+        return (
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 50, hide: 250 }}
+            overlay={getIconTooltip(connectionId, 'Execute Large Update', event.transactionIsolation)}
+          >
+            <div>
+              <HugeiconsDatabaseExport color="green" />
+            </div>
+          </OverlayTrigger>
+        );
+      case 'EXECUTE_LARGE_BATCH':
+        return (
+          <OverlayTrigger
+            placement="left"
+            delay={{ show: 50, hide: 250 }}
+            overlay={getIconTooltip(connectionId, 'Execute Large Batch', event.transactionIsolation)}
+          >
+            <div>
+              <GravityUiAbbrSql color="green" />
             </div>
           </OverlayTrigger>
         );
