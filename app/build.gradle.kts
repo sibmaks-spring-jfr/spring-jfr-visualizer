@@ -30,7 +30,6 @@ dependencies {
     annotationProcessor(libs.lombok)
 
     implementation(libs.spring.jfr.api.common)
-    implementation(libs.spring.jfr.api.reading)
     implementation(libs.spring.jfr.api.recording)
 
     implementation(libs.protobuf)

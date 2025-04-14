@@ -1,5 +1,5 @@
 [versions]
-spring-jfr-api = "0.0.28"
+spring-jfr-api = "0.0.29"
 
 lombok = "1.18.34"
 jackson = "2.18.0"
@@ -18,7 +18,6 @@ junit-jupiter = "5.10.3"
 [libraries]
 
 spring-jfr-api-common = { module = "io.github.sibmaks.spring-jfr.api:common", version.ref = "spring-jfr-api" }
-spring-jfr-api-reading = { module = "io.github.sibmaks.spring-jfr.api:reading", version.ref = "spring-jfr-api" }
 spring-jfr-api-recording = { module = "io.github.sibmaks.spring-jfr.api:recording", version.ref = "spring-jfr-api" }
 
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
