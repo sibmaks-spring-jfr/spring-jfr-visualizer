@@ -1,26 +1,25 @@
 package io.github.sibmaks.spring.jfr.report.calls;
 
+import io.github.sibmaks.spring.jfr.bus.SubscribeTo;
+import io.github.sibmaks.spring.jfr.dto.protobuf.processing.Event;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallTrace;
 import io.github.sibmaks.spring.jfr.dto.view.calls.CallsReport;
 import io.github.sibmaks.spring.jfr.dto.view.calls.InvocationType;
-import io.github.sibmaks.spring.jfr.event.reading.api.common.InvocationExecutedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.common.InvocationFailedRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.component.ComponentMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.controller.ControllerMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.jpa.JPAMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.scheduled.ScheduledMethodCalledRecordedEvent;
-import io.github.sibmaks.spring.jfr.event.reading.api.service.ServiceMethodCalledRecordedEvent;
+import io.github.sibmaks.spring.jfr.event.api.common.InvocationExecutedFact;
+import io.github.sibmaks.spring.jfr.event.api.common.InvocationFailedFact;
+import io.github.sibmaks.spring.jfr.event.recording.component.ComponentMethodCalledEvent;
+import io.github.sibmaks.spring.jfr.event.recording.controller.ControllerMethodCalledEvent;
+import io.github.sibmaks.spring.jfr.event.recording.jpa.JPAMethodCalledEvent;
+import io.github.sibmaks.spring.jfr.event.recording.scheduled.ScheduledMethodCalledEvent;
+import io.github.sibmaks.spring.jfr.event.recording.service.ServiceMethodCalledEvent;
 import io.github.sibmaks.spring.jfr.service.StringConstantRegistry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static io.github.sibmaks.spring.jfr.utils.JavaFlightRecorderUtils.getThreadName;
 
 /**
  * @author sibmaks
@@ -51,25 +50,25 @@ public class CallsReportCreator {
                 .toList();
     }
 
-    @EventListener
-    public void onControllerMethodCalled(ControllerMethodCalledRecordedEvent event) {
-        var invocationId = event.getInvocationId();
+    @SubscribeTo(ControllerMethodCalledEvent.class)
+    public void onControllerMethodCalled(Event event) {
+        var invocationId = event.getStringFieldsOrThrow("invocationId");
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
 
         var details = new LinkedHashMap<Integer, Integer>();
-        addDetail(details, "HTTP Method", event.getHttpMethod());
-        addDetail(details, "HTTP URL", event.getUrl());
-        addDetail(details, "Rest", String.valueOf(event.isRest()));
+        addDetail(details, "HTTP Method", event.getStringFieldsOrThrow("httpMethod"));
+        addDetail(details, "HTTP URL", event.getStringFieldsOrThrow("url"));
+        addDetail(details, "Rest", String.valueOf(event.getBoolFieldsOrThrow("rest")));
 
-        var contextId = stringConstantRegistry.getOrRegister(event.getContextId());
+        var contextId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("contextId"));
         var trace = CallTrace.builder()
                 .contextId(contextId)
                 .invocationId(invocationIdCode)
                 .type(stringConstantRegistry.getOrRegister(InvocationType.CONTROLLER.name()))
-                .startTime(event.getStartTime().toEpochMilli())
-                .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
-                .className(stringConstantRegistry.getOrRegister(event.getClassName()))
-                .methodName(stringConstantRegistry.getOrRegister(event.getMethodName()))
+                .startTime(event.getStartTime())
+                .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
+                .className(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("className")))
+                .methodName(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("methodName")))
                 .details(details)
                 .children(new ArrayList<>());
 
@@ -79,19 +78,19 @@ public class CallsReportCreator {
         allCalls.put(invocationIdCode, trace);
     }
 
-    @EventListener
-    public void onScheduledMethodCalled(ScheduledMethodCalledRecordedEvent event) {
-        var invocationId = event.getInvocationId();
+    @SubscribeTo(ScheduledMethodCalledEvent.class)
+    public void onScheduledMethodCalled(Event event) {
+        var invocationId = event.getStringFieldsOrThrow("invocationId");
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
-        var contextId = stringConstantRegistry.getOrRegister(event.getContextId());
+        var contextId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("contextId"));
         var trace = CallTrace.builder()
                 .contextId(contextId)
                 .invocationId(invocationIdCode)
                 .type(stringConstantRegistry.getOrRegister(InvocationType.SCHEDULED.name()))
-                .startTime(event.getStartTime().toEpochMilli())
-                .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
-                .className(stringConstantRegistry.getOrRegister(event.getClassName()))
-                .methodName(stringConstantRegistry.getOrRegister(event.getMethodName()))
+                .startTime(event.getStartTime())
+                .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
+                .className(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("className")))
+                .methodName(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("methodName")))
                 .children(new ArrayList<>());
 
         var contextParentCalls = contextToParentCalls.computeIfAbsent(contextId, it -> new ArrayList<>());
@@ -100,61 +99,61 @@ public class CallsReportCreator {
         allCalls.put(invocationIdCode, trace);
     }
 
-    @EventListener
-    public void onJPAMethodCalled(JPAMethodCalledRecordedEvent event) {
-        var correlationId = stringConstantRegistry.getOrRegister(event.getCorrelationId());
-        var invocationId = event.getInvocationId();
+    @SubscribeTo(JPAMethodCalledEvent.class)
+    public void onJPAMethodCalled(Event event) {
+        var correlationId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrDefault("correlationId", null));
+        var invocationId = event.getStringFieldsOrThrow("invocationId");
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
-        var contextId = stringConstantRegistry.getOrRegister(event.getContextId());
+        var contextId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("contextId"));
         var trace = CallTrace.builder()
                 .contextId(contextId)
                 .correlationId(correlationId)
                 .invocationId(invocationIdCode)
                 .type(stringConstantRegistry.getOrRegister(InvocationType.JPA.name()))
-                .startTime(event.getStartTime().toEpochMilli())
-                .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
-                .className(stringConstantRegistry.getOrRegister(event.getClassName()))
-                .methodName(stringConstantRegistry.getOrRegister(event.getMethodName()))
+                .startTime(event.getStartTime())
+                .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
+                .className(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("className")))
+                .methodName(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("methodName")))
                 .children(new ArrayList<>());
 
         saveChildTrace(invocationIdCode, trace, correlationId, contextId);
     }
 
-    @EventListener
-    public void onServiceMethodCalled(ServiceMethodCalledRecordedEvent event) {
-        var correlationId = stringConstantRegistry.getOrRegister(event.getCorrelationId());
-        var invocationId = event.getInvocationId();
+    @SubscribeTo(ServiceMethodCalledEvent.class)
+    public void onServiceMethodCalled(Event event) {
+        var correlationId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrDefault("correlationId", null));
+        var invocationId = event.getStringFieldsOrThrow("invocationId");
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
-        var contextId = stringConstantRegistry.getOrRegister(event.getContextId());
+        var contextId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("contextId"));
         var trace = CallTrace.builder()
                 .contextId(contextId)
                 .correlationId(correlationId)
                 .invocationId(invocationIdCode)
                 .type(stringConstantRegistry.getOrRegister(InvocationType.SERVICE.name()))
-                .startTime(event.getStartTime().toEpochMilli())
-                .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
-                .className(stringConstantRegistry.getOrRegister(event.getClassName()))
-                .methodName(stringConstantRegistry.getOrRegister(event.getMethodName()))
+                .startTime(event.getStartTime())
+                .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
+                .className(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("className")))
+                .methodName(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("methodName")))
                 .children(new ArrayList<>());
 
         saveChildTrace(invocationIdCode, trace, correlationId, contextId);
     }
 
-    @EventListener
-    public void onComponentMethodCalled(ComponentMethodCalledRecordedEvent event) {
-        var correlationId = stringConstantRegistry.getOrRegister(event.getCorrelationId());
-        var invocationId = event.getInvocationId();
+    @SubscribeTo(ComponentMethodCalledEvent.class)
+    public void onComponentMethodCalled(Event event) {
+        var correlationId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrDefault("correlationId", null));
+        var invocationId = event.getStringFieldsOrThrow("invocationId");
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
-        var contextId = stringConstantRegistry.getOrRegister(event.getContextId());
+        var contextId = stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("contextId"));
         var trace = CallTrace.builder()
                 .contextId(contextId)
                 .correlationId(correlationId)
                 .invocationId(invocationIdCode)
                 .type(stringConstantRegistry.getOrRegister(InvocationType.COMPONENT.name()))
-                .startTime(event.getStartTime().toEpochMilli())
-                .threadName(stringConstantRegistry.getOrRegister(getThreadName(event)))
-                .className(stringConstantRegistry.getOrRegister(event.getClassName()))
-                .methodName(stringConstantRegistry.getOrRegister(event.getMethodName()))
+                .startTime(event.getStartTime())
+                .threadName(stringConstantRegistry.getOrRegister(event.getJavaThreadName()))
+                .className(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("className")))
+                .methodName(stringConstantRegistry.getOrRegister(event.getStringFieldsOrThrow("methodName")))
                 .children(new ArrayList<>());
 
         saveChildTrace(invocationIdCode, trace, correlationId, contextId);
@@ -187,9 +186,9 @@ public class CallsReportCreator {
                 .add(invocationId);
     }
 
-    @EventListener
-    public void onInvocationExecuted(InvocationExecutedRecordedEvent event) {
-        var invocationId = event.getInvocationId();
+    @SubscribeTo(InvocationExecutedFact.class)
+    public void onInvocationExecuted(Event event) {
+        var invocationId = event.getStringFieldsOrThrow("invocationId");
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
         var callTrace = allCalls.get(invocationIdCode);
         if (callTrace == null) {
@@ -201,12 +200,12 @@ public class CallsReportCreator {
 
         callTrace
                 .success(true)
-                .endTime(endTime.toEpochMilli());
+                .endTime(endTime);
     }
 
-    @EventListener
-    public void onInvocationFailed(InvocationFailedRecordedEvent event) {
-        var invocationId = event.getInvocationId();
+    @SubscribeTo(InvocationFailedFact.class)
+    public void onInvocationFailed(Event event) {
+        var invocationId = event.getStringFieldsOrThrow("invocationId");
         var invocationIdCode = stringConstantRegistry.getOrRegister(invocationId);
         var callTrace = allCalls.get(invocationIdCode);
         if (callTrace == null) {
@@ -215,14 +214,14 @@ public class CallsReportCreator {
         }
 
         var details = new LinkedHashMap<Integer, Integer>();
-        addDetail(details, "Exception Class", event.getExceptionClass());
-        addDetail(details, "Exception Message", event.getExceptionMessage());
+        addDetail(details, "Exception Class", event.getStringFieldsOrThrow("exceptionClass"));
+        addDetail(details, "Exception Message", event.getStringFieldsOrThrow("exceptionMessage"));
 
         var endTime = event.getEndTime();
 
         callTrace
                 .success(false)
-                .endTime(endTime.toEpochMilli())
+                .endTime(endTime)
                 .addDetails(details);
     }
 

@@ -10,16 +10,21 @@ import java.util.function.Consumer;
 
 @Component
 public class InMemoryEventBus {
-    private final Map<String, List<Consumer<Object>>> subscribers = new ConcurrentHashMap<>();
+    private final Map<Class<?>, List<Consumer<Object>>> subscribers = new ConcurrentHashMap<>();
 
-    public void publish(String topic, Object event) {
-        var handlers = subscribers.getOrDefault(topic, List.of());
-        for (var handler : handlers) {
-            handler.accept(event);
+    public void publish(Class<?> eventType, Object event) {
+        for (var entry : subscribers.entrySet()) {
+            var key = entry.getKey();
+            if (!key.isAssignableFrom(eventType)) {
+                continue;
+            }
+            for (var consumer : entry.getValue()) {
+                consumer.accept(event);
+            }
         }
     }
 
-    public void subscribe(String topic, Consumer<Object> handler) {
-        subscribers.computeIfAbsent(topic, t -> new CopyOnWriteArrayList<>()).add(handler);
+    public void subscribe(Class<?> type, Consumer<Object> handler) {
+        subscribers.computeIfAbsent(type, t -> new CopyOnWriteArrayList<>()).add(handler);
     }
 }

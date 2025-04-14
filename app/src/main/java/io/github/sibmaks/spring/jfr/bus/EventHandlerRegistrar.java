@@ -44,17 +44,8 @@ public class EventHandlerRegistrar implements BeanPostProcessor {
         }
         for (var method : methods) {
             var subscribeTo = method.getAnnotation(SubscribeTo.class);
-            for (var topic : subscribeTo.value()) {
-                bus.subscribe(topic.getName(), event -> {
-                    try {
-                        method.invoke(bean, event);
-                    } catch (Exception e) {
-                        throw new RuntimeException("Event consumer calling error", e);
-                    }
-                });
-            }
-            for (var topic : subscribeTo.topics()) {
-                bus.subscribe(topic, event -> {
+            for (var type : subscribeTo.value()) {
+                bus.subscribe(type, event -> {
                     try {
                         method.invoke(bean, event);
                     } catch (Exception e) {

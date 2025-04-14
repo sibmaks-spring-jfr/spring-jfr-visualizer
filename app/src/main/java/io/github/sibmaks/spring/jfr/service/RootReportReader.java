@@ -36,7 +36,11 @@ public class RootReportReader {
         try (var in = Files.newInputStream(path)) {
             Event event;
             while ((event = Event.parseDelimitedFrom(in)) != null) {
-                bus.publish(event.getEventName(), event);
+                try {
+                    var eventType = Class.forName(event.getEventName());
+                    bus.publish(eventType, event);
+                } catch (ClassNotFoundException ignored) {
+                }
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
