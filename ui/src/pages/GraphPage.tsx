@@ -254,29 +254,52 @@ const GraphPage: React.FC<GraphProps> = ({
 
     simulation.on('tick', () => {
       link
-        .attr(
-          'x1',
-          d => typeof d.source !== 'string' && typeof d.source !== 'number' && d.source.x !== undefined ? d.source.x : 0
-        )
-        .attr(
-          'y1',
-          d => typeof d.source !== 'string' && typeof d.source !== 'number' && d.source.y !== undefined ? d.source.y : 0
-        )
-        .attr(
-          'x2',
-          d => typeof d.target !== 'string' && typeof d.target !== 'number' && d.target.x !== undefined ? d.target.x : 0
-        )
-        .attr(
-          'y2',
-          d => typeof d.target !== 'string' && typeof d.target !== 'number' && d.target.y !== undefined ? d.target.y : 0
-        );
-
+        .attr('x1', d => {
+          if (typeof d.source === 'object' && d.source.x !== undefined) {
+            const target = typeof d.target === 'object' ? d.target : nodes.find(n => n.id === d.target);
+            return calculateBorderPoint(d.source, target, 10).x; // 10 - радиус узла
+          }
+          return 0;
+        })
+        .attr('y1', d => {
+          if (typeof d.source === 'object' && d.source.y !== undefined) {
+            const target = typeof d.target === 'object' ? d.target : nodes.find(n => n.id === d.target);
+            return calculateBorderPoint(d.source, target, 10).y;
+          }
+          return 0;
+        })
+        .attr('x2', d => {
+          if (typeof d.target === 'object' && d.target.x !== undefined) {
+            const source = typeof d.source === 'object' ? d.source : nodes.find(n => n.id === d.source);
+            return calculateBorderPoint(d.target, source, 10).x;
+          }
+          return 0;
+        })
+        .attr('y2', d => {
+          if (typeof d.target === 'object' && d.target.y !== undefined) {
+            const source = typeof d.source === 'object' ? d.source : nodes.find(n => n.id === d.source);
+            return calculateBorderPoint(d.target, source, 10).y;
+          }
+          return 0;
+        });
       node
         .attr('transform', d => `translate(${d.x},${d.y})`);
     });
 
     highlightNode(beanId);
   };
+
+  function calculateBorderPoint(source: Node, target: Node | undefined, radius: number) {
+    const dx = (target?.x ?? 0) - (source.x ?? 0);
+    const dy = (target?.y ?? 0) - (source.y ?? 0);
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const ratio = radius / distance;
+
+    return {
+      x: (source.x ?? 0) + dx * ratio,
+      y: (source.y ?? 0) + dy * ratio
+    };
+  }
 
   return (
     <Card>
