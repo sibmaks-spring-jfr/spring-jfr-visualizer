@@ -11,17 +11,19 @@
 .link {
   stroke: #999;
   stroke-opacity: 0.6;
-  stroke-width: 2px;
+  stroke-width: 1px;
 }
 
 .link.highlighted {
   stroke: #99B2DD;
   stroke-opacity: 1.0;
+  stroke-width: 2px;
 }
 
 .link.highlighted-in {
   stroke: #F96E46;
   stroke-opacity: 1.0;
+  stroke-width: 2px;
 }
 
 .node {

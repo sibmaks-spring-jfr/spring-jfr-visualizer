@@ -27,21 +27,22 @@ repositories {
 
 dependencies {
     compileOnly(libs.lombok)
-    annotationProcessor(libs.lombok)
 
+    implementation("org.springframework.boot:spring-boot-starter")
     implementation(libs.spring.jfr.api.common)
     implementation(libs.spring.jfr.api.recording)
 
     implementation(libs.protobuf)
     implementation(libs.jackarta.annotation)
 
-    implementation("org.springframework:spring-context")
-    implementation("org.springframework:spring-core")
-
-
     implementation(libs.slf4j.api)
 
     implementation(libs.bundles.jackson)
+
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    annotationProcessor(libs.lombok)
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     runtimeOnly(libs.slf4j.simple)
 

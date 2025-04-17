@@ -3,6 +3,8 @@ package io.github.sibmaks.spring.jfr;
 import io.github.sibmaks.spring.jfr.service.ReportService;
 import io.github.sibmaks.spring.jfr.service.RootReportReader;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -15,7 +17,7 @@ import java.nio.file.Path;
  * @since 0.0.1
  */
 @Slf4j
-@ComponentScan(basePackageClasses = Application.class)
+@SpringBootApplication
 public class Application {
 
     public static void main(String[] args) throws IOException {
@@ -26,7 +28,7 @@ public class Application {
         var path = Path.of(args[0]);
 
         var sortedPath = Files.createTempFile("jfr-sorted-", ".proto");
-        try (var context = new AnnotationConfigApplicationContext(Application.class)) {
+        try (var context = SpringApplication.run(Application.class);) {
             ExternalJfrSorter.sort(path, sortedPath, 100_000);
 
             var reader = context.getBean(RootReportReader.class);

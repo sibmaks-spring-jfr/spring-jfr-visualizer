@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
-import { Card, Button, Row, Col, FormLabel, InputGroup } from 'react-bootstrap';
+import { Button, Card, Col, FormLabel, InputGroup, Row } from 'react-bootstrap';
 import { SimulationLinkDatum, SimulationNodeDatum } from 'd3-force';
 import { SuggestiveInput } from '@sibdevtools/frontend-common';
 import { SuggestiveItem } from '@sibdevtools/frontend-common/dist/components/suggestive-input/types';
@@ -312,17 +312,17 @@ const GraphPage: React.FC<GraphProps> = ({
         <Row className={'m-2 h-100'}>
           <svg className={'h-100 graph-svg'} ref={graphRef}>
             <defs>
-              <marker id="arrowhead" className="arrowhead" markerWidth="10" markerHeight="7"
-                      refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
-                <polygon points="0 0, 10 3.5, 0 7" />
+              <marker id="arrowhead" className="arrowhead" markerWidth="7.5" markerHeight="5.25"
+                      refX="7.5" refY="2.625" orient="auto" markerUnits="strokeWidth">
+                <polygon points="0 0, 7.5 2.625, 0 5.25" />
               </marker>
-              <marker id="highlighted-arrowhead" className="arrowhead highlighted" markerWidth="10"
-                      markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
-                <polygon points="0 0, 10 3.5, 0 7" />
+              <marker id="highlighted-arrowhead" className="arrowhead highlighted" markerWidth="7.5"
+                      markerHeight="5.25" refX="7.5" refY="2.625" orient="auto" markerUnits="strokeWidth">
+                <polygon points="0 0, 7.5 2.625, 0 5.25" />
               </marker>
-              <marker id="highlighted-in-arrowhead" className="arrowhead highlighted-in" markerWidth="10"
-                      markerHeight="7" refX="10" refY="3.5" orient="auto" markerUnits="strokeWidth">
-                <polygon points="0 0, 10 3.5, 0 7" />
+              <marker id="highlighted-in-arrowhead" className="arrowhead highlighted-in" markerWidth="7.5"
+                      markerHeight="5.25" refX="7.5" refY="2.625" orient="auto" markerUnits="strokeWidth">
+                <polygon points="0 0, 7.5 2.625, 0 5.25" />
               </marker>
             </defs>
           </svg>

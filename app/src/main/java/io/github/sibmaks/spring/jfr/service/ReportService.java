@@ -31,11 +31,8 @@ import java.util.zip.GZIPOutputStream;
 @Slf4j
 @Service
 public class ReportService {
-    private final String reportFilePath;
-
-    public ReportService(@Value("${app.report.file}") String reportFilePath) {
-        this.reportFilePath = reportFilePath;
-    }
+    @Value("${app.report.file}")
+    private String reportFilePath;
 
     private static void copyStaticFiles(File destinationFolder) throws IOException {
         var classLoader = Application.class.getClassLoader();
