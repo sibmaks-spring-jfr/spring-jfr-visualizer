@@ -180,7 +180,6 @@ const CallTraceTree: React.FC<CallTraceTreeProps> = ({
                       </Col>
                       <Col xxl={10} md={12}>
                         <InputGroup>
-                          <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
                           <Form.Control
                             id={'minDurationInput'}
                             type="number"
@@ -188,7 +187,7 @@ const CallTraceTree: React.FC<CallTraceTreeProps> = ({
                             value={minDurationFilter === null ? '' : minDurationFilter}
                             onChange={(e) => setMinDurationFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
                           />
-                          <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                          <InputGroup.Text>-</InputGroup.Text>
                           <Form.Control
                             id={'maxDurationInput'}
                             type="number"
@@ -336,7 +335,6 @@ const CallReportPage = () => {
                       </Col>
                       <Col xxl={10} md={12}>
                         <InputGroup>
-                          <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
                           <Form.Control
                             id={'minDurationInput'}
                             type="number"
@@ -344,7 +342,7 @@ const CallReportPage = () => {
                             value={minDurationFilter === null ? '' : minDurationFilter}
                             onChange={(e) => setMinDurationFilter(e.target.value ? parseInt(e.target.value, 10) : null)}
                           />
-                          <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                          <InputGroup.Text>-</InputGroup.Text>
                           <Form.Control
                             id={'maxDurationInput'}
                             type="number"

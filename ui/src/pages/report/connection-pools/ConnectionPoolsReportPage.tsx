@@ -126,7 +126,6 @@ const ConnectionPoolsReportPage: React.FC = () => {
                   </Col>
                   <Col xxl={10} md={12} className={'d-none d-md-block'}>
                     <InputGroup>
-                      <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
                       <Form.Control
                         id={'minDurationInput'}
                         type="number"
@@ -134,7 +133,7 @@ const ConnectionPoolsReportPage: React.FC = () => {
                         value={minDuration === null ? '' : minDuration}
                         onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
                       />
-                      <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                      <InputGroup.Text>-</InputGroup.Text>
                       <Form.Control
                         id={'maxDurationInput'}
                         type="number"

@@ -92,14 +92,14 @@ const CallsReportPage = () => {
                   <Form.Label htmlFor={'contextInput'}>Context</Form.Label>
                 </Col>
                 <Col xxl={11} xs={12}>
-                    <SuggestiveInput
-                      id={'contextInput'}
-                      mode={'strict'}
-                      onChange={it => setContext(it.key ? +it.key : -1)}
-                      suggestions={contexts}
-                      disabled={contexts.length === 0}
-                      required={true}
-                    />
+                  <SuggestiveInput
+                    id={'contextInput'}
+                    mode={'strict'}
+                    onChange={it => setContext(it.key ? +it.key : -1)}
+                    suggestions={contexts}
+                    disabled={contexts.length === 0}
+                    required={true}
+                  />
                 </Col>
               </Row>
             </Col>
@@ -110,14 +110,13 @@ const CallsReportPage = () => {
                 </Col>
                 <Col xxl={11}>
                   <InputGroup>
-                    <InputGroup.Text><label htmlFor={'leftTimeBoundInput'}>from</label></InputGroup.Text>
                     <Form.Control
                       id={'leftTimeBoundInput'}
                       type="datetime-local"
                       value={leftTimeBound}
                       onChange={(e) => setLeftTimeBound(e.target.value)}
                     />
-                    <InputGroup.Text><label htmlFor={'rightTimeBoundInput'}>to</label></InputGroup.Text>
+                    <InputGroup.Text>-</InputGroup.Text>
                     <Form.Control
                       id={'rightTimeBoundInput'}
                       type="datetime-local"
@@ -144,7 +143,6 @@ const CallsReportPage = () => {
                 </Col>
                 <Col xxl={11} md={12} className={'d-none d-md-block'}>
                   <InputGroup>
-                    <InputGroup.Text><label htmlFor={'minDurationInput'}>from</label></InputGroup.Text>
                     <Form.Control
                       id={'minDurationInput'}
                       type="number"
@@ -152,7 +150,7 @@ const CallsReportPage = () => {
                       value={minDuration === null ? '' : minDuration}
                       onChange={(e) => setMinDuration(e.target.value ? parseInt(e.target.value, 10) : null)}
                     />
-                    <InputGroup.Text><label htmlFor={'maxDurationInput'}>to</label></InputGroup.Text>
+                    <InputGroup.Text>-</InputGroup.Text>
                     <Form.Control
                       id={'maxDurationInput'}
                       type="number"
